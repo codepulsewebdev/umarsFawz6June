@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pins & Fasteners | Fawz Haberdashery</title>
+<link rel="stylesheet" href="global-images.css">
+
+<script src="firebase-config.js" type="module"></script>
+<script src="fawz-product-id-map.js"></script>
+<script src="fawz-firebase-pricing.js" type="module"></script>
+<script src="fawz-security.js" defer></script>
+
+<style>
+:root {
+    --fawz-red: #e31e24;
+    --fawz-dark: #1a1a1a;
+    --fawz-grey: #f8f8f8;
+    --border: #eeeeee;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background: #fff;
+    color: var(--fawz-dark);
+    overflow-x: hidden;
+}
+header {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    padding: 15px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid var(--fawz-red);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    z-index: 1000;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.logo {
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1.2rem;
+}
+.logo span { color: var(--fawz-red); }
+nav { display: flex; gap: 16px; flex-wrap: wrap; }
+nav a {
+    color: var(--fawz-dark);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+.hero {
+    padding: 46px 5% 24px;
+    max-width: 1300px;
+    margin: auto;
+}
+.hero h1 {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    margin: 0;
+    text-transform: uppercase;
+}
+.toolbar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+}
+.toolbar input {
+    padding: 13px 14px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    min-width: 260px;
+    font-size: 1rem;
+    background: #fff;
+}
+main {
+    padding: 15px 5% 70px;
+    max-width: 1300px;
+    margin: auto;
+}
+.section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-left: 6px solid var(--fawz-red);
+    padding-left: 14px;
+    margin-bottom: 20px;
+    margin-top: 35px;
+}
+.section-heading h3 {
+    font-size: 1.6rem;
+    margin: 0;
+    text-transform: uppercase;
+}
+.section-heading span {
+    background: #fff3f3;
+    color: var(--fawz-red);
+    font-weight: 800;
+    border-radius: 999px;
+    padding: 6px 11px;
+}
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
+}
+.product-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.04);
+    transition: 0.25s;
+}
+.product-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--fawz-red);
+    box-shadow: 0 15px 32px rgba(0,0,0,0.10);
+}
+.product-img-wrap {
+    height: 190px;
+    background: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border);
+}
+.product-img-wrap img {
+    max-width: 85%;
+    max-height: 85%;
+    object-fit: contain;
+}
+.no-image-icon {
+    font-size: 3rem;
+    color: #ccc;
+}
+.product-info {
+    padding: 16px;
+    text-align: center;
+}
+.product-info h4 {
+    font-size: 1rem;
+    font-weight: 800;
+    margin: 0 0 6px;
+    text-transform: uppercase;
+}
+.product-info p {
+    font-size: 0.75rem;
+    color: #777;
+    margin: 0;
+}
+.hidden { display: none !important; }
+
+/* MODAL STRUCTURE */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(3px);
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+}
+.modal-content {
+    background: #fff;
+    margin: auto;
+    width: 90%;
+    max-width: 1100px;
+    height: 85%;
+    max-height: 85vh;
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.4);
+    position: relative;
+}
+.close-x {
+    position: absolute;
+    right: 20px;
+    top: 12px;
+    font-size: 34px;
+    cursor: pointer;
+    color: #aaa;
+    z-index: 10;
+    background: rgba(255,255,255,0.9);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+.close-x:hover { color: var(--fawz-red); background: #fff; }
+.modal-left {
+    background: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    border-right: 1px solid var(--border);
+    overflow: hidden;
+}
+.modal-left img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+.modal-right {
+    padding: 28px 32px;
+    overflow-y: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.modal-right h2 {
+    margin: 0 0 16px;
+    text-transform: uppercase;
+    color: var(--fawz-red);
+    font-size: 1.5rem;
+}
+.variant-group {
+    margin: 18px 0;
+}
+.variant-group label {
+    display: block;
+    margin: 0 0 8px;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: #555;
+    letter-spacing: 1px;
+}
+.variant-select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    background: #fff;
+    cursor: pointer;
+}
+.qty-input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: #f8f8f8;
+    margin: 8px 0 12px;
+}
+#price {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin: 15px 0 20px;
+    color: var(--fawz-red);
+}
+.btn-add {
+    width: 100%;
+    background: var(--fawz-red);
+    border: none;
+    color: #fff;
+    font-weight: 900;
+    text-transform: uppercase;
+    padding: 16px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    transition: background 0.2s;
+    margin-top: auto;
+}
+.btn-add:hover { background: #c41a1f; }
+
+@media (max-width: 700px) {
+    .modal-content { grid-template-columns: 1fr; height: 90%; max-height: 90vh; }
+    .modal-left { min-height: 160px; max-height: 200px; border-right: 0; border-bottom: 1px solid var(--border); padding: 20px; }
+    .modal-right { padding: 20px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Fawz <span>Haberdashery</span></div>
+    <nav>
+        <a href="home.html">Home</a>
+        <a href="category-index.html">Categories</a>
+        <a href="all-products.html">All Products</a>
+        <a href="demo_cart.html">View Cart</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>Pins Portfolio</h1>
+    <div class="toolbar">
+        <input id="searchBox" placeholder="Search pins...">
+    </div>
+</section>
+
+<div id="imageBank" style="display:none;">
+    <img data-img-key="hat-pins" src="images/pins/head pins.jpg" alt="Hat Pins">
+    <img data-img-key="berry-pearl-pins" src="images/pins/pearlHead.webp" alt="Berry Pearl Pins">
+    <img data-img-key="diamond-crystal-pins" src="images/pins/glassHead.webp" alt="Diamond Crystal Pins">
+    <img data-img-key="glass-head-pins" src="images/pins/glassHead.webp" alt="Glass Head Pins">
+    <img data-img-key="heart-leaf-pins" src="images/pins/heart-leaf-pins.jpg" alt="Heart & Leaf Pins">
+    <img data-img-key="pearl-head-pins" src="images/pins/pearlHead.webp" alt="Pearl Head Pins">
+    <img data-img-key="quilt-pins" src="images/pins/quilt-pins.jpg" alt="Quilt Pins">
+    <img data-img-key="dressmakers-pins-plastic" src="images/pins/dressmakersPins/100g.webp" alt="dressmakers-pins-plastic">
+    <img data-img-key="dressmakers-pins-paper" src="images/pins/dressmakersPins/" alt="dressmakers-pins-paper">
+    <img data-img-key="dressmakers-pins-b" src="images/pins/dressmakersPins/" alt="dressmakers-pins-b">
+    <img data-img-key="dressmakers-pins-brass-pins" src="images/pins/dressmakersPins/brassCarded.jpg" alt="dressmakers-pins-brass-pins">
+    <img data-img-key="dressmakers-pins-carded-g-20-12-box" src="images/pins/dressmakersPins/G20Carded.jpg">
+    <img data-img-key="dressmakers-pins-ss-pins" src="images/pins/dressmakersPins/extraLong.jpg" alt="dressmakers-pins-ss-pins">
+    <img data-img-key="dressmakers-pins-draping" src="images/pins/dressmakersPins/draping.jpg" alt="dressmakers-pins-draping">
+    <img data-img-key="dressmakers-pins-g-20-12-box" src="images/pins/dressmakersPins/g20.jpg" alt="dressmakers-pins-g-20-12-box">
+    <img data-img-key="dressmakers-pins-long" src="images/pins/dressmakersPins/extraLong.jpg" alt="dressmakers-pins-long">
+    <img data-img-key="safety-pins" src="images/pins/dressmakersPins/silverSafety.jpg" alt="safety-pins">
+    <img data-img-key="safety-pins-blanket" src="images/pins/dressmakersPins/blanket.jpg" alt="safety-pins-blanket">
+    <img data-img-key="safety-pins-carded-retail" src="images/pins/dressmakersPins/safetyCarded.jpg" alt="safety-pins-carded-retail">
+</div>
+
+<main>
+    <div class="section-heading" style="border-left-color: #333; margin-bottom: 0;">
+        <h3>Pins Inventory Summary</h3>
+        <span id="itemCount">0 Products Loaded</span>
+    </div>
+    
+    <div id="categorySectionsContainer"></div>
+</main>
+
+<div id="productModal" class="modal">
+    <div class="modal-content">
+        <span class="close-x" onclick="closeModal()">&times;</span>
+        <div class="modal-left" id="modalLeft">
+            <img id="modalImg" src="" alt="">
+        </div>
+        <div class="modal-right">
+            <h2 id="modalTitle">Product Title</h2>
+            <div id="sizeGroup" class="variant-group">
+                <label id="sizeLabel">Select Option</label>
+                <select id="sizeSelect" class="variant-select"></select>
+            </div>
+            <label>Quantity</label>
+            <input type="number" id="qty" class="qty-input" value="1" min="1" oninput="updatePrice()">
+            <div id="price">R 0.00</div>
+            <button class="btn-add" onclick="addToCart()">Add to Cart</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function getImageSrc(imgKey) {
+    const bankImg = document.querySelector(`#imageBank img[data-img-key="${imgKey}"]`);
+    return bankImg ? bankImg.getAttribute('src') : '';
+}
+
+// Complete Product Registry Database Map configuration
+const productGroups = {
+  // --- 1. DRESSMAKERS PINS ---
+  "dressmakers-pins-plastic": {
+    "title": "Plastic Pack Pins",
+    "category": "Dressmakers Pins",
+    "label": "Option",
+    "imgKey": "dressmakers-pins-plastic",
+    "options": [
+      { "name": "100g Plastic Box", "productId": "dressmakers-pins-100g-plastic-box", "basePrice": 276.0 }
+    ]
+  },
+  "dressmakers-pins-paper": {
+    "title": "Paper Pack Pins",
+    "category": "Dressmakers Pins",
+    "label": "Option",
+    "imgKey": "dressmakers-pins-paper",
+    "options": [
+      { "name": "250g Paper Box", "productId": "dressmakers-pins-250g-paper-box", "basePrice": 52.65 }
+    ]
+  },
+  "dressmakers-pins-b": {
+    "title": "B Pins Grouped",
+    "category": "Dressmakers Pins",
+    "label": "Option",
+    "imgKey": "dressmakers-pins-b",
+    "options": [
+      { "name": "B-15 - 12 / Box", "productId": "dressmakers-pins-b-15-12-box", "basePrice": 62.58 },
+      { "name": "B-20 - 12 / box", "productId": "dressmakers-pins-b-20-12-box", "basePrice": 89.01 },
+      { "name": "Carded B-15 - 12/box", "productId": "dressmakers-pins-carded-b-15-12-box", "basePrice": 76.49 },
+      { "name": "Carded B-20 - 12/box", "productId": "dressmakers-pins-carded-b-20-12-box", "basePrice": 102.91 }
+    ]
+  },
+  "dressmakers-pins-brass-pins": {
+    "title": "Brass Dressmakers Pins",
+    "category": "Dressmakers Pins",
+    "label": "Option",
+    "imgKey": "dressmakers-pins-brass-pins",
+    "options": [
+      { "name": "Brass Pins 25g 12/Box", "productId": "dressmakers-pins-brass-pins-25g-12-box", "basePrice": 185.0 },
+      { "name": "Card Brass Pins 25g 12/box", "productId": "dressmakers-pins-card-brass-pins-25g-12-box", "basePrice": 195.0 }
+    ]
+  },
+  "dressmakers-pins-carded-g-20-12-box": {
+    "title": "Carded G-20 Pack",
+    "category": "Dressmakers Pins",
+    "label": "Option",
+    "imgKey": "dressmakers-pins-carded-g-20-12-box",
+    "options": [
+      { "name": "Carded G-20 - 12/box", "productId": "dressmakers-pins-carded-g-20-12-box", "basePrice": 85.0 }
+    ]
+  },
+  "dressmakers-pins-ss-pins": {
+    "title": "Stainless Steel Pins",
+    "category": "Dressmakers Pins",
+    "label": "Option",
+    "imgKey": "dressmakers-pins-ss-pins",
+    "options": [
+      { "name": "Extra Long Stainless Steel Box", "productId": "dressmakers-pins-extra-long-ss-box", "basePrice": 145.0 }
+    ]
+  },
+  "dressmakers-pins-draping": {
+    "title": "Draping Pins",
+    "category": "Dressmakers Pins",
+    "label": "Option",
+    "imgKey": "dressmakers-pins-draping",
+    "options": [
+      { "name": "Draping Pins Box", "productId": "dressmakers-pins-draping-box", "basePrice": 115.0 }
+    ]
+  },
+  "dressmakers-pins-g-20-12-box": {
+    "title": "G-20 Boxed Pins",
+    "category": "Dressmakers Pins",
+    "label": "Option",
+    "imgKey": "dressmakers-pins-g-20-12-box",
+    "options": [
+      { "name": "G-20 12/box Pack", "productId": "dressmakers-pins-g-20-12-box-pack", "basePrice": 72.0 }
+    ]
+  },
+  "dressmakers-pins-long": {
+    "title": "Long R-40 Pins",
+    "category": "Dressmakers Pins",
+    "label": "Option",
+    "imgKey": "dressmakers-pins-long",
+    "options": [
+      { "name": "R-40 40mm Long 12/box", "productId": "dressmakers-pins-r-40-40mm-long-12-box", "basePrice": 80.39 }
+    ]
+  },
+
+  // --- 2. HEAD & HAT PINS ---
+  "hat-pins-product": {
+    "title": "Hat Pins",
+    "category": "Head Pins",
+    "label": "Select Size",
+    "imgKey": "hat-pins",
+    "options": [
+      { "name": "Large (24/box)", "productId": "hat-pins-large-24-box", "basePrice": 100.00 },
+      { "name": "Small (36/box)", "productId": "hat-pins-small-36-box", "basePrice": 120.00 }
+    ]
+  },
+  "berry-pearl-pins-product": {
+    "title": "Berry Pearl Pins",
+    "category": "Head Pins",
+    "label": "Select Option",
+    "imgKey": "berry-pearl-pins",
+    "options": [
+      { "name": "Carded (12/box)", "productId": "head-pins-berry-pearl", "basePrice": 45.00 },
+      { "name": "Bulk (36/box)", "productId": "head-pins-berry-round", "basePrice": 95.00 },
+      { "name": "Display Pack", "productId": "head-pins-berry-pins-display", "basePrice": 150.00 },
+      { "name": "Round 100s (12/box)", "productId": "head-pins-berry-round-100s", "basePrice": 65.00 }
+    ]
+  },
+  "diamond-crystal-pins-product": {
+    "title": "Diamond Crystal Pins",
+    "category": "Head Pins",
+    "label": "Select Option",
+    "imgKey": "diamond-crystal-pins",
+    "options": [
+      { "name": "Assorted (38mm)", "productId": "head-pins-diamond-asst", "basePrice": 205.00 },
+      { "name": "Crystal 38mm", "productId": "head-pins-diamond-crystal-38", "basePrice": 205.00 },
+      { "name": "Crystal 55mm", "productId": "head-pins-diamond-crystal-55", "basePrice": 165.00 },
+      { "name": "Crystal 64mm", "productId": "head-pins-diamond-crystal-64", "basePrice": 125.00 }
+    ]
+  },
+  "quilt-pins-product": {
+    "title": "Quilt Pins",
+    "category": "Head Pins",
+    "label": "Select Option",
+    "imgKey": "quilt-pins",
+    "options": [
+      { "name": "Standard Quilt Pins", "productId": "head-pins-quilt-pins", "basePrice": 110.00 },
+      { "name": "Quilting Flower Head", "productId": "head-pins-quilting-flower-head", "basePrice": 130.04 }
+    ]
+  },
+
+  // --- 3. SAFETY PINS & BLANKET PINS ---
+  "safety-pins": {
+    "title": "Standard Safety Pins Bulk",
+    "category": "Safety Pins",
+    "label": "Option",
+    "imgKey": "safety-pins",
+    "options": [
+      { "name": "Gold Safety Pins 0-28mm (1GG - 1728pcs)", "productId": "safety-pins-gold-0-28mm-1gg-1728pcs", "basePrice": 101.11 },
+      { "name": "Gold Safety Pins 0-28mm (Half GG - 864pcs)", "productId": "safety-pins-gold-0-28mm-half-gg-864pcs", "basePrice": 101.11 },
+      { "name": "Gold Safety Pins 1-32mm (Half GG - 864pcs)", "productId": "safety-pins-gold-1-32mm-half-gg-864pcs", "basePrice": 57.3 },
+      { "name": "Gold Safety Pins 2-38mm (Half GG - 864pcs)", "productId": "safety-pins-gold-2-38mm-half-gg-864pcs", "basePrice": 82.02 },
+      { "name": "Gold Safety Pins 3-48mm (Quarter GG - 432pcs)", "productId": "safety-pins-gold-3-48mm-quarter-gg-432pcs", "basePrice": 58.42 },
+      { "name": "Gold Safety Pins 4-50mm (Quarter GG - 432pcs)", "productId": "safety-pins-gold-4-50mm-quarter-gg-432pcs", "basePrice": 76.95 }
+    ]
+  },
+  "safety-pins-blanket": {
+    "title": "Blanket Safety Pins",
+    "category": "Safety Pins",
+    "label": "Option",
+    "imgKey": "safety-pins-blanket",
+    "options": [
+      { "name": "Gold Blanket Pins 70mm (Pack)", "productId": "safety-pins-blanket-gold-70mm-pack", "basePrice": 116.21 },
+      { "name": "Gold Blanket Pins 100mm (Pack)", "productId": "safety-pins-blanket-gold-100mm-pack", "basePrice": 170.0 },
+      { "name": "Silver Blanket Pins 70mm (Pack)", "productId": "safety-pins-blanket-silver-70mm-pack", "basePrice": 100.71 },
+      { "name": "Silver Blanket Pins 100mm (Pack)", "productId": "safety-pins-blanket-silver-100mm-pack", "basePrice": 141.56 }
+    ]
+  },
+  "safety-pins-carded-retail": {
+    "title": "Carded Retail Safety Pins",
+    "category": "Safety Pins",
+    "label": "Select Option",
+    "imgKey": "safety-pins-carded-retail",
+    "options": [
+      { "name": "Carded Gold Safety Pins Size 0 - 28mm (12 pins/card)", "productId": "safety-pins-carded-gold-size-0-28mm-12-pins-per-card", "basePrice": 17.26 }
+    ]
+  }
+};
+
+let activeItem = null;
+let activeSizeOrOption = "";
+
+// Dynamic Page Generation Matrix Logic
+function buildPageGrid() {
+    const container = document.getElementById('categorySectionsContainer');
+    if (!container) return;
+    container.innerHTML = '';
+
+    // Step 1: Pre-populate map bucket data slots
+    const categorisedMap = {
+        "Dressmakers Pins": [],
+        "Head Pins": [],
+        "Safety Pins": []
+    };
+    
+    let activeTotalCount = 0;
+
+    // Step 2: Push registry products and strip duplicates from internal options list
+    for (const key in productGroups) {
+        const item = productGroups[key];
+        const catName = item.category;
+        
+        // Dynamic fallback fallback assignment bucket selector safety block
+        if (!categorisedMap[catName]) {
+            categorisedMap[catName] = [];
+        }
+
+        // Filter out any internal sub-variant duplicate text values cleanly
+        const verifiedOptions = [];
+        const checkedNames = new Set();
+        
+        item.options.forEach(opt => {
+            if (!checkedNames.has(opt.name)) {
+                checkedNames.add(opt.name);
+                verifiedOptions.push(opt);
+            }
+        });
+
+        categorisedMap[catName].push({
+            id: key,
+            title: item.title,
+            category: catName,
+            label: item.label || "Option",
+            imgKey: item.imgKey,
+            options: verifiedOptions
+        });
+        activeTotalCount++;
+    }
+
+    // Step 3: Explicit Custom Sequential Render Pipeline sorting array list execution
+    const orderedCategorySequence = ["Dressmakers Pins", "Head Pins", "Safety Pins"];
+
+    orderedCategorySequence.forEach(categoryName => {
+        const itemsList = categorisedMap[categoryName];
+        if (!itemsList || itemsList.length === 0) return;
+
+        const section = document.createElement('section');
+        section.className = 'product-section';
+        
+        const heading = document.createElement('div');
+        heading.className = 'section-heading';
+        heading.innerHTML = `<h3>${categoryName}</h3><span>${itemsList.length} items</span>`;
+        section.appendChild(heading);
+
+        const grid = document.createElement('div');
+        grid.className = 'product-grid';
+
+        itemsList.forEach(prod => {
+            const card = document.createElement('article');
+            card.className = 'product-card';
+            
+            const srcImg = getImageSrc(prod.imgKey);
+            const imageTemplate = srcImg ? `<img src="${srcImg}" alt="${prod.title}" loading="lazy">` : `<div class="no-image-icon">📍</div>`;
+
+            card.innerHTML = `
+                <div class="product-img-wrap">${imageTemplate}</div>
+                <div class="product-info">
+                    <h4>${prod.title}</h4>
+                    <p class="product-id">${prod.options.length} Selectable Variant(s)</p>
+                    <p class="firebase-price" data-pid="${prod.options[0]?.productId || ''}">Login to view pricing</p>
+                </div>
+            `;
+
+            card.onclick = () => openProductModal(prod);
+            grid.appendChild(card);
+        });
+
+        section.appendChild(grid);
+        container.appendChild(section);
+    });
+
+    document.getElementById('itemCount').innerText = `${activeTotalCount} Products Active`;
+}
+
+function openProductModal(prod) {
+    activeItem = prod;
+    document.getElementById('modalTitle').innerText = prod.title;
+    document.getElementById('modalImg').src = getImageSrc(prod.imgKey);
+
+    const selectElement = document.getElementById('sizeSelect');
+    const labelElement = document.getElementById('sizeLabel');
+    
+    labelElement.innerText = prod.label;
+    selectElement.innerHTML = '';
+
+    // Render single structural unique entities list inside user selection field layout
+    prod.options.forEach(opt => {
+        const el = document.createElement('option');
+        el.value = opt.name;
+        el.innerText = opt.name;
+        selectElement.appendChild(el);
+    });
+
+    activeSizeOrOption = prod.options[0]?.name || "";
+    selectElement.value = activeSizeOrOption;
+
+    selectElement.onchange = (e) => {
+        activeSizeOrOption = e.target.value;
+        updatePrice();
+    };
+
+    document.getElementById('qty').value = 1;
+    updatePrice();
+    document.getElementById('productModal').style.display = 'flex';
+}
+
+function updatePrice() {
+    if (!activeItem) return;
+    const currentOpt = activeItem.options.find(o => o.name === activeSizeOrOption);
+    if (!currentOpt) return;
+
+    const basePrice = currentOpt.basePrice || 0;
+    const qty = Math.max(1, parseInt(document.getElementById('qty').value) || 1);
+
+    // Dynamic price evaluation hook for Live Firebase systems tiering modules
+    const baseUnit = (window.getFirebasePrice) ? window.getFirebasePrice(currentOpt.productId, basePrice) : basePrice;
+    const totalAmount = baseUnit * qty;
+
+    const priceBox = document.getElementById('price');
+    if (priceBox) {
+        priceBox.innerText = baseUnit === 0 ? "Contact for Pricing" : `R ${totalAmount.toFixed(2)}`;
+    }
+}
+
+function addToCart() {
+    if (!activeItem) return;
+    const currentOpt = activeItem.options.find(o => o.name === activeSizeOrOption);
+    if (!currentOpt) return;
+
+    const qty = Math.max(1, parseInt(document.getElementById('qty').value) || 1);
+    const cost = currentOpt.basePrice || 0;
+
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    cart.push({
+        product: `${activeItem.title} - ${currentOpt.name}`,
+        category: activeItem.category,
+        size: currentOpt.name,
+        qty: qty,
+        price: cost * qty,
+        unitPrice: cost,
+        total: cost * qty,
+        productId: currentOpt.productId,
+        tier: window.userTier || 'tier_1'
+    });
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert(`Added: ${activeItem.title} (${currentOpt.name}) x${qty} to cart list.`);
+    closeModal();
+}
+
+function closeModal() {
+    document.getElementById('productModal').style.display = 'none';
+}
+
+function handleSearch() {
+    const filter = document.getElementById('searchBox').value.toLowerCase();
+    const productCards = document.querySelectorAll('.product-card');
+    
+    productCards.forEach(card => {
+        const textValue = card.innerText.toLowerCase();
+        card.classList.toggle('hidden', !textValue.includes(filter));
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    buildPageGrid();
+    document.getElementById('searchBox')?.addEventListener('input', handleSearch);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Needles | Fawz Haberdashery</title>
+<link rel="stylesheet" href="global-images.css">
+<style>
+
+:root{--fawz-red:#e31e24;--fawz-dark:#1a1a1a;--fawz-grey:#f8f8f8;--border:#eeeeee;}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',Roboto,Arial,sans-serif;background:#fff;color:var(--fawz-dark)}
+header{position:sticky;top:0;background:#fff;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--fawz-red);box-shadow:0 2px 10px rgba(0,0,0,.05);z-index:1000;gap:20px}
+.logo{font-weight:900;text-transform:uppercase;letter-spacing:1px;font-size:1.2rem}
+.logo span{color:var(--fawz-red)}
+nav a{color:var(--fawz-dark);margin-left:18px;text-decoration:none;font-weight:700;font-size:.9rem}
+.hero{padding:46px 5% 24px;max-width:1300px;margin:auto}
+.hero h1{font-size:clamp(2rem,4vw,3.5rem);margin:0;text-transform:uppercase}
+.hero p{color:#666;max-width:900px;line-height:1.6}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.toolbar input,.toolbar select{padding:13px 14px;border:1px solid #ddd;border-radius:10px;min-width:240px;font-size:1rem;background:#fff}
+main{padding:15px 5% 70px;max-width:1300px;margin:auto}
+.product-section{margin:32px 0 54px}
+.section-heading{display:flex;align-items:center;justify-content:space-between;border-left:6px solid var(--fawz-red);padding-left:14px;margin-bottom:18px}
+.section-heading h3{font-size:1.6rem;margin:0;text-transform:uppercase}
+.section-heading span{background:#fff3f3;color:var(--fawz-red);font-weight:800;border-radius:999px;padding:6px 11px}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+.product-card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.04);transition:.25s}
+.product-card:hover{transform:translateY(-4px);border-color:var(--fawz-red);box-shadow:0 15px 32px rgba(0,0,0,.10)}
+.product-img-wrap{height:190px;background:#fafafa;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border)}
+.product-img-wrap img{width:100%;height:100%;object-fit:contain;padding:14px}
+.product-info{padding:15px}
+.category-pill{display:inline-block;font-size:.72rem;font-weight:900;text-transform:uppercase;background:#f2f2f2;border-radius:999px;padding:5px 8px;color:#555}
+.product-info h4{font-size:1rem;margin:12px 0 8px;line-height:1.3}
+.product-id{font-size:.76rem;color:#777;word-break:break-all;margin:0 0 8px}
+.firebase-price{font-weight:900;color:var(--fawz-red);margin:0}
+.modal{display:none;position:fixed;z-index:2000;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(4px);padding:30px 12px}
+.modal-content{background:#fff;margin:auto;max-width:980px;min-height:520px;display:grid;grid-template-columns:1fr 1.05fr;border-radius:18px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,.24);position:relative}
+.close-x{position:absolute;right:22px;top:16px;font-size:32px;cursor:pointer;color:#999;z-index:5}
+.modal-left{background:#fafafa;display:flex;align-items:center;justify-content:center;padding:28px;border-right:1px solid var(--border)}
+.modal-left img{max-width:100%;max-height:430px;object-fit:contain}
+.modal-right{padding:42px 36px}
+.modal-right h2{margin:0 0 12px;text-transform:uppercase;color:var(--fawz-red)}
+.modal-meta{color:#666;font-size:.92rem;word-break:break-all}
+label{display:block;margin:22px 0 8px;font-weight:900;text-transform:uppercase;font-size:.75rem;color:#555}
+input,.option-select{width:100%;padding:14px;border:1px solid #ddd;border-radius:10px;font-size:1rem;background:var(--fawz-grey)}
+#price{font-size:2rem;font-weight:950;margin:25px 0;color:#111}
+.btn-add{width:100%;background:var(--fawz-red);border:none;color:#fff;font-weight:900;text-transform:uppercase;padding:17px;border-radius:12px;cursor:pointer;letter-spacing:1px}
+.btn-add:hover{background:#b3161a}
+.hidden{display:none!important}
+#imageBank{display:none}
+@media(max-width:760px){header{align-items:flex-start;flex-direction:column} nav a{margin:0 14px 0 0}.modal-content{grid-template-columns:1fr;max-height:92vh;overflow:auto}.modal-left{min-height:260px;border-right:0;border-bottom:1px solid var(--border)}}
+
+</style>
+<script src="firebase-config.js" type="module"></script>
+<script src="fawz-product-id-map.js"></script>
+<script src="fawz-firebase-pricing.js" type="module"></script>
+<script src="fawz-security.js" defer></script>
+</head>
+<body>
+<header><div class="logo">Fawz <span>Haberdashery</span></div><nav><a href="home.html">Home</a><a href="all-products.html">All Products</a><a href="demo_cart.html">View Cart</a></nav><a href="login.html" style="margin-left:12px;font-weight:900;color:#e31e24;text-decoration:none">Login</a></header>
+
+<section class="hero">
+<h1>Machine Needles</h1>
+<p>Products rebuilt from the Fawz Habby Price List. Similar products are grouped into one block, while every individual variant keeps its own Firebase-ready product ID and fallback workbook price.</p>
+<div class="toolbar">
+<input id="searchBox" placeholder="Search products or product IDs...">
+<select id="categoryFilter">
+<option value="">All categories</option>
+<option value="Industrial Machine Needles">Industrial Machine Needles</option>
+<option value="Machine Needles">Machine Needles</option>
+<option value="SINGER">SINGER</option>
+</select>
+</div>
+</section>
+
+<!-- HTML IMAGE BANK: edit image paths here only. JavaScript uses data-img-key and does not store image paths. -->
+<div id="imageBank">
+<img data-img-key="industrial-machine-needles-db-fawz" src="images/Machine Needles/fawz industrial/DSC06373.jpg" alt="industrial-machine-needles-db-fawz">
+<img data-img-key="industrial-machine-needles-dc-fawz" src="images/machine Needles/fawz industrial/DSC06374.jpg" alt="industrial-machine-needles-dc-fawz">
+<img data-img-key="industrial-machine-needles-dp-fawz" src="images/machine Needles/fawz industrial/DSC06371.jpg" alt="industrial-machine-needles-dp-fawz">
+<img data-img-key="industrial-machine-needles-uo" src="images/machine Needles/fawz industrial/DSC06376.jpg" alt="industrial-machine-needles-uo">
+<img data-img-key="industrial-machine-needles-uy-fawz" src="images/machine Needles/UYX128GAS.webp" alt="industrial-machine-needles-uy-fawz">
+<img data-img-key="machine-needles-ball-point" src="images/Machine Needles/ballPiont.jpg" alt="machine-needles-ball-point">
+<img data-img-key="machine-needles-butterfly" src="images/Machine Needles/butterfly.jpg" alt="machine-needles-butterfly">
+<img data-img-key="machine-needles-embroidery" src="images/Machine Needles/machineEmbroidery.jpg" alt="machine-needles-embroidery">
+<img data-img-key="machine-needles-industrial" src="images/Machine Needles/indsdbx1.jpg" alt="machine-needles-industrial">
+<img data-img-key="machine-needles-jeans" src="images/Machine Needles/machineJeans.jpg" alt="machine-needles-jeans">
+<img data-img-key="machine-needles-leather" src="images/Machine Needles/machineLeather.jpg" alt="machine-needles-leather">
+<img data-img-key="machine-needles-microtex" src="images/Machine Needles/machineMicrotex.jpg" alt="machine-needles-microtex">
+<img data-img-key="machine-needles-overlocker" src="images/Machine Needles/machineOverlocker.jpg" alt="machine-needles-overlocker">
+<img data-img-key="machine-needles-quilting" src="images/Machine Needles/tapestry needle/DSC06352.jpg" alt="machine-needles-quilting">
+<img data-img-key="machine-needles-stretch" src="images/Machine Needles/machineStretch.jpg" alt="machine-needles-stretch">
+<img data-img-key="machine-needles-top-stitch" src="images/Machine Needles/machineTopStitch.jpg" alt="machine-needles-top-stitch">
+<img data-img-key="machine-needles-twin" src="images/Machine Needles/machineTwin.jpg" alt="machine-needles-twin">
+<img data-img-key="machine-needles-universal" src="images/Machine Needles/machineUniversal.jpg" alt="machine-needles-universal">
+<img data-img-key="machine-needles-violin-db" src="images/Machine Needles/dbViolin.jpg" alt="machine-needles-violin-db">
+<img data-img-key="machine-needles-violin-dc" src="images/Machine Needles/dcViolin.jpg" alt="machine-needles-violin-dc">
+<img data-img-key="machine-needles-violin-dp" src="images/Machine Needles/dpViolin.jpg" alt="machine-needles-violin-dp">
+<img data-img-key="singer-machine-needles" src="images/Machine Needles/singer2020.webp" alt="singer-machine-needles">
+<img data-img-key="singer-machine-oil-ml" src="images/Machine Needles/singerOil.webp" alt="singer-machine-oil-ml">
+</div>
+
+<main>
+  <section class="product-section" data-category-section="Hand Needles">
+  <div class="section-heading">
+    <h3>Hand Needles</h3>
+    <span>11 blocks</span>
+  </div>
+  <div class="product-grid">
+
+    <!-- Darning / Tapestry -->
+    <article class="product-card" data-group-id="hand-needles-darning-tapestry" data-category="Hand Needles" onclick="openProduct(this)">
+      <div class="product-img-wrap">
+        <img data-image-key="hand-needles-darning-tapestry" src="images/machineneedles/" alt="Darning / Tapestry Needles" loading="lazy">
+      </div>
+      <div class="product-info">
+        <span class="category-pill">Hand Needles</span>
+        <h4>Darning / Tapestry</h4>
+        <p class="product-id">Selectable Options</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+    <!-- Beading Long 13 -->
+    <article class="product-card" data-group-id="hand-needles-beading-long" data-category="Hand Needles" onclick="openProduct(this)">
+      <div class="product-img-wrap">
+        <img data-image-key="hand-needles-beading-long" src="images/machineneedles/" alt="Beading Long Needles" loading="lazy">
+      </div>
+      <div class="product-info">
+        <span class="category-pill">Hand Needles</span>
+        <h4>Beading Long (Size 13)</h4>
+        <p class="product-id">Selectable Options</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+    <!-- Beading Short 13 -->
+    <article class="product-card" data-group-id="hand-needles-beading-short" data-category="Hand Needles" onclick="openProduct(this)">
+      <div class="product-img-wrap">
+        <img data-image-key="hand-needles-beading-short" src="images/machineneedles/" alt="Beading Short Needles" loading="lazy">
+      </div>
+      <div class="product-info">
+        <span class="category-pill">Hand Needles</span>
+        <h4>Beading Short (Size 13)</h4>
+        <p class="product-id">Selectable Options</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+    <!-- Easy Threading -->
+    <article class="product-card" data-group-id="hand-needles-easy-threading" data-category="Hand Needles" onclick="openProduct(this)">
+      <div class="product-img-wrap">
+        <img data-image-key="hand-needles-easy-threading" src="images/machineneedles/" alt="Easy Threading Needles" loading="lazy">
+      </div>
+      <div class="product-info">
+        <span class="category-pill">Hand Needles</span>
+        <h4>Easy Threading (4/8)</h4>
+        <p class="product-id">Selectable Options</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+    <!-- Assorted Sharps / Embroidery -->
+    <article class="product-card" data-group-id="hand-needles-assorted-sharps" data-category="Hand Needles" onclick="openProduct(this)">
+      <div class="product-img-wrap">
+        <img data-image-key="hand-needles-assorted-sharps" src="images/machineneedles/" alt="Assorted Sharps & Embroidery Needles" loading="lazy">
+      </div>
+      <div class="product-info">
+        <span class="category-pill">Hand Needles</span>
+        <h4>Assorted Sharps & Embroidery (18/24)</h4>
+        <p class="product-id">Selectable Options</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+    <!-- Embroidery Craft Pack -->
+    <article class="product-card" data-group-id="hand-needles-embroidery-craft" data-category="Hand Needles" onclick="openProduct(this)">
+      <div class="product-img-wrap">
+        <img data-image-key="hand-needles-embroidery-craft" src="images/machineneedles/" alt="Embroidery Craft Needles" loading="lazy">
+      </div>
+      <div class="product-info">
+        <span class="category-pill">Hand Needles</span>
+        <h4>Embroidery Craft (43/95/10)</h4>
+        <p class="product-id">Selectable Options</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+    <!-- Tapestry Needles -->
+    <article class="product-card" data-group-id="hand-needles-tapestry" data-category="Hand Needles" onclick="openProduct(this)">
+      <div class="product-img-wrap">
+        <img data-image-key="hand-needles-tapestry" src="images/machineneedles/" alt="Tapestry Needles" loading="lazy">
+      </div>
+      <div class="product-info">
+        <span class="category-pill">Hand Needles</span>
+        <h4>Tapestry Needles (18/24)</h4>
+        <p class="product-id">Selectable Options</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+    <!-- Habby Box Needles -->
+    <article class="product-card" data-group-id="hand-needles-habby-box" data-category="Hand Needles" onclick="openProduct(this)">
+      <div class="product-img-wrap">
+        <img data-image-key="hand-needles-habby-box" src="images/machineneedles/" alt="Habby Box Needles" loading="lazy">
+      </div>
+      <div class="product-info">
+        <span class="category-pill">Hand Needles</span>
+        <h4>Habby Box Needles</h4>
+        <p class="product-id">Selectable Options</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+    <!-- Reggiani & Bignami (R&B 27) -->
+    <article class="product-card" data-group-id="hand-needles-rb-27" data-category="Hand Needles" onclick="openProduct(this)">
+      <div class="product-img-wrap">
+        <img data-image-key="hand-needles-rb-27" src="images/machineneedles/" alt="R&B 27 Needles" loading="lazy">
+      </div>
+      <div class="product-info">
+        <span class="category-pill">Hand Needles</span>
+        <h4>R&B Needles (Size 27)</h4>
+        <p class="product-id">Selectable Options</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+    <!-- Packing Needles -->
+    <article class="product-card" data-group-id="hand-needles-packing" data-category="Hand Needles" onclick="openProduct(this)">
+      <div class="product-img-wrap">
+        <img data-image-key="hand-needles-packing" src="images/machineneedles/" alt="Packing Needles" loading="lazy">
+      </div>
+      <div class="product-info">
+        <span class="category-pill">Hand Needles</span>
+        <h4>Packing Needles</h4>
+        <p class="product-id">Selectable Options</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+    <!-- Upholstery & Circular Needles -->
+    <article class="product-card" data-group-id="hand-needles-upholstery-circular" data-category="Hand Needles" onclick="openProduct(this)">
+      <div class="product-img-wrap">
+        <img data-image-key="hand-needles-upholstery-circular" src="images/machineneedles/" alt="Upholstery & Circular Curved Needles" loading="lazy">
+      </div>
+      <div class="product-info">
+        <span class="category-pill">Hand Needles</span>
+        <h4>Upholstery Straight & Curved</h4>
+        <p class="product-id">Selectable Options</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+  </div>
+</section>
+<section class="product-section" data-category-section="Industrial Machine Needles">
+<div class="section-heading"><h3>Industrial Machine Needles</h3><span>5 blocks</span></div>
+<div class="product-grid">
+<article class="product-card" data-group-id="industrial-machine-needles-db-fawz" data-category="Industrial Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="industrial-machine-needles-db-fawz" src="images/machineneedles/" alt="Db Fawz" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Industrial Machine Needles</span><h4>Db Fawz</h4><p class="product-id">18 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="industrial-machine-needles-dc-fawz" data-category="Industrial Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="industrial-machine-needles-dc-fawz" src="images/machineneedles/" alt="Dc Fawz" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Industrial Machine Needles</span><h4>Dc Fawz</h4><p class="product-id">8 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="industrial-machine-needles-dp-fawz" data-category="Industrial Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="industrial-machine-needles-dp-fawz" src="images/machineneedles/" alt="Dp Fawz" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Industrial Machine Needles</span><h4>Dp Fawz</h4><p class="product-id">8 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="industrial-machine-needles-uo" data-category="Industrial Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="industrial-machine-needles-uo" src="images/machineneedles/" alt="Uo" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Industrial Machine Needles</span><h4>Uo</h4><p class="product-id">2 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="industrial-machine-needles-uy-fawz" data-category="Industrial Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="industrial-machine-needles-uy-fawz" src="images/machineneedles/" alt="Uy Fawz" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Industrial Machine Needles</span><h4>Uy Fawz</h4><p class="product-id">6 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+</div>
+</section>
+<section class="product-section" data-category-section="Machine Needles">
+<div class="section-heading"><h3>Machine Needles</h3><span>16 blocks</span></div>
+<div class="product-grid">
+<article class="product-card" data-group-id="machine-needles-ball-point" data-category="Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-needles-ball-point" src="images/Machine Needles/ballPiont.jpg" alt="Ball Point" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Needles</span><h4>Ball Point</h4><p class="product-id">8 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-needles-butterfly" data-category="Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-needles-butterfly" src="images/Machine Needles/butterfly.jpg" alt="Butterfly" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Needles</span><h4>Butterfly</h4><p class="product-id">8 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-needles-embroidery" data-category="Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-needles-embroidery" src="images/Machine Needles/machineEmbroidery.jpg" alt="Embroidery" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Needles</span><h4>Embroidery</h4><p class="product-id">6 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-needles-industrial" data-category="Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-needles-industrial" src="images/Machine Needles/dbz1.jpg" alt="Industrial" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Needles</span><h4>Industrial</h4><p class="product-id">8 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-needles-jeans" data-category="Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-needles-jeans" src="images/Machine Needles/machineJeans.jpg" alt="Jeans" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Needles</span><h4>Jeans</h4><p class="product-id">2 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-needles-leather" data-category="Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-needles-leather" src="images/Machine Needles/machineLeather.jpg" alt="Leather" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Needles</span><h4>Leather</h4><p class="product-id">2 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-needles-microtex" data-category="Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-needles-microtex" src="images/Machine Needles/machineMicrotex.jpg" alt="Microtex" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Needles</span><h4>Microtex</h4><p class="product-id">8 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-needles-overlocker" data-category="Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-needles-overlocker" src="images/Machine Needles/machineOverlocker.jpg" alt="Overlocker" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Needles</span><h4>Overlocker</h4><p class="product-id">6 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-needles-quilting" data-category="Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-needles-quilting" src="images/Machine Needles/machineQuilting.jpg" alt="Quilting" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Needles</span><h4>Quilting</h4><p class="product-id">4 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-needles-stretch" data-category="Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-needles-stretch" src="images/Machine Needles/machineStretch.jpg" alt="Stretch" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Needles</span><h4>Stretch</h4><p class="product-id">4 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-needles-top-stitch" data-category="Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-needles-top-stitch" src="images/Machine Needles/machineTopStitch.jpg" alt="Top Stitch" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Needles</span><h4>Top Stitch</h4><p class="product-id">6 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-needles-twin" data-category="Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-needles-twin" src="images/Machine Needles/machineTwin.jpg" alt="Twin" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Needles</span><h4>Twin</h4><p class="product-id">4 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-needles-universal" data-category="Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-needles-universal" src="images/Machine Needles/machineUniversal.jpg" alt="Universal" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Needles</span><h4>Universal</h4><p class="product-id">8 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-needles-violin-db" data-category="Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-needles-violin-db" src="images/machineneedles/" alt="Violin Db" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Needles</span><h4>Violin Db</h4><p class="product-id">12 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-needles-violin-dc" data-category="Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-needles-violin-dc" src="images/machineneedles/" alt="Violin Dc" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Needles</span><h4>Violin Dc</h4><p class="product-id">8 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-needles-violin-dp" data-category="Machine Needles" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-needles-violin-dp" src="images/machineneedles/" alt="Violin Dp" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Needles</span><h4>Violin Dp</h4><p class="product-id">6 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+</div>
+</section>
+<section class="product-section" data-category-section="SINGER">
+<div class="section-heading"><h3>SINGER</h3><span>2 blocks</span></div>
+<div class="product-grid">
+<article class="product-card" data-group-id="singer-machine-needles" data-category="SINGER" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="singer-machine-needles" src="images/machineneedles/" alt="Machine Needles" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">SINGER</span><h4>Machine Needles</h4><p class="product-id">4 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="singer-machine-oil-ml" data-category="SINGER" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="singer-machine-oil-ml" src="images/machineneedles/" alt="Machine Oil Ml" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">SINGER</span><h4>Machine Oil Ml</h4><p class="product-id">2 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+</div>
+</section>
+</main>
+
+<div id="productModal" class="modal">
+<div class="modal-content">
+<span class="close-x" onclick="closeModal()">&times;</span>
+<div class="modal-left"><img id="modalImg" src="" alt=""></div>
+<div class="modal-right">
+<h2 id="modalTitle">Product</h2>
+<p class="modal-meta" id="modalCategory"></p>
+<p class="modal-meta">Product ID: <strong id="modalProductId"></strong></p>
+<label id="variantLabel" for="variantSelect">Option</label>
+<select id="variantSelect" class="option-select" onchange="selectVariant()"></select>
+<label>Quantity</label>
+<input type="number" id="qty" value="1" min="1" oninput="updateModalPrice()">
+<p id="price">Select product</p>
+<button class="btn-add" onclick="addToCart()">Add to Cart</button>
+</div>
+</div>
+</div>
+
+<script>
+const productGroups = {
+  "industrial-machine-needles-db-fawz": {
+    "title": "Db Fawz",
+    "category": "Industrial Machine Needles",
+    "label": "Option",
+    "imgKey": "industrial-machine-needles-db-fawz",
+    "options": [
+      {
+        "name": "DB x 1 Size 12 Fawz",
+        "productId": "industrial-machine-needles-db-x-1-size-12-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x 1 Size 14 Fawz",
+        "productId": "industrial-machine-needles-db-x-1-size-14-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x 1 Size 16 Fawz",
+        "productId": "industrial-machine-needles-db-x-1-size-16-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x 1 Size 18 Fawz",
+        "productId": "industrial-machine-needles-db-x-1-size-18-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x 1 Size 21 Fawz",
+        "productId": "industrial-machine-needles-db-x-1-size-21-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x K5 Size 10 Fawz",
+        "productId": "industrial-machine-needles-db-x-k5-size-10-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x K5 Size 11 Fawz",
+        "productId": "industrial-machine-needles-db-x-k5-size-11-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x K5 Size 12 Fawz",
+        "productId": "industrial-machine-needles-db-x-k5-size-12-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x K5 Size 9 Fawz",
+        "productId": "industrial-machine-needles-db-x-k5-size-9-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x 1 Size 12 Fawz",
+        "productId": "industrial-machine-needles-db-x-1-size-12-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x 1 Size 14 Fawz",
+        "productId": "industrial-machine-needles-db-x-1-size-14-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x 1 Size 16 Fawz",
+        "productId": "industrial-machine-needles-db-x-1-size-16-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x 1 Size 18 Fawz",
+        "productId": "industrial-machine-needles-db-x-1-size-18-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x 1 Size 21 Fawz",
+        "productId": "industrial-machine-needles-db-x-1-size-21-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x K5 Size 10 Fawz",
+        "productId": "industrial-machine-needles-db-x-k5-size-10-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x K5 Size 11 Fawz",
+        "productId": "industrial-machine-needles-db-x-k5-size-11-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x K5 Size 12 Fawz",
+        "productId": "industrial-machine-needles-db-x-k5-size-12-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DB x K5 Size 9 Fawz",
+        "productId": "industrial-machine-needles-db-x-k5-size-9-fawz",
+        "basePrice": 8.0,
+        "imgKey": "industrial-machine-needles-db-fawz",
+        "category": "Industrial Machine Needles"
+      }
+    ]
+  },
+  "industrial-machine-needles-dc-fawz": {
+    "title": "Dc Fawz",
+    "category": "Industrial Machine Needles",
+    "label": "Option",
+    "imgKey": "industrial-machine-needles-dc-fawz",
+    "options": [
+      {
+        "name": "DC x 1 Size 12 Fawz",
+        "productId": "industrial-machine-needles-dc-x-1-size-12-fawz",
+        "basePrice": 9.0,
+        "imgKey": "industrial-machine-needles-dc-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DC x 1 Size 14 Fawz",
+        "productId": "industrial-machine-needles-dc-x-1-size-14-fawz",
+        "basePrice": 9.0,
+        "imgKey": "industrial-machine-needles-dc-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DC x 1 Size 16 Fawz",
+        "productId": "industrial-machine-needles-dc-x-1-size-16-fawz",
+        "basePrice": 9.0,
+        "imgKey": "industrial-machine-needles-dc-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DC x 1 Size 18 Fawz",
+        "productId": "industrial-machine-needles-dc-x-1-size-18-fawz",
+        "basePrice": 9.0,
+        "imgKey": "industrial-machine-needles-dc-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DC x 1 Size 12 Fawz",
+        "productId": "industrial-machine-needles-dc-x-1-size-12-fawz",
+        "basePrice": 9.0,
+        "imgKey": "industrial-machine-needles-dc-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DC x 1 Size 14 Fawz",
+        "productId": "industrial-machine-needles-dc-x-1-size-14-fawz",
+        "basePrice": 9.0,
+        "imgKey": "industrial-machine-needles-dc-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DC x 1 Size 16 Fawz",
+        "productId": "industrial-machine-needles-dc-x-1-size-16-fawz",
+        "basePrice": 9.0,
+        "imgKey": "industrial-machine-needles-dc-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DC x 1 Size 18 Fawz",
+        "productId": "industrial-machine-needles-dc-x-1-size-18-fawz",
+        "basePrice": 9.0,
+        "imgKey": "industrial-machine-needles-dc-fawz",
+        "category": "Industrial Machine Needles"
+      }
+    ]
+  },
+  "industrial-machine-needles-dp-fawz": {
+    "title": "Dp Fawz",
+    "category": "Industrial Machine Needles",
+    "label": "Option",
+    "imgKey": "industrial-machine-needles-dp-fawz",
+    "options": [
+      {
+        "name": "DP x 17 Size 20 Fawz",
+        "productId": "industrial-machine-needles-dp-x-17-size-20-fawz",
+        "basePrice": 10.75,
+        "imgKey": "industrial-machine-needles-dp-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DP x 17 Size 22 Fawz",
+        "productId": "industrial-machine-needles-dp-x-17-size-22-fawz",
+        "basePrice": 10.75,
+        "imgKey": "industrial-machine-needles-dp-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DP x 17 Size 23 Fawz",
+        "productId": "industrial-machine-needles-dp-x-17-size-23-fawz",
+        "basePrice": 10.75,
+        "imgKey": "industrial-machine-needles-dp-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DP x 17 Size 24 Fawz",
+        "productId": "industrial-machine-needles-dp-x-17-size-24-fawz",
+        "basePrice": 16.5,
+        "imgKey": "industrial-machine-needles-dp-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DP x 17 Size 20 Fawz",
+        "productId": "industrial-machine-needles-dp-x-17-size-20-fawz",
+        "basePrice": 10.75,
+        "imgKey": "industrial-machine-needles-dp-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DP x 17 Size 22 Fawz",
+        "productId": "industrial-machine-needles-dp-x-17-size-22-fawz",
+        "basePrice": 10.75,
+        "imgKey": "industrial-machine-needles-dp-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DP x 17 Size 23 Fawz",
+        "productId": "industrial-machine-needles-dp-x-17-size-23-fawz",
+        "basePrice": 10.75,
+        "imgKey": "industrial-machine-needles-dp-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "DP x 17 Size 24 Fawz",
+        "productId": "industrial-machine-needles-dp-x-17-size-24-fawz",
+        "basePrice": 16.5,
+        "imgKey": "industrial-machine-needles-dp-fawz",
+        "category": "Industrial Machine Needles"
+      }
+    ]
+  },
+  "industrial-machine-needles-uo": {
+    "title": "Uo",
+    "category": "Industrial Machine Needles",
+    "label": "Option",
+    "imgKey": "industrial-machine-needles-uo",
+    "options": [
+      {
+        "name": "UO x 113 Size 14",
+        "productId": "industrial-machine-needles-uo-x-113-size-14",
+        "basePrice": 22.5,
+        "imgKey": "industrial-machine-needles-uo",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "UO x 113 Size 14",
+        "productId": "industrial-machine-needles-uo-x-113-size-14",
+        "basePrice": 22.5,
+        "imgKey": "industrial-machine-needles-uo",
+        "category": "Industrial Machine Needles"
+      }
+    ]
+  },
+  "industrial-machine-needles-uy-fawz": {
+    "title": "Uy Fawz",
+    "category": "Industrial Machine Needles",
+    "label": "Option",
+    "imgKey": "industrial-machine-needles-uy-fawz",
+    "options": [
+      {
+        "name": "UY x 113 Size 14 Fawz",
+        "productId": "industrial-machine-needles-uy-x-113-size-14-fawz",
+        "basePrice": 19.85,
+        "imgKey": "industrial-machine-needles-uy-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "UY x 128 Size 11 Fawz",
+        "productId": "industrial-machine-needles-uy-x-128-size-11-fawz",
+        "basePrice": 16.0,
+        "imgKey": "industrial-machine-needles-uy-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "UY x 128 Size 14 Fawz",
+        "productId": "industrial-machine-needles-uy-x-128-size-14-fawz",
+        "basePrice": 16.0,
+        "imgKey": "industrial-machine-needles-uy-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "UY x 113 Size 14 Fawz",
+        "productId": "industrial-machine-needles-uy-x-113-size-14-fawz",
+        "basePrice": 19.85,
+        "imgKey": "industrial-machine-needles-uy-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "UY x 128 Size 11 Fawz",
+        "productId": "industrial-machine-needles-uy-x-128-size-11-fawz",
+        "basePrice": 16.0,
+        "imgKey": "industrial-machine-needles-uy-fawz",
+        "category": "Industrial Machine Needles"
+      },
+      {
+        "name": "UY x 128 Size 14 Fawz",
+        "productId": "industrial-machine-needles-uy-x-128-size-14-fawz",
+        "basePrice": 16.0,
+        "imgKey": "industrial-machine-needles-uy-fawz",
+        "category": "Industrial Machine Needles"
+      }
+    ]
+  },
+  "machine-needles-ball-point": {
+    "title": "Ball Point",
+    "category": "Machine Needles",
+    "label": "Option",
+    "imgKey": "machine-needles-ball-point",
+    "options": [
+      {
+        "name": "Ball Point 10 Cards Size 12",
+        "productId": "machine-needles-ball-point-10-cards-size-12",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-ball-point",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Ball Point 10 Cards Size 14",
+        "productId": "machine-needles-ball-point-10-cards-size-14",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-ball-point",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Ball Point 10 Cards Size 16",
+        "productId": "machine-needles-ball-point-10-cards-size-16",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-ball-point",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Ball Point 10Cards Size 10",
+        "productId": "machine-needles-ball-point-10cards-size-10",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-ball-point",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Ball Point 10 Cards Size 12",
+        "productId": "machine-needles-ball-point-10-cards-size-12",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-ball-point",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Ball Point 10 Cards Size 14",
+        "productId": "machine-needles-ball-point-10-cards-size-14",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-ball-point",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Ball Point 10 Cards Size 16",
+        "productId": "machine-needles-ball-point-10-cards-size-16",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-ball-point",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Ball Point 10Cards Size 10",
+        "productId": "machine-needles-ball-point-10cards-size-10",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-ball-point",
+        "category": "Machine Needles"
+      }
+    ]
+  },
+  "machine-needles-butterfly": {
+    "title": "Butterfly",
+    "category": "Machine Needles",
+    "label": "Option",
+    "imgKey": "machine-needles-butterfly",
+    "options": [
+      {
+        "name": "Butterfly Size 11",
+        "productId": "machine-needles-butterfly-size-11",
+        "basePrice": 167.2,
+        "imgKey": "machine-needles-butterfly",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Butterfly Size 14",
+        "productId": "machine-needles-butterfly-size-14",
+        "basePrice": 167.2,
+        "imgKey": "machine-needles-butterfly",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Butterfly Size 16",
+        "productId": "machine-needles-butterfly-size-16",
+        "basePrice": 167.2,
+        "imgKey": "machine-needles-butterfly",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Butterfly Size 18",
+        "productId": "machine-needles-butterfly-size-18",
+        "basePrice": 167.2,
+        "imgKey": "machine-needles-butterfly",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Butterfly Size 11",
+        "productId": "machine-needles-butterfly-size-11",
+        "basePrice": 167.2,
+        "imgKey": "machine-needles-butterfly",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Butterfly Size 14",
+        "productId": "machine-needles-butterfly-size-14",
+        "basePrice": 167.2,
+        "imgKey": "machine-needles-butterfly",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Butterfly Size 16",
+        "productId": "machine-needles-butterfly-size-16",
+        "basePrice": 167.2,
+        "imgKey": "machine-needles-butterfly",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Butterfly Size 18",
+        "productId": "machine-needles-butterfly-size-18",
+        "basePrice": 167.2,
+        "imgKey": "machine-needles-butterfly",
+        "category": "Machine Needles"
+      }
+    ]
+  },
+  "machine-needles-embroidery": {
+    "title": "Embroidery",
+    "category": "Machine Needles",
+    "label": "Option",
+    "imgKey": "machine-needles-embroidery",
+    "options": [
+      {
+        "name": "Embroidery 10 Cards Size 14",
+        "productId": "machine-needles-embroidery-10-cards-size-14",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-embroidery",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Embroidery 10 Cards Size 16",
+        "productId": "machine-needles-embroidery-10-cards-size-16",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-embroidery",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Embroidery 10 Cards Size 18",
+        "productId": "machine-needles-embroidery-10-cards-size-18",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-embroidery",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Embroidery 10 Cards Size 14",
+        "productId": "machine-needles-embroidery-10-cards-size-14",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-embroidery",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Embroidery 10 Cards Size 16",
+        "productId": "machine-needles-embroidery-10-cards-size-16",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-embroidery",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Embroidery 10 Cards Size 18",
+        "productId": "machine-needles-embroidery-10-cards-size-18",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-embroidery",
+        "category": "Machine Needles"
+      }
+    ]
+  },
+  "machine-needles-industrial": {
+    "title": "Industrial",
+    "category": "Machine Needles",
+    "label": "Option",
+    "imgKey": "machine-needles-industrial",
+    "options": [
+      {
+        "name": "Industrial 20 Cards Size 14",
+        "productId": "machine-needles-industrial-20-cards-size-14",
+        "basePrice": 105.0,
+        "imgKey": "machine-needles-industrial",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Industrial 20 Cards Size 18",
+        "productId": "machine-needles-industrial-20-cards-size-18",
+        "basePrice": 105.0,
+        "imgKey": "machine-needles-industrial",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Industrial 20 Cards Size 21",
+        "productId": "machine-needles-industrial-20-cards-size-21",
+        "basePrice": 105.0,
+        "imgKey": "machine-needles-industrial",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Industrial 20 Cards Size 16",
+        "productId": "machine-needles-industrial-20-cards-size-16",
+        "basePrice": 105.0,
+        "imgKey": "machine-needles-industrial",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Industrial 20 Cards Size 14",
+        "productId": "machine-needles-industrial-20-cards-size-14",
+        "basePrice": 105.0,
+        "imgKey": "machine-needles-industrial",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Industrial 20 Cards Size 18",
+        "productId": "machine-needles-industrial-20-cards-size-18",
+        "basePrice": 105.0,
+        "imgKey": "machine-needles-industrial",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Industrial 20 Cards Size 21",
+        "productId": "machine-needles-industrial-20-cards-size-21",
+        "basePrice": 105.0,
+        "imgKey": "machine-needles-industrial",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Industrial 20 Cards Size 16",
+        "productId": "machine-needles-industrial-20-cards-size-16",
+        "basePrice": 105.0,
+        "imgKey": "machine-needles-industrial",
+        "category": "Machine Needles"
+      }
+    ]
+  },
+  "machine-needles-jeans": {
+    "title": "Jeans",
+    "category": "Machine Needles",
+    "label": "Option",
+    "imgKey": "machine-needles-jeans",
+    "options": [
+      {
+        "name": "Jeans 20 cards Size 16",
+        "productId": "machine-needles-jeans-20-cards-size-16",
+        "basePrice": 105.0,
+        "imgKey": "machine-needles-jeans",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Jeans 20 cards Size 16",
+        "productId": "machine-needles-jeans-20-cards-size-16",
+        "basePrice": 105.0,
+        "imgKey": "machine-needles-jeans",
+        "category": "Machine Needles"
+      }
+    ]
+  },
+  "machine-needles-leather": {
+    "title": "Leather",
+    "category": "Machine Needles",
+    "label": "Option",
+    "imgKey": "machine-needles-leather",
+    "options": [
+      {
+        "name": "Leather 10 Cards Size 16",
+        "productId": "machine-needles-leather-10-cards-size-16",
+        "basePrice": 121.0,
+        "imgKey": "machine-needles-leather",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Leather 10 Cards Size 16",
+        "productId": "machine-needles-leather-10-cards-size-16",
+        "basePrice": 121.0,
+        "imgKey": "machine-needles-leather",
+        "category": "Machine Needles"
+      }
+    ]
+  },
+  "machine-needles-microtex": {
+    "title": "Microtex",
+    "category": "Machine Needles",
+    "label": "Option",
+    "imgKey": "machine-needles-microtex",
+    "options": [
+      {
+        "name": "Microtex 10 Cards Size 10",
+        "productId": "machine-needles-microtex-10-cards-size-10",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-microtex",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Microtex 10 Cards Size 12",
+        "productId": "machine-needles-microtex-10-cards-size-12",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-microtex",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Microtex 10 Cards Size 14",
+        "productId": "machine-needles-microtex-10-cards-size-14",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-microtex",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Microtex 10 Cards Size 8",
+        "productId": "machine-needles-microtex-10-cards-size-8",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-microtex",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Microtex 10 Cards Size 10",
+        "productId": "machine-needles-microtex-10-cards-size-10",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-microtex",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Microtex 10 Cards Size 12",
+        "productId": "machine-needles-microtex-10-cards-size-12",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-microtex",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Microtex 10 Cards Size 14",
+        "productId": "machine-needles-microtex-10-cards-size-14",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-microtex",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Microtex 10 Cards Size 8",
+        "productId": "machine-needles-microtex-10-cards-size-8",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-microtex",
+        "category": "Machine Needles"
+      }
+    ]
+  },
+  "machine-needles-overlocker": {
+    "title": "Overlocker",
+    "category": "Machine Needles",
+    "label": "Option",
+    "imgKey": "machine-needles-overlocker",
+    "options": [
+      {
+        "name": "Overlocker 20 Cards Size 14",
+        "productId": "machine-needles-overlocker-20-cards-size-14",
+        "basePrice": 105.0,
+        "imgKey": "machine-needles-overlocker",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Overlocker 20 Cards Size 16",
+        "productId": "machine-needles-overlocker-20-cards-size-16",
+        "basePrice": 105.0,
+        "imgKey": "machine-needles-overlocker",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Overlocker 20 Cards Size 18",
+        "productId": "machine-needles-overlocker-20-cards-size-18",
+        "basePrice": 105.0,
+        "imgKey": "machine-needles-overlocker",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Overlocker 20 Cards Size 14",
+        "productId": "machine-needles-overlocker-20-cards-size-14",
+        "basePrice": 105.0,
+        "imgKey": "machine-needles-overlocker",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Overlocker 20 Cards Size 16",
+        "productId": "machine-needles-overlocker-20-cards-size-16",
+        "basePrice": 105.0,
+        "imgKey": "machine-needles-overlocker",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Overlocker 20 Cards Size 18",
+        "productId": "machine-needles-overlocker-20-cards-size-18",
+        "basePrice": 105.0,
+        "imgKey": "machine-needles-overlocker",
+        "category": "Machine Needles"
+      }
+    ]
+  },
+  "machine-needles-quilting": {
+    "title": "Quilting",
+    "category": "Machine Needles",
+    "label": "Option",
+    "imgKey": "machine-needles-quilting",
+    "options": [
+      {
+        "name": "Quilting 20 cards Size 11",
+        "productId": "machine-needles-quilting-20-cards-size-11",
+        "basePrice": 100.0,
+        "imgKey": "machine-needles-quilting",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Quilting 20 cards Size 14",
+        "productId": "machine-needles-quilting-20-cards-size-14",
+        "basePrice": 100.0,
+        "imgKey": "machine-needles-quilting",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Quilting 20 cards Size 11",
+        "productId": "machine-needles-quilting-20-cards-size-11",
+        "basePrice": 100.0,
+        "imgKey": "machine-needles-quilting",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Quilting 20 cards Size 14",
+        "productId": "machine-needles-quilting-20-cards-size-14",
+        "basePrice": 100.0,
+        "imgKey": "machine-needles-quilting",
+        "category": "Machine Needles"
+      }
+    ]
+  },
+  "machine-needles-stretch": {
+    "title": "Stretch",
+    "category": "Machine Needles",
+    "label": "Option",
+    "imgKey": "machine-needles-stretch",
+    "options": [
+      {
+        "name": "Stretch 10 Cards Size 11",
+        "productId": "machine-needles-stretch-10-cards-size-11",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-stretch",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Stretch 10 Cards Size 14",
+        "productId": "machine-needles-stretch-10-cards-size-14",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-stretch",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Stretch 10 Cards Size 11",
+        "productId": "machine-needles-stretch-10-cards-size-11",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-stretch",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Stretch 10 Cards Size 14",
+        "productId": "machine-needles-stretch-10-cards-size-14",
+        "basePrice": 56.38,
+        "imgKey": "machine-needles-stretch",
+        "category": "Machine Needles"
+      }
+    ]
+  },
+  "machine-needles-top-stitch": {
+    "title": "Top Stitch",
+    "category": "Machine Needles",
+    "label": "Option",
+    "imgKey": "machine-needles-top-stitch",
+    "options": [
+      {
+        "name": "Top Stitch 20 cards Size 12",
+        "productId": "machine-needles-top-stitch-20-cards-size-12",
+        "basePrice": 100.0,
+        "imgKey": "machine-needles-top-stitch",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Top Stitch 20 cards Size 14",
+        "productId": "machine-needles-top-stitch-20-cards-size-14",
+        "basePrice": 100.0,
+        "imgKey": "machine-needles-top-stitch",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Top Stitch 20 cards Size 16",
+        "productId": "machine-needles-top-stitch-20-cards-size-16",
+        "basePrice": 100.0,
+        "imgKey": "machine-needles-top-stitch",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Top Stitch 20 cards Size 12",
+        "productId": "machine-needles-top-stitch-20-cards-size-12",
+        "basePrice": 100.0,
+        "imgKey": "machine-needles-top-stitch",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Top Stitch 20 cards Size 14",
+        "productId": "machine-needles-top-stitch-20-cards-size-14",
+        "basePrice": 100.0,
+        "imgKey": "machine-needles-top-stitch",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Top Stitch 20 cards Size 16",
+        "productId": "machine-needles-top-stitch-20-cards-size-16",
+        "basePrice": 100.0,
+        "imgKey": "machine-needles-top-stitch",
+        "category": "Machine Needles"
+      }
+    ]
+  },
+  "machine-needles-twin": {
+    "title": "Twin",
+    "category": "Machine Needles",
+    "label": "Option",
+    "imgKey": "machine-needles-twin",
+    "options": [
+      {
+        "name": "Twin 10 Cards Size 2.0/80",
+        "productId": "machine-needles-twin-10-cards-size-2-0-80",
+        "basePrice": 89.0,
+        "imgKey": "machine-needles-twin",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Twin 10 Cards Size 3.0/90",
+        "productId": "machine-needles-twin-10-cards-size-3-0-90",
+        "basePrice": 89.0,
+        "imgKey": "machine-needles-twin",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Twin 10 Cards Size 2.0/80",
+        "productId": "machine-needles-twin-10-cards-size-2-0-80",
+        "basePrice": 89.0,
+        "imgKey": "machine-needles-twin",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Twin 10 Cards Size 3.0/90",
+        "productId": "machine-needles-twin-10-cards-size-3-0-90",
+        "basePrice": 89.0,
+        "imgKey": "machine-needles-twin",
+        "category": "Machine Needles"
+      }
+    ]
+  },
+  "machine-needles-universal": {
+    "title": "Universal",
+    "category": "Machine Needles",
+    "label": "Option",
+    "imgKey": "machine-needles-universal",
+    "options": [
+      {
+        "name": "Universal 20 cards Size 11",
+        "productId": "machine-needles-universal-20-cards-size-11",
+        "basePrice": 98.0,
+        "imgKey": "machine-needles-universal",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Universal 20 Cards Size 14",
+        "productId": "machine-needles-universal-20-cards-size-14",
+        "basePrice": 98.0,
+        "imgKey": "machine-needles-universal",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Universal 20 Cards Size 16",
+        "productId": "machine-needles-universal-20-cards-size-16",
+        "basePrice": 98.0,
+        "imgKey": "machine-needles-universal",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Universal 20 Cards Size 18",
+        "productId": "machine-needles-universal-20-cards-size-18",
+        "basePrice": 98.0,
+        "imgKey": "machine-needles-universal",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Universal 20 cards Size 11",
+        "productId": "machine-needles-universal-20-cards-size-11",
+        "basePrice": 98.0,
+        "imgKey": "machine-needles-universal",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Universal 20 Cards Size 14",
+        "productId": "machine-needles-universal-20-cards-size-14",
+        "basePrice": 98.0,
+        "imgKey": "machine-needles-universal",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Universal 20 Cards Size 16",
+        "productId": "machine-needles-universal-20-cards-size-16",
+        "basePrice": 98.0,
+        "imgKey": "machine-needles-universal",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Universal 20 Cards Size 18",
+        "productId": "machine-needles-universal-20-cards-size-18",
+        "basePrice": 98.0,
+        "imgKey": "machine-needles-universal",
+        "category": "Machine Needles"
+      }
+    ]
+  },
+  "machine-needles-violin-db": {
+    "title": "Violin Db",
+    "category": "Machine Needles",
+    "label": "Option",
+    "imgKey": "machine-needles-violin-db",
+    "options": [
+      {
+        "name": "Violin DB 50s Size 11",
+        "productId": "machine-needles-violin-db-50s-size-11",
+        "basePrice": 210.0,
+        "imgKey": "machine-needles-violin-db",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DB 50s Size 14",
+        "productId": "machine-needles-violin-db-50s-size-14",
+        "basePrice": 172.7,
+        "imgKey": "machine-needles-violin-db",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DB 50s Size 16",
+        "productId": "machine-needles-violin-db-50s-size-16",
+        "basePrice": 172.7,
+        "imgKey": "machine-needles-violin-db",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DB 50s Size 18",
+        "productId": "machine-needles-violin-db-50s-size-18",
+        "basePrice": 172.7,
+        "imgKey": "machine-needles-violin-db",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DB 50s Size 21",
+        "productId": "machine-needles-violin-db-50s-size-21",
+        "basePrice": 193.6,
+        "imgKey": "machine-needles-violin-db",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DB 50s Size 23",
+        "productId": "machine-needles-violin-db-50s-size-23",
+        "basePrice": 325.0,
+        "imgKey": "machine-needles-violin-db",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DB 50s Size 11",
+        "productId": "machine-needles-violin-db-50s-size-11",
+        "basePrice": 210.0,
+        "imgKey": "machine-needles-violin-db",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DB 50s Size 14",
+        "productId": "machine-needles-violin-db-50s-size-14",
+        "basePrice": 172.7,
+        "imgKey": "machine-needles-violin-db",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DB 50s Size 16",
+        "productId": "machine-needles-violin-db-50s-size-16",
+        "basePrice": 172.7,
+        "imgKey": "machine-needles-violin-db",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DB 50s Size 18",
+        "productId": "machine-needles-violin-db-50s-size-18",
+        "basePrice": 172.7,
+        "imgKey": "machine-needles-violin-db",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DB 50s Size 21",
+        "productId": "machine-needles-violin-db-50s-size-21",
+        "basePrice": 193.6,
+        "imgKey": "machine-needles-violin-db",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DB 50s Size 23",
+        "productId": "machine-needles-violin-db-50s-size-23",
+        "basePrice": 325.0,
+        "imgKey": "machine-needles-violin-db",
+        "category": "Machine Needles"
+      }
+    ]
+  },
+  "machine-needles-violin-dc": {
+    "title": "Violin Dc",
+    "category": "Machine Needles",
+    "label": "Option",
+    "imgKey": "machine-needles-violin-dc",
+    "options": [
+      {
+        "name": "Violin DC 50s Size 11",
+        "productId": "machine-needles-violin-dc-50s-size-11",
+        "basePrice": 255.0,
+        "imgKey": "machine-needles-violin-dc",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DC 50s Size 14",
+        "productId": "machine-needles-violin-dc-50s-size-14",
+        "basePrice": 215.0,
+        "imgKey": "machine-needles-violin-dc",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DC 50s Size 16",
+        "productId": "machine-needles-violin-dc-50s-size-16",
+        "basePrice": 207.9,
+        "imgKey": "machine-needles-violin-dc",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DC 50s Size 18",
+        "productId": "machine-needles-violin-dc-50s-size-18",
+        "basePrice": 207.9,
+        "imgKey": "machine-needles-violin-dc",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DC 50s Size 11",
+        "productId": "machine-needles-violin-dc-50s-size-11",
+        "basePrice": 255.0,
+        "imgKey": "machine-needles-violin-dc",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DC 50s Size 14",
+        "productId": "machine-needles-violin-dc-50s-size-14",
+        "basePrice": 215.0,
+        "imgKey": "machine-needles-violin-dc",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DC 50s Size 16",
+        "productId": "machine-needles-violin-dc-50s-size-16",
+        "basePrice": 207.9,
+        "imgKey": "machine-needles-violin-dc",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DC 50s Size 18",
+        "productId": "machine-needles-violin-dc-50s-size-18",
+        "basePrice": 207.9,
+        "imgKey": "machine-needles-violin-dc",
+        "category": "Machine Needles"
+      }
+    ]
+  },
+  "machine-needles-violin-dp": {
+    "title": "Violin Dp",
+    "category": "Machine Needles",
+    "label": "Option",
+    "imgKey": "machine-needles-violin-dp",
+    "options": [
+      {
+        "name": "Violin DP 50s Size 14",
+        "productId": "machine-needles-violin-dp-50s-size-14",
+        "basePrice": 198.0,
+        "imgKey": "machine-needles-violin-dp",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DP 50s Size 16",
+        "productId": "machine-needles-violin-dp-50s-size-16",
+        "basePrice": 198.0,
+        "imgKey": "machine-needles-violin-dp",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DP 50s Size 18",
+        "productId": "machine-needles-violin-dp-50s-size-18",
+        "basePrice": 198.0,
+        "imgKey": "machine-needles-violin-dp",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DP 50s Size 14",
+        "productId": "machine-needles-violin-dp-50s-size-14",
+        "basePrice": 198.0,
+        "imgKey": "machine-needles-violin-dp",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DP 50s Size 16",
+        "productId": "machine-needles-violin-dp-50s-size-16",
+        "basePrice": 198.0,
+        "imgKey": "machine-needles-violin-dp",
+        "category": "Machine Needles"
+      },
+      {
+        "name": "Violin DP 50s Size 18",
+        "productId": "machine-needles-violin-dp-50s-size-18",
+        "basePrice": 198.0,
+        "imgKey": "machine-needles-violin-dp",
+        "category": "Machine Needles"
+      }
+    ]
+  },
+  "singer-machine-needles": {
+    "title": "Machine Needles",
+    "category": "SINGER",
+    "label": "Option",
+    "imgKey": "singer-machine-needles",
+    "options": [
+      {
+        "name": "Machine Needles 2020",
+        "productId": "singer-machine-needles-2020",
+        "basePrice": 12.51,
+        "imgKey": "singer-machine-needles",
+        "category": "SINGER"
+      },
+      {
+        "name": "Machine Needles 2045",
+        "productId": "singer-machine-needles-2045",
+        "basePrice": 13.1,
+        "imgKey": "singer-machine-needles",
+        "category": "SINGER"
+      },
+      {
+        "name": "Machine Needles 2020",
+        "productId": "singer-machine-needles-2020",
+        "basePrice": 12.51,
+        "imgKey": "singer-machine-needles",
+        "category": "SINGER"
+      },
+      {
+        "name": "Machine Needles 2045",
+        "productId": "singer-machine-needles-2045",
+        "basePrice": 13.1,
+        "imgKey": "singer-machine-needles",
+        "category": "SINGER"
+      }
+    ]
+  },
+  "singer-machine-oil-ml": {
+    "title": "Machine Oil Ml",
+    "category": "SINGER",
+    "label": "Option",
+    "imgKey": "singer-machine-oil-ml",
+    "options": [
+      {
+        "name": "Machine Oil 100ml",
+        "productId": "singer-machine-oil-100ml",
+        "basePrice": 16.6,
+        "imgKey": "singer-machine-oil-ml",
+        "category": "SINGER"
+      },
+      {
+        "name": "Machine Oil 100ml",
+        "productId": "singer-machine-oil-100ml",
+        "basePrice": 16.6,
+        "imgKey": "singer-machine-oil-ml",
+        "category": "SINGER"
+      }
+    ]
+  }
+};
+
+let selectedGroup = null;
+let selectedProduct = null;
+
+function getBankImage(key){
+  const img = document.querySelector(`#imageBank img[data-img-key="${CSS.escape(key)}"]`);
+  return img ? img.getAttribute('src') : '';
+}
+
+function applyCardImages(){
+  document.querySelectorAll('[data-image-key]').forEach(img => {
+    const key = img.dataset.imageKey;
+    img.src = getBankImage(key);
+  });
+}
+
+function openProduct(card){
+  const groupId = card.dataset.groupId;
+  selectedGroup = productGroups[groupId];
+  if(!selectedGroup) return;
+
+  const variantSelect = document.getElementById('variantSelect');
+  variantSelect.innerHTML = selectedGroup.options.map((option,index)=>`<option value="${index}">${option.name}</option>`).join('');
+  document.getElementById('variantLabel').textContent = selectedGroup.label || 'Option';
+  document.getElementById('modalTitle').textContent = selectedGroup.title;
+  document.getElementById('modalCategory').textContent = selectedGroup.category;
+  document.getElementById('qty').value = 1;
+  document.getElementById('productModal').style.display = 'block';
+  selectVariant();
+}
+
+function selectVariant(){
+  if(!selectedGroup) return;
+  const index = Number(document.getElementById('variantSelect').value || 0);
+  const option = selectedGroup.options[index] || selectedGroup.options[0];
+
+  selectedProduct = {
+    productId: option.productId,
+    name: option.name,
+    category: selectedGroup.category,
+    basePrice: Number(option.basePrice || 0),
+    imgKey: option.imgKey || selectedGroup.imgKey
+  };
+
+  window.fawzCurrentProductId = selectedProduct.productId;
+  window.fawzCurrentProductName = selectedProduct.name;
+  document.getElementById('modalProductId').textContent = selectedProduct.productId;
+  document.getElementById('modalImg').src = getBankImage(selectedProduct.imgKey);
+  document.getElementById('modalImg').alt = selectedProduct.name;
+  updateModalPrice();
+}
+
+function closeModal(){document.getElementById('productModal').style.display='none'}
+
+async function updateModalPrice(){
+  const qty = Math.max(parseInt(document.getElementById('qty').value || '1',10) || 1, 1);
+  const priceEl = document.getElementById('price');
+  if(!selectedProduct){priceEl.textContent='Select product';return;}
+  priceEl.textContent='Loading...';
+  let unit = selectedProduct.basePrice;
+  try{
+    if(window.fawzFetchTierPrice) unit = await window.fawzFetchTierPrice(selectedProduct.productId);
+  }catch(e){
+    console.warn('Using workbook fallback price until Firebase is configured:', e);
+  }
+  window.fawzCurrentUnitPrice = unit;
+  priceEl.textContent = 'R ' + (unit * qty).toFixed(2);
+}
+
+function addToCart(){
+  if(!selectedProduct) return;
+  const qty = Math.max(parseInt(document.getElementById('qty').value || '1',10) || 1, 1);
+  const unit = Number(window.fawzCurrentUnitPrice || selectedProduct.basePrice || 0);
+  const optionText = document.getElementById('variantSelect').selectedOptions[0]?.textContent || 'Standard';
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  cart.push({
+    product: optionText,
+    productId: selectedProduct.productId,
+    category: selectedProduct.category,
+    size: optionText,
+    qty,
+    price: unit,
+    unitPrice: unit,
+    total: unit * qty,
+    image: getBankImage(selectedProduct.imgKey)
+  });
+  localStorage.setItem('cart', JSON.stringify(cart));
+  alert('Added to cart: ' + optionText);
+}
+
+function filterProducts(){
+  const q = document.getElementById('searchBox').value.toLowerCase().trim();
+  const c = document.getElementById('categoryFilter').value;
+  document.querySelectorAll('.product-card').forEach(card => {
+    const group = productGroups[card.dataset.groupId];
+    const haystack = JSON.stringify(group || {}).toLowerCase();
+    const matchesSearch = !q || haystack.includes(q) || card.textContent.toLowerCase().includes(q);
+    const matchesCategory = !c || card.dataset.category === c;
+    card.classList.toggle('hidden', !(matchesSearch && matchesCategory));
+  });
+  document.querySelectorAll('.product-section').forEach(section => {
+    const visibleCards = section.querySelectorAll('.product-card:not(.hidden)').length;
+    section.classList.toggle('hidden', visibleCards === 0);
+  });
+}
+
+document.getElementById('searchBox').addEventListener('input', filterProducts);
+document.getElementById('categoryFilter').addEventListener('change', filterProducts);
+window.addEventListener('click', e => {if(e.target === document.getElementById('productModal')) closeModal();});
+document.addEventListener('DOMContentLoaded', applyCardImages);
+</script>
+</body>
+</html>

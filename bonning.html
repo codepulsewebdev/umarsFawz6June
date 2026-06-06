@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boning Bra Cups Shoulder Pads | Fawz Haberdashery</title>
+<link rel="stylesheet" href="global-images.css">
+
+<style>
+:root{--fawz-red:#e31e24;--fawz-dark:#1a1a1a;--fawz-grey:#f8f8f8;--border:#eeeeee;}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',Roboto,Arial,sans-serif;background:#fff;color:var(--fawz-dark)}
+header{position:sticky;top:0;background:#fff;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--fawz-red);box-shadow:0 2px 10px rgba(0,0,0,.05);z-index:1000;gap:20px}
+.logo{font-weight:900;text-transform:uppercase;letter-spacing:1px;font-size:1.2rem}
+.logo span{color:var(--fawz-red)}
+nav a{color:var(--fawz-dark);margin-left:18px;text-decoration:none;font-weight:700;font-size:.9rem}
+.hero{padding:46px 5% 24px;max-width:1300px;margin:auto}
+.hero h1{font-size:clamp(2rem,4vw,3.5rem);margin:0;text-transform:uppercase}
+.hero p{color:#666;max-width:900px;line-height:1.6}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.toolbar input,.toolbar select,.variant-select{padding:13px 14px;border:1px solid #ddd;border-radius:10px;min-width:240px;font-size:1rem;background:#fff}
+main{padding:15px 5% 70px;max-width:1300px;margin:auto}
+.product-section{margin:32px 0 54px}
+.section-heading{display:flex;align-items:center;justify-content:space-between;border-left:6px solid var(--fawz-red);padding-left:14px;margin-bottom:18px}
+.section-heading h3{font-size:1.6rem;margin:0;text-transform:uppercase}
+.section-heading span{background:#fff3f3;color:var(--fawz-red);font-weight:800;border-radius:999px;padding:6px 11px}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+.product-card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.04);transition:.25s}
+.product-card:hover{transform:translateY(-4px);border-color:var(--fawz-red);box-shadow:0 15px 32px rgba(0,0,0,.10)}
+.product-img-wrap{height:190px;background:#fafafa;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border)}
+.product-img-wrap img{width:100%;height:100%;object-fit:contain;padding:14px}
+.product-info{padding:15px}
+.category-pill{display:inline-block;font-size:.72rem;font-weight:900;text-transform:uppercase;background:#f2f2f2;border-radius:999px;padding:5px 8px;color:#555}
+.product-info h4{font-size:1rem;margin:12px 0 8px;line-height:1.3}
+.product-id{font-size:.76rem;color:#777;word-break:break-all;margin:0 0 8px}
+.firebase-price{font-weight:900;color:var(--fawz-red);margin:0}
+.modal{display:none;position:fixed;z-index:2000;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(4px);padding:30px 12px}
+.modal-content{background:#fff;margin:auto;max-width:980px;min-height:520px;display:grid;grid-template-columns:1fr 1.05fr;border-radius:18px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,.24);position:relative}
+.close-x{position:absolute;right:22px;top:16px;font-size:32px;cursor:pointer;color:#999;z-index:5}
+.modal-left{background:#fafafa;display:flex;align-items:center;justify-content:center;padding:28px;border-right:1px solid var(--border)}
+.modal-left img{max-width:100%;max-height:430px;object-fit:contain}
+.modal-right{padding:42px 36px}
+.modal-right h2{margin:0 0 12px;text-transform:uppercase;color:var(--fawz-red)}
+.modal-meta{color:#666;font-size:.92rem;word-break:break-all}
+label{display:block;margin:22px 0 8px;font-weight:900;text-transform:uppercase;font-size:.75rem;color:#555}
+input{width:100%;padding:14px;border:1px solid #ddd;border-radius:10px;font-size:1rem;background:var(--fawz-grey)}
+#price{font-size:2rem;font-weight:950;margin:25px 0;color:#111}
+.btn-add{width:100%;background:var(--fawz-red);border:none;color:#fff;font-weight:900;text-transform:uppercase;padding:17px;border-radius:12px;cursor:pointer;letter-spacing:1px}
+.btn-add:hover{background:#b3161a}
+.hidden{display:none!important}
+@media(max-width:760px){
+header{align-items:flex-start;flex-direction:column}
+nav a{margin:0 14px 0 0}
+.modal-content{grid-template-columns:1fr;max-height:92vh;overflow:auto}
+.modal-left{min-height:260px;border-right:0;border-bottom:1px solid var(--border)}
+}
+</style>
+
+<script src="firebase-config.js" type="module"></script>
+<script src="fawz-product-id-map.js"></script>
+<script src="fawz-firebase-pricing.js" type="module"></script>
+<script src="fawz-security.js" defer></script>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">Fawz <span>Haberdashery</span></div>
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="all-products.html">All Products</a>
+    <a href="demo_cart.html">View Cart</a>
+  </nav>
+  <a href="login.html" style="margin-left:12px;font-weight:900;color:#e31e24;text-decoration:none">Login</a>
+</header>
+
+<section class="hero">
+  <h1>Boning Bra Cups Shoulder Pads</h1>
+  <p>Products are grouped properly: choose the main item first, then select the size, colour, type and quantity inside the order modal. Firebase pricing is fetched using the final selected variant product ID.</p>
+  <div class="toolbar">
+    <input id="searchBox" placeholder="Search products or options...">
+    <select id="categoryFilter">
+      <option value="">All categories</option>
+      <option value="Boning">Boning</option>
+      <option value="Bra Accessories">Bra Accessories</option>
+      <option value="Shoulder Pads (Pairs)">Shoulder Pads (Pairs)</option>
+    </select>
+  </div>
+</section>
+
+<main>
+
+<section class="product-section" data-category-section="Boning">
+  <div class="section-heading"><h3>Boning</h3><span>2 groups</span></div>
+  <div class="product-grid">
+
+    <article class="product-card" data-parent-id="polyester-boning" data-category="Boning" onclick="openProduct('polyester-boning')">
+      <div class="product-img-wrap"><img src="images/bonningBraCupsShoulderPads/polyesterbonning.webp" alt="Polyester Boning" loading="lazy"></div>
+      <div class="product-info">
+        <span class="category-pill">Boning</span>
+        <h4>Polyester Boning</h4>
+        <p class="product-id">Choose options inside</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+    <article class="product-card" data-parent-id="clear-plastic-boning" data-category="Boning" onclick="openProduct('clear-plastic-boning')">
+      <div class="product-img-wrap"><img src="images/bonningBraCupsShoulderPads/clearbonning.jpg" alt="Clear Plastic Boning" loading="lazy"></div>
+      <div class="product-info">
+        <span class="category-pill">Boning</span>
+        <h4>Clear Plastic Boning</h4>
+        <p class="product-id">Choose options inside</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="product-section" data-category-section="Bra Accessories">
+  <div class="section-heading"><h3>Bra Accessories</h3><span>2 groups</span></div>
+  <div class="product-grid">
+
+    <article class="product-card" data-parent-id="bra-cups" data-category="Bra Accessories" onclick="openProduct('bra-cups')">
+      <div class="product-img-wrap"><img src="images/bonningBraCupsShoulderPads/typeA.jpg" alt="Bra Cups" loading="lazy"></div>
+      <div class="product-info">
+        <span class="category-pill">Bra Accessories</span>
+        <h4>Bra Cups</h4>
+        <p class="product-id">Choose options inside</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+    <article class="product-card" data-parent-id="under-wire" data-category="Bra Accessories" onclick="openProduct('under-wire')">
+      <div class="product-img-wrap"><img src="images/bonningBraCupsShoulderPads/underWire.webp" alt="Under Wire" loading="lazy"></div>
+      <div class="product-info">
+        <span class="category-pill">Bra Accessories</span>
+        <h4>Under Wire</h4>
+        <p class="product-id">Choose options inside</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="product-section" data-category-section="Shoulder Pads (Pairs)">
+  <div class="section-heading"><h3>Shoulder Pads (Pairs)</h3><span>4 groups</span></div>
+  <div class="product-grid">
+
+    <article class="product-card" data-parent-id="shoulder-pads-standard" data-category="Shoulder Pads (Pairs)" onclick="openProduct('shoulder-pads-standard')">
+      <div class="product-img-wrap"><img src="images/bonningBraCupsShoulderPads/shoulderPads.webp" alt="Shoulder Pads" loading="lazy"></div>
+      <div class="product-info">
+        <span class="category-pill">Shoulder Pads (Pairs)</span>
+        <h4>Shoulder Pads</h4>
+        <p class="product-id">Choose options inside</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+    <article class="product-card" data-parent-id="mens-shoulder-pads" data-category="Shoulder Pads (Pairs)" onclick="openProduct('mens-shoulder-pads')">
+      <div class="product-img-wrap"><img src="images/bonningBraCupsShoulderPads/mensShoulderPads.webp" alt="Mens Shoulder Pads" loading="lazy"></div>
+      <div class="product-info">
+        <span class="category-pill">Shoulder Pads (Pairs)</span>
+        <h4>Mens Shoulder Pads</h4>
+        <p class="product-id">Choose options inside</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+    <article class="product-card" data-parent-id="coat-liners" data-category="Shoulder Pads (Pairs)" onclick="openProduct('coat-liners')">
+      <div class="product-img-wrap"><img src="images/bonningBraCupsShoulderPads/coatLiners.jpg" alt="Coat Liners" loading="lazy"></div>
+      <div class="product-info">
+        <span class="category-pill">Shoulder Pads (Pairs)</span>
+        <h4>Coat Liners</h4>
+        <p class="product-id">Choose options inside</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+    <article class="product-card" data-parent-id="sleeve-shoulder-roll" data-category="Shoulder Pads (Pairs)" onclick="openProduct('sleeve-shoulder-roll')">
+      <div class="product-img-wrap"><img src="images/bonningBraCupsShoulderPads/shoulderRoll.jpg" alt="Sleeve / Shoulder Roll" loading="lazy"></div>
+      <div class="product-info">
+        <span class="category-pill">Shoulder Pads (Pairs)</span>
+        <h4>Sleeve / Shoulder Roll</h4>
+        <p class="product-id">Choose options inside</p>
+        <p class="firebase-price">Login to view price</p>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+</main>
+
+<div id="productModal" class="modal">
+  <div class="modal-content">
+    <span class="close-x" onclick="closeModal()">&times;</span>
+    <div class="modal-left"><img id="modalImg" src="" alt=""></div>
+    <div class="modal-right">
+      <h2 id="modalTitle">Product</h2>
+      <p class="modal-meta" id="modalDesc"></p>
+      <p class="modal-meta" id="modalCategory"></p>
+      <p class="modal-meta">Product ID: <strong id="modalProductId"></strong></p>
+      <div id="variantFields"></div>
+      <label>Quantity</label>
+      <input type="number" id="qty" value="1" min="1" oninput="updateModalPrice()">
+      <p id="price">Select product</p>
+      <button class="btn-add" onclick="addToCart()">Add to Cart</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PRODUCT_GROUPS = [
+  {
+    id: "polyester-boning",
+    title: "Polyester Boning",
+    category: "Boning",
+    img: "images/bonningBraCupsShoulderPads/polyesterbonning.webp",
+    desc: "Choose width and colour inside.",
+    fields: [
+      { key: "size", label: "Select Size", options: ["6mm", "8mm", "10mm", "12mm", "15mm"] },
+      { key: "color", label: "Select Colour", options: ["Black", "White"] }
+    ],
+    variants: [
+      { size: "6mm", color: "Black", productId: "boning-6mm-black-45mts", name: "6mm Black 45mts" },
+      { size: "6mm", color: "White", productId: "boning-6mm-white-45mts", name: "6mm White 45mts" },
+      { size: "8mm", color: "Black", productId: "boning-8mm-black-45mts", name: "8mm Black 45mts" },
+      { size: "8mm", color: "White", productId: "boning-8mm-white-45mts", name: "8mm White 45mts" },
+      { size: "10mm", color: "Black", productId: "boning-10mm-black-45mts", name: "10mm Black 45mts" },
+      { size: "10mm", color: "White", productId: "boning-10mm-white-45mts", name: "10mm White 45mts" },
+      { size: "12mm", color: "Black", productId: "boning-12mm-black-45mts", name: "12mm Black 45mts" },
+      { size: "12mm", color: "White", productId: "boning-12mm-white-45mts", name: "12mm White 45mts" },
+      { size: "15mm", color: "Black", productId: "boning-15mm-black-45mts", name: "15mm Black 45mts" },
+      { size: "15mm", color: "White", productId: "boning-15mm-white-45mts", name: "15mm White 45mts" }
+    ]
+  },
+  {
+    id: "clear-plastic-boning",
+    title: "Clear Plastic Boning",
+    category: "Boning",
+    img: "images/bonningBraCupsShoulderPads/clearbonning.jpg",
+    desc: "Clear plastic boning rolls. Choose width inside.",
+    fields: [
+      { key: "size", label: "Select Size", options: ["6mm", "8mm", "12mm"] }
+    ],
+    variants: [
+      { size: "6mm", productId: "boning-clear-plastic-6mm-35mt-roll", name: "Clear Plastic 6mm - 35mt/roll" },
+      { size: "8mm", productId: "boning-clear-plastic-8mm-35mt-roll", name: "Clear Plastic 8mm - 35mt/roll" },
+      { size: "12mm", productId: "boning-clear-plastic-12mm-35mt-roll", name: "Clear Plastic 12mm - 35mt/roll" }
+    ]
+  },
+  {
+    id: "bra-cups",
+    title: "Bra Cups",
+    category: "Bra Accessories",
+    img: "images/bonningBraCupsShoulderPads/typeA.jpg",
+    desc: "Choose cup type and size inside.",
+    fields: [
+      { key: "type", label: "Select Type", options: ["A", "B", "C", "D"] },
+      { key: "size", label: "Select Size", options: ["S", "M", "L", "XL", "XXL"] }
+    ],
+    variants: [
+      { type: "A", size: "S", productId: "bra-cups-type-a", name: "Bra Cups S Type A", img: "images/bonningBraCupsShoulderPads/typeA.jpg" },
+      { type: "A", size: "M", productId: "bra-cups-type-a", name: "Bra Cups M Type A", img: "images/bonningBraCupsShoulderPads/typeA.jpg" },
+      { type: "A", size: "L", productId: "bra-cups-type-a", name: "Bra Cups L Type A", img: "images/bonningBraCupsShoulderPads/typeA.jpg" },
+      { type: "A", size: "XL", productId: "bra-cups-type-a", name: "Bra Cups XL Type A", img: "images/bonningBraCupsShoulderPads/typeA.jpg" },
+      { type: "A", size: "XXL", productId: "bra-cups-type-a", name: "Bra Cups XXL Type A", img: "images/bonningBraCupsShoulderPads/typeA.jpg" },
+
+      { type: "B", size: "S", productId: "bra-cups-type-b", name: "Bra Cups S Type B", img: "images/bonningBraCupsShoulderPads/typeB.jpg" },
+      { type: "B", size: "M", productId: "bra-cups-type-b", name: "Bra Cups M Type B", img: "images/bonningBraCupsShoulderPads/typeB.jpg" },
+      { type: "B", size: "L", productId: "bra-cups-type-b", name: "Bra Cups L Type B", img: "images/bonningBraCupsShoulderPads/typeB.jpg" },
+      { type: "B", size: "XL", productId: "bra-cups-type-b", name: "Bra Cups XL Type B", img: "images/bonningBraCupsShoulderPads/typeB.jpg" },
+      { type: "B", size: "XXL", productId: "bra-cups-type-b", name: "Bra Cups XXL Type B", img: "images/bonningBraCupsShoulderPads/typeB.jpg" },
+
+      { type: "C", size: "S", productId: "bra-cups-type-c", name: "Bra Cups S Type C", img: "images/bonningBraCupsShoulderPads/typeC.jpg" },
+      { type: "C", size: "M", productId: "bra-cups-type-c", name: "Bra Cups M Type C", img: "images/bonningBraCupsShoulderPads/typeC.jpg" },
+      { type: "C", size: "L", productId: "bra-cups-type-c", name: "Bra Cups L Type C", img: "images/bonningBraCupsShoulderPads/typeC.jpg" },
+      { type: "C", size: "XL", productId: "bra-cups-type-c", name: "Bra Cups XL Type C", img: "images/bonningBraCupsShoulderPads/typeC.jpg" },
+      { type: "C", size: "XXL", productId: "bra-cups-type-c", name: "Bra Cups XXL Type C", img: "images/bonningBraCupsShoulderPads/typeC.jpg" },
+
+      { type: "D", size: "S", productId: "bra-cups-type-d", name: "Bra Cups S Type D", img: "images/bonningBraCupsShoulderPads/typeD.webp" },
+      { type: "D", size: "M", productId: "bra-cups-type-d", name: "Bra Cups M Type D", img: "images/bonningBraCupsShoulderPads/typeD.webp" },
+      { type: "D", size: "L", productId: "bra-cups-type-d", name: "Bra Cups L Type D", img: "images/bonningBraCupsShoulderPads/typeD.webp" },
+      { type: "D", size: "XL", productId: "bra-cups-type-d", name: "Bra Cups XL Type D", img: "images/bonningBraCupsShoulderPads/typeD.webp" },
+      { type: "D", size: "XXL", productId: "bra-cups-type-d", name: "Bra Cups XXL Type D", img: "images/bonningBraCupsShoulderPads/typeD.webp" }
+    ]
+  },
+  {
+    id: "under-wire",
+    title: "Under Wire",
+    category: "Bra Accessories",
+    img: "images/BoningBraCupsShoulderPads/bra-accessories-under-wire.jpg",
+    desc: "Standard under wire item.",
+    fields: [],
+    variants: [
+      { productId: "bra-accessories-under-wire", name: "Under Wire" }
+    ]
+  },
+  {
+    id: "shoulder-pads-standard",
+    title: "Shoulder Pads",
+    category: "Shoulder Pads (Pairs)",
+    img: "images/BoningBraCupsShoulderPads/shoulder-pads-pairs-20mm-white-medium.jpg",
+    desc: "Choose size and colour inside.",
+    fields: [
+      { key: "size", label: "Select Size", options: ["15mm Small", "20mm Medium", "25mm Large"] },
+      { key: "color", label: "Select Colour", options: ["Black", "White"] }
+    ],
+    variants: [
+      { size: "15mm Small", color: "Black", productId: "shoulder-pads-pairs-15mm-black-small", name: "15mm Black Small" },
+      { size: "15mm Small", color: "White", productId: "shoulder-pads-pairs-15mm-white-small", name: "15mm White Small" },
+      { size: "20mm Medium", color: "Black", productId: "shoulder-pads-pairs-20mm-black-medium", name: "20mm Black Medium" },
+      { size: "20mm Medium", color: "White", productId: "shoulder-pads-pairs-20mm-white-medium", name: "20mm White Medium" },
+      { size: "25mm Large", color: "Black", productId: "shoulder-pads-pairs-25mm-black-large", name: "25mm Black Large" },
+      { size: "25mm Large", color: "White", productId: "shoulder-pads-pairs-25mm-white-large", name: "25mm White Large" }
+    ]
+  },
+  {
+    id: "mens-shoulder-pads",
+    title: "Mens Shoulder Pads",
+    category: "Shoulder Pads (Pairs)",
+    img: "images/BoningBraCupsShoulderPads/shoulder-pads-pairs-mens-white-and-black.jpg",
+    desc: "Choose colour inside.",
+    fields: [
+      { key: "color", label: "Select Colour", options: ["White", "Black"] }
+    ],
+    variants: [
+      { color: "White", productId: "shoulder-pads-pairs-mens-white-and-black", name: "Mens Shoulder Pads White" },
+      { color: "Black", productId: "shoulder-pads-pairs-mens-white-and-black", name: "Mens Shoulder Pads Black" }
+    ]
+  },
+  {
+    id: "coat-liners",
+    title: "Coat Liners",
+    category: "Shoulder Pads (Pairs)",
+    img: "images/BoningBraCupsShoulderPads/shoulder-pads-pairs-coat-liners.jpg",
+    desc: "Standard coat liner item.",
+    fields: [],
+    variants: [
+      { productId: "shoulder-pads-pairs-coat-liners", name: "Coat Liners" }
+    ]
+  },
+  {
+    id: "sleeve-shoulder-roll",
+    title: "Sleeve / Shoulder Roll",
+    category: "Shoulder Pads (Pairs)",
+    img: "images/BoningBraCupsShoulderPads/shoulder-pads-pairs-sleeve-shoulder-roll.jpg",
+    desc: "Standard sleeve / shoulder roll item.",
+    fields: [],
+    variants: [
+      { productId: "shoulder-pads-pairs-sleeve-shoulder-roll", name: "Sleeve / Shoulder Roll" }
+    ]
+  }
+];
+
+let activeGroup = null;
+let selectedProduct = null;
+
+function byId(id){ return document.getElementById(id); }
+function getGroup(id){ return PRODUCT_GROUPS.find(p => p.id === id); }
+
+function openProduct(parentId){
+  activeGroup = getGroup(parentId);
+  if(!activeGroup) return;
+
+  byId('modalTitle').textContent = activeGroup.title;
+  byId('modalDesc').textContent = activeGroup.desc || '';
+  byId('modalCategory').textContent = activeGroup.category;
+  byId('modalImg').src = activeGroup.img || '';
+  byId('qty').value = 1;
+
+  renderVariantFields();
+  byId('productModal').style.display = 'block';
+  resolveSelectedVariant();
+}
+
+function renderVariantFields(){
+  const wrap = byId('variantFields');
+  wrap.innerHTML = '';
+
+  (activeGroup.fields || []).forEach(field => {
+    const label = document.createElement('label');
+    label.textContent = field.label;
+
+    const select = document.createElement('select');
+    select.className = 'variant-select';
+    select.id = 'field_' + field.key;
+    select.onchange = resolveSelectedVariant;
+
+    field.options.forEach(opt => {
+      const option = document.createElement('option');
+      option.value = opt;
+      option.textContent = opt;
+      select.appendChild(option);
+    });
+
+    wrap.appendChild(label);
+    wrap.appendChild(select);
+  });
+}
+
+function resolveSelectedVariant(){
+  if(!activeGroup) return;
+
+  const chosen = {};
+  (activeGroup.fields || []).forEach(field => {
+    chosen[field.key] = byId('field_' + field.key)?.value || '';
+  });
+
+  selectedProduct = activeGroup.variants.find(v =>
+    Object.keys(chosen).every(k => String(v[k] || '') === String(chosen[k] || ''))
+  ) || activeGroup.variants[0];
+
+  if(!selectedProduct) return;
+
+  selectedProduct.category = activeGroup.category;
+  selectedProduct.parentName = activeGroup.title;
+  selectedProduct.img = selectedProduct.img || activeGroup.img;
+
+  window.fawzCurrentProductId = selectedProduct.productId;
+  window.fawzCurrentProductName = selectedProduct.name;
+
+  byId('modalProductId').textContent = selectedProduct.productId;
+  byId('modalImg').src = selectedProduct.img;
+
+  updateModalPrice();
+}
+
+function closeModal(){
+  byId('productModal').style.display = 'none';
+}
+
+async function updateModalPrice(){
+  const qty = Math.max(parseInt(byId('qty').value || '1',10) || 1, 1);
+  const priceEl = byId('price');
+
+  if(!selectedProduct){
+    priceEl.textContent = 'Select product';
+    return;
+  }
+
+  priceEl.textContent = 'Loading...';
+
+  let unit = Number(selectedProduct.basePrice || 0);
+
+  try{
+    if(window.fawzFetchTierPrice){
+      unit = await window.fawzFetchTierPrice(selectedProduct.productId);
+    }
+  }catch(e){
+    console.warn('Firebase price not available yet:', e);
+  }
+
+  window.fawzCurrentUnitPrice = Number(unit || 0);
+  priceEl.textContent = unit ? 'R ' + (window.fawzCurrentUnitPrice * qty).toFixed(2) : 'Login to view price';
+}
+
+function addToCart(){
+  if(!selectedProduct) return;
+
+  const qty = Math.max(parseInt(byId('qty').value || '1',10) || 1, 1);
+  const unit = Number(window.fawzCurrentUnitPrice || selectedProduct.basePrice || 0);
+
+  const options = {};
+  (activeGroup.fields || []).forEach(field => {
+    options[field.key] = byId('field_' + field.key)?.value || '';
+  });
+
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+  cart.push({
+    product: selectedProduct.name,
+    parentProduct: activeGroup.title,
+    productId: selectedProduct.productId,
+    category: activeGroup.category,
+    size: options.size || 'Standard',
+    color: options.color || '',
+    type: options.type || '',
+    options,
+    qty,
+    price: unit,
+    unitPrice: unit,
+    total: unit * qty
+  });
+
+  localStorage.setItem('cart', JSON.stringify(cart));
+  alert('Added to cart: ' + selectedProduct.name);
+}
+
+function filterProducts(){
+  const q = byId('searchBox').value.toLowerCase().trim();
+  const c = byId('categoryFilter').value;
+
+  document.querySelectorAll('.product-section').forEach(sec => {
+    let visible = 0;
+
+    sec.querySelectorAll('.product-card').forEach(card => {
+      const group = getGroup(card.dataset.parentId);
+      const variantText = group ? JSON.stringify(group).toLowerCase() : '';
+      const text = (card.textContent + ' ' + variantText).toLowerCase();
+      const ok = (!q || text.includes(q)) && (!c || card.dataset.category === c);
+
+      card.classList.toggle('hidden', !ok);
+      if(ok) visible++;
+    });
+
+    sec.classList.toggle('hidden', visible === 0);
+  });
+}
+
+byId('searchBox').addEventListener('input', filterProducts);
+byId('categoryFilter').addEventListener('change', filterProducts);
+
+window.onclick = e => {
+  if(e.target === byId('productModal')) closeModal();
+};
+</script>
+
+<script type="module" src="./fawz-auth-guard.js"></script>
+<script type="module" src="./fawz-firebase-pricing.js"></script>
+
+</body>
+</html>

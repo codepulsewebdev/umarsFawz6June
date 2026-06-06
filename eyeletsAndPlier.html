@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eyelets &amp; Tools | Fawz Haberdashery</title>
+<link rel="stylesheet" href="global-images.css">
+<style>
+
+:root{--fawz-red:#e31e24;--fawz-dark:#1a1a1a;--fawz-grey:#f8f8f8;--border:#eeeeee;}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',Roboto,Arial,sans-serif;background:#fff;color:var(--fawz-dark)}
+header{position:sticky;top:0;background:#fff;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--fawz-red);box-shadow:0 2px 10px rgba(0,0,0,.05);z-index:1000;gap:20px}
+.logo{font-weight:900;text-transform:uppercase;letter-spacing:1px;font-size:1.2rem}
+.logo span{color:var(--fawz-red)}
+nav a{color:var(--fawz-dark);margin-left:18px;text-decoration:none;font-weight:700;font-size:.9rem}
+.hero{padding:46px 5% 24px;max-width:1300px;margin:auto}
+.hero h1{font-size:clamp(2rem,4vw,3.5rem);margin:0;text-transform:uppercase}
+.hero p{color:#666;max-width:900px;line-height:1.6}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.toolbar input,.toolbar select{padding:13px 14px;border:1px solid #ddd;border-radius:10px;min-width:240px;font-size:1rem;background:#fff}
+main{padding:15px 5% 70px;max-width:1300px;margin:auto}
+.product-section{margin:32px 0 54px}
+.section-heading{display:flex;align-items:center;justify-content:space-between;border-left:6px solid var(--fawz-red);padding-left:14px;margin-bottom:18px}
+.section-heading h3{font-size:1.6rem;margin:0;text-transform:uppercase}
+.section-heading span{background:#fff3f3;color:var(--fawz-red);font-weight:800;border-radius:999px;padding:6px 11px}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+.product-card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.04);transition:.25s}
+.product-card:hover{transform:translateY(-4px);border-color:var(--fawz-red);box-shadow:0 15px 32px rgba(0,0,0,.10)}
+.product-img-wrap{height:190px;background:#fafafa;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border)}
+.product-img-wrap img{width:100%;height:100%;object-fit:contain;padding:14px}
+.product-info{padding:15px}
+.category-pill{display:inline-block;font-size:.72rem;font-weight:900;text-transform:uppercase;background:#f2f2f2;border-radius:999px;padding:5px 8px;color:#555}
+.product-info h4{font-size:1rem;margin:12px 0 8px;line-height:1.3}
+.product-id{font-size:.76rem;color:#777;word-break:break-all;margin:0 0 8px}
+.firebase-price{font-weight:900;color:var(--fawz-red);margin:0}
+.modal{display:none;position:fixed;z-index:2000;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(4px);padding:30px 12px}
+.modal-content{background:#fff;margin:auto;max-width:980px;min-height:520px;display:grid;grid-template-columns:1fr 1.05fr;border-radius:18px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,.24);position:relative}
+.close-x{position:absolute;right:22px;top:16px;font-size:32px;cursor:pointer;color:#999;z-index:5}
+.modal-left{background:#fafafa;display:flex;align-items:center;justify-content:center;padding:28px;border-right:1px solid var(--border)}
+.modal-left img{max-width:100%;max-height:430px;object-fit:contain}
+.modal-right{padding:42px 36px}
+.modal-right h2{margin:0 0 12px;text-transform:uppercase;color:var(--fawz-red)}
+.modal-meta{color:#666;font-size:.92rem;word-break:break-all}
+label{display:block;margin:22px 0 8px;font-weight:900;text-transform:uppercase;font-size:.75rem;color:#555}
+input,.option-select{width:100%;padding:14px;border:1px solid #ddd;border-radius:10px;font-size:1rem;background:var(--fawz-grey)}
+#price{font-size:2rem;font-weight:950;margin:25px 0;color:#111}
+.btn-add{width:100%;background:var(--fawz-red);border:none;color:#fff;font-weight:900;text-transform:uppercase;padding:17px;border-radius:12px;cursor:pointer;letter-spacing:1px}
+.btn-add:hover{background:#b3161a}
+.hidden{display:none!important}
+#imageBank{display:none}
+@media(max-width:760px){header{align-items:flex-start;flex-direction:column} nav a{margin:0 14px 0 0}.modal-content{grid-template-columns:1fr;max-height:92vh;overflow:auto}.modal-left{min-height:260px;border-right:0;border-bottom:1px solid var(--border)}}
+
+</style>
+<script src="firebase-config.js" type="module"></script>
+<script src="fawz-product-id-map.js"></script>
+<script src="fawz-firebase-pricing.js" type="module"></script>
+<script src="fawz-security.js" defer></script>
+</head>
+<body>
+<header><div class="logo">Fawz <span>Haberdashery</span></div><nav><a href="home.html">Home</a><a href="all-products.html">All Products</a><a href="demo_cart.html">View Cart</a></nav><a href="login.html" style="margin-left:12px;font-weight:900;color:#e31e24;text-decoration:none">Login</a></header>
+
+<section class="hero">
+<h1>Eyelets &amp; Tools</h1>
+<p>Eyelets and tools are separated into clean sections. Eyelets are packed 100 pieces per card and 12 cards per box, with colour selection in the modal.</p>
+<div class="toolbar">
+<input id="searchBox" placeholder="Search products or product IDs...">
+<select id="categoryFilter">
+<option value="">All categories</option>
+<option value="Eyelets">Eyelets</option>
+<option value="Eyelet Tools">Eyelet Tools</option>
+</select>
+</div>
+</section>
+
+<!-- HTML IMAGE BANK: edit image paths here only. JavaScript uses data-img-key and does not store image paths. -->
+<div id="imageBank">
+<img data-img-key="eyelet-tools-eyelets" src="images/eyelets&Pliers/eyelets.jpg" alt="eyelet-tools-eyelets">
+<img data-img-key="eyelet-tools-plier-ep" src="images/eyelets/ep01.PNG" alt="eyelet-tools-plier-ep">
+<img data-img-key="eyelet-tools-punch-ep" src="images/eyelets/ep02.PNG" alt="eyelet-tools-punch-ep">
+<img data-img-key="eyelet-tools-plier-eyelets-ep" src="images/eyelets/ep03.PNG" alt="eyelet-tools-plier-eyelets-ep">
+<img data-img-key="eyelet-tools-punch-plier-in-ep" src="images/eyelets/ep04.PNG" alt="eyelet-tools-punch-plier-in-ep">
+<img data-img-key="eyelet-tools-punch-plier-set" src="images/eyelets/ep05.PNG" alt="eyelet-tools-punch-plier-set">
+<img data-img-key="eyelet-tools-punch-plier-set-ep" src="images/eyelets/3pck.PNG" alt="eyelet-tools-punch-plier-set-ep">
+<img data-img-key="eyelet-tools-upholstery-ring-plier" src="images/eyelets/uphol.webp" alt="eyelet-tools-upholstery-ring-plier">
+</div>
+
+<main>
+<section class="product-section" data-category-section="Eyelets">
+<div class="section-heading"><h3>Eyelets</h3><span>1 block</span></div>
+<div class="product-grid">
+<article class="product-card" data-group-id="eyelet-tools-eyelets" data-category="Eyelets" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="eyelet-tools-eyelets" src="images/eyelets&Pliers/eyelets.jpg" alt="Eyelets" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Eyelets</span><h4>Eyelets</h4><p class="product-id">4 colour options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+</div>
+</section>
+
+<section class="product-section" data-category-section="Eyelet Tools">
+<div class="section-heading"><h3>Tools</h3><span>7 blocks</span></div>
+<div class="product-grid">
+<article class="product-card" data-group-id="eyelet-tools-plier-ep" data-category="Eyelet Tools" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="eyelet-tools-plier-ep" src="images/eyelets/ep01.PNG" alt="Plier Ep 01" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Eyelet Tools</span><h4>Plier Ep 01</h4><p class="product-id">1 option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="eyelet-tools-punch-ep" data-category="Eyelet Tools" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="eyelet-tools-punch-ep" src="images/eyelets/ep02.PNG" alt="Plier Ep 02" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Eyelet Tools</span><h4>Plier Ep 02</h4><p class="product-id">1 option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="eyelet-tools-plier-eyelets-ep" data-category="Eyelet Tools" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="eyelet-tools-plier-eyelets-ep" src="images/eyelets/ep03.PNG" alt="Plier Ep 03" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Eyelet Tools</span><h4>Plier Ep 03</h4><p class="product-id">1 option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="eyelet-tools-punch-plier-in-ep" data-category="Eyelet Tools" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="eyelet-tools-punch-plier-in-ep" src="images/eyelets/ep04.PNG" alt="Plier Ep04" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Eyelet Tools</span><h4>Plier Ep04</h4><p class="product-id">1 option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="eyelet-tools-punch-plier-set" data-category="Eyelet Tools" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="eyelet-tools-punch-plier-set" src="images/eyelets/ep05.PNG" alt="Plier Ep05" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Eyelet Tools</span><h4>Plier Ep05</h4><p class="product-id">1 option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="eyelet-tools-punch-plier-set-ep" data-category="Eyelet Tools" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="eyelet-tools-punch-plier-set-ep" src="images/eyelets/3pck.PNG" alt="Punch Plier Set" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Eyelet Tools</span><h4>Punch Plier Set</h4><p class="product-id">1 option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="eyelet-tools-upholstery-ring-plier" data-category="Eyelet Tools" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="eyelet-tools-upholstery-ring-plier" src="images/eyelets/uphol.webp" alt="Upholstery Ring Plier" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Eyelet Tools</span><h4>Upholstery Ring Plier</h4><p class="product-id">1 option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+</div>
+</section>
+</main>
+
+<div id="productModal" class="modal">
+<div class="modal-content">
+<span class="close-x" onclick="closeModal()">&times;</span>
+<div class="modal-left"><img id="modalImg" src="" alt=""></div>
+<div class="modal-right">
+<h2 id="modalTitle">Product</h2>
+<p class="modal-meta" id="modalCategory"></p>
+<p class="modal-meta">Product ID: <strong id="modalProductId"></strong></p>
+<label id="variantLabel" for="variantSelect">Option</label>
+<select id="variantSelect" class="option-select" onchange="selectVariant()"></select>
+<label>Quantity</label>
+<input type="number" id="qty" value="1" min="1" oninput="updateModalPrice()">
+<p id="price">Select product</p>
+<button class="btn-add" onclick="addToCart()">Add to Cart</button>
+</div>
+</div>
+</div>
+
+<script>
+const productGroups = {
+  "eyelet-tools-eyelets": {
+    "title": "Eyelets",
+    "category": "Eyelets",
+    "label": "Colour",
+    "imgKey": "eyelet-tools-eyelets",
+    "options": [
+      {
+        "name": "Eyelets Silver - 100pcs/card - 12 cards/box",
+        "productId": "eyelets-silver-100pcs-card-12-cards-box",
+        "basePrice": 61.63,
+        "imgKey": "eyelet-tools-eyelets",
+        "category": "Eyelets"
+      },
+      {
+        "name": "Eyelets Black - 100pcs/card - 12 cards/box",
+        "productId": "eyelets-black-100pcs-card-12-cards-box",
+        "basePrice": 61.63,
+        "imgKey": "eyelet-tools-eyelets",
+        "category": "Eyelets"
+      },
+      {
+        "name": "Eyelets Gold - 100pcs/card - 12 cards/box",
+        "productId": "eyelets-gold-100pcs-card-12-cards-box",
+        "basePrice": 61.63,
+        "imgKey": "eyelet-tools-eyelets",
+        "category": "Eyelets"
+      },
+      {
+        "name": "Eyelets Anti Brass - 100pcs/card - 12 cards/box",
+        "productId": "eyelets-anti-brass-100pcs-card-12-cards-box",
+        "basePrice": 61.63,
+        "imgKey": "eyelet-tools-eyelets",
+        "category": "Eyelets"
+      }
+    ]
+  },
+  "eyelet-tools-plier-ep": {
+    "title": "Plier Ep 01",
+    "category": "Eyelet Tools",
+    "label": "Option",
+    "imgKey": "eyelet-tools-plier-ep",
+    "options": [
+      {
+        "name": "Heavy Duty Plier EP05",
+        "productId": "eyelet-tools-heavy-duty-plier-ep05",
+        "basePrice": 76.35,
+        "imgKey": "eyelet-tools-plier-ep",
+        "category": "Eyelet Tools"
+      }
+    ]
+  },
+  "eyelet-tools-punch-ep": {
+    "title": "Plier Ep 02",
+    "category": "Eyelet Tools",
+    "label": "Option",
+    "imgKey": "eyelet-tools-punch-ep",
+    "options": [
+      {
+        "name": "Heavy Duty Punch EP03",
+        "productId": "eyelet-tools-heavy-duty-punch-ep03",
+        "basePrice": 75.0,
+        "imgKey": "eyelet-tools-punch-ep",
+        "category": "Eyelet Tools"
+      }
+    ]
+  },
+  "eyelet-tools-plier-eyelets-ep": {
+    "title": "Plier Ep 03",
+    "category": "Eyelet Tools",
+    "label": "Option",
+    "imgKey": "eyelet-tools-plier-eyelets-ep",
+    "options": [
+      {
+        "name": "Plier & Eyelets EP02",
+        "productId": "eyelet-tools-plier-and-eyelets-ep02",
+        "basePrice": 28.55,
+        "imgKey": "eyelet-tools-plier-eyelets-ep",
+        "category": "Eyelet Tools"
+      }
+    ]
+  },
+  "eyelet-tools-punch-plier-in-ep": {
+    "title": "Plier Ep04",
+    "category": "Eyelet Tools",
+    "label": "Option",
+    "imgKey": "eyelet-tools-punch-plier-in-ep",
+    "options": [
+      {
+        "name": "Punch & Plier 2in1 EP04",
+        "productId": "eyelet-tools-punch-and-plier-2in1-ep04",
+        "basePrice": 46.5,
+        "imgKey": "eyelet-tools-punch-plier-in-ep",
+        "category": "Eyelet Tools"
+      }
+    ]
+  },
+  "eyelet-tools-punch-plier-set": {
+    "title": "Plier Ep05",
+    "category": "Eyelet Tools",
+    "label": "Option",
+    "imgKey": "eyelet-tools-punch-plier-set",
+    "options": [
+      {
+        "name": "Punch & Plier 3pc Set",
+        "productId": "eyelet-tools-punch-and-plier-3pc-set",
+        "basePrice": 117.0,
+        "imgKey": "eyelet-tools-punch-plier-set",
+        "category": "Eyelet Tools"
+      }
+    ]
+  },
+  "eyelet-tools-punch-plier-set-ep": {
+    "title": "Punch Plier Set",
+    "category": "Eyelet Tools",
+    "label": "Option",
+    "imgKey": "eyelet-tools-punch-plier-set-ep",
+    "options": [
+      {
+        "name": "Punch Plier Set EP01",
+        "productId": "eyelet-tools-punch-plier-set-ep01",
+        "basePrice": 67.0,
+        "imgKey": "eyelet-tools-punch-plier-set-ep",
+        "category": "Eyelet Tools"
+      }
+    ]
+  },
+  "eyelet-tools-upholstery-ring-plier": {
+    "title": "Upholstery Ring Plier",
+    "category": "Eyelet Tools",
+    "label": "Option",
+    "imgKey": "eyelet-tools-upholstery-ring-plier",
+    "options": [
+      {
+        "name": "Upholstery Ring Plier",
+        "productId": "eyelet-tools-upholstery-ring-plier",
+        "basePrice": 80.0,
+        "imgKey": "eyelet-tools-upholstery-ring-plier",
+        "category": "Eyelet Tools"
+      }
+    ]
+  }
+};
+
+let selectedGroup = null;
+let selectedProduct = null;
+
+function getBankImage(key){
+  const img = document.querySelector(`#imageBank img[data-img-key="${CSS.escape(key)}"]`);
+  return img ? img.getAttribute('src') : '';
+}
+
+function applyCardImages(){
+  document.querySelectorAll('[data-image-key]').forEach(img => {
+    const key = img.dataset.imageKey;
+    img.src = getBankImage(key);
+  });
+}
+
+function openProduct(card){
+  const groupId = card.dataset.groupId;
+  selectedGroup = productGroups[groupId];
+  if(!selectedGroup) return;
+
+  const variantSelect = document.getElementById('variantSelect');
+  variantSelect.innerHTML = selectedGroup.options.map((option,index)=>`<option value="${index}">${option.name}</option>`).join('');
+  document.getElementById('variantLabel').textContent = selectedGroup.label || 'Option';
+  document.getElementById('modalTitle').textContent = selectedGroup.title;
+  document.getElementById('modalCategory').textContent = selectedGroup.category;
+  document.getElementById('qty').value = 1;
+  document.getElementById('productModal').style.display = 'block';
+  selectVariant();
+}
+
+function selectVariant(){
+  if(!selectedGroup) return;
+  const index = Number(document.getElementById('variantSelect').value || 0);
+  const option = selectedGroup.options[index] || selectedGroup.options[0];
+
+  selectedProduct = {
+    productId: option.productId,
+    name: option.name,
+    category: selectedGroup.category,
+    basePrice: Number(option.basePrice || 0),
+    imgKey: option.imgKey || selectedGroup.imgKey
+  };
+
+  window.fawzCurrentProductId = selectedProduct.productId;
+  window.fawzCurrentProductName = selectedProduct.name;
+  document.getElementById('modalProductId').textContent = selectedProduct.productId;
+  document.getElementById('modalImg').src = getBankImage(selectedProduct.imgKey);
+  document.getElementById('modalImg').alt = selectedProduct.name;
+  updateModalPrice();
+}
+
+function closeModal(){document.getElementById('productModal').style.display='none'}
+
+async function updateModalPrice(){
+  const qty = Math.max(parseInt(document.getElementById('qty').value || '1',10) || 1, 1);
+  const priceEl = document.getElementById('price');
+  if(!selectedProduct){priceEl.textContent='Select product';return;}
+  priceEl.textContent='Loading...';
+  let unit = selectedProduct.basePrice;
+  try{
+    if(window.fawzFetchTierPrice) unit = await window.fawzFetchTierPrice(selectedProduct.productId);
+  }catch(e){
+    console.warn('Using workbook fallback price until Firebase is configured:', e);
+  }
+  window.fawzCurrentUnitPrice = unit;
+  priceEl.textContent = 'R ' + (unit * qty).toFixed(2);
+}
+
+function addToCart(){
+  if(!selectedProduct) return;
+  const qty = Math.max(parseInt(document.getElementById('qty').value || '1',10) || 1, 1);
+  const unit = Number(window.fawzCurrentUnitPrice || selectedProduct.basePrice || 0);
+  const optionText = document.getElementById('variantSelect').selectedOptions[0]?.textContent || 'Standard';
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  cart.push({
+    product: optionText,
+    productId: selectedProduct.productId,
+    category: selectedProduct.category,
+    size: optionText,
+    qty,
+    price: unit,
+    unitPrice: unit,
+    total: unit * qty,
+    image: getBankImage(selectedProduct.imgKey)
+  });
+  localStorage.setItem('cart', JSON.stringify(cart));
+  alert('Added to cart: ' + optionText);
+}
+
+function filterProducts(){
+  const q = document.getElementById('searchBox').value.toLowerCase().trim();
+  const c = document.getElementById('categoryFilter').value;
+  document.querySelectorAll('.product-card').forEach(card => {
+    const group = productGroups[card.dataset.groupId];
+    const haystack = JSON.stringify(group || {}).toLowerCase();
+    const matchesSearch = !q || haystack.includes(q) || card.textContent.toLowerCase().includes(q);
+    const matchesCategory = !c || card.dataset.category === c;
+    card.classList.toggle('hidden', !(matchesSearch && matchesCategory));
+  });
+  document.querySelectorAll('.product-section').forEach(section => {
+    const visibleCards = section.querySelectorAll('.product-card:not(.hidden)').length;
+    section.classList.toggle('hidden', visibleCards === 0);
+  });
+}
+
+document.getElementById('searchBox').addEventListener('input', filterProducts);
+document.getElementById('categoryFilter').addEventListener('change', filterProducts);
+window.addEventListener('click', e => {if(e.target === document.getElementById('productModal')) closeModal();});
+document.addEventListener('DOMContentLoaded', applyCardImages);
+</script>
+</body>
+</html>

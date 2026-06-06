@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fawz Haberdashery | Sewing Notions</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#f5f5f5;
+}
+
+header {
+  background:#111;
+  color:#fff;
+  padding:20px;
+  text-align:center;
+  font-size:20px;
+  letter-spacing:1px;
+}
+
+#searchBar {
+  width:90%;
+  margin:15px auto;
+  display:block;
+  padding:10px;
+  font-size:16px;
+}
+
+.category {
+  margin:30px auto;
+  width:95%;
+}
+
+.category h2 {
+  background:#222;
+  color:white;
+  padding:10px;
+  border-radius:6px;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap:10px;
+}
+
+.card {
+  background:white;
+  padding:10px;
+  border-radius:8px;
+  cursor:pointer;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card img {
+  width:100%;
+  height:120px;
+  object-fit:cover;
+}
+
+.modal {
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.7);
+}
+
+.modal-content {
+  background:white;
+  width:90%;
+  max-width:500px;
+  margin:80px auto;
+  padding:20px;
+  border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>Sewing Notions - Fawz Haberdashery</header>
+
+<input type="text" id="searchBar" placeholder="Search products...">
+
+<div id="app"></div>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h3 id="modalTitle"></h3>
+    <p id="modalInfo"></p>
+    <button onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<script>
+const SIZE_MAP = {
+  "0":"8mm","1":"10mm","2":"12mm","3":"14mm","4":"16mm","5":"19mm","6":"25mm"
+};
+
+const data = [
+{
+name:"Magnetic Press Studs",
+items:[
+{name:"Magnetic Press Stud Gold", id:"SN001", sizes:["15mm","20mm"], colors:["Gold","Silver"]},
+{name:"Magnetic Buttons Round", id:"SN002", sizes:["10mm","15mm","20mm","25mm"]},
+{name:"Magnetic Buttons Rectangle", id:"SN003", sizes:["20mm x 10mm"]}
+]
+},
+{
+name:"Hook & Eyes",
+items:[
+{name:"Hook & Eyes Silver/Black", id:"SN010", sizes:["1","2","3"], mapSizes:true},
+{name:"Hook & Eyes Bar Pack", id:"SN011", sizes:["1","2","3"], mapSizes:true},
+{name:"Trouser Hook & Bar Clip", id:"SN012", sizes:["Set of 3"]},
+{name:"Trouser Hook & Bar Set", id:"SN013", sizes:["4 pieces"]}
+]
+},
+{
+name:"Press Studs",
+items:[
+{name:"Nickel Silver Press Studs", id:"SN020", sizes:["0","1","2","3","4","5","6"], mapSizes:true},
+{name:"Plastic Press Studs", id:"SN021", sizes:["0","1","2","3","4","5","6"], mapSizes:true},
+{name:"Black Press Studs", id:"SN022", sizes:["0","1","2","3","4","5","6"], mapSizes:true},
+{name:"Bar Pack Press Studs", id:"SN023", sizes:["0","1","2","3","4","5","6"], mapSizes:true}
+]
+},
+{
+name:"Fabric Markers & Pencils",
+items:[
+{name:"Permanent Markers 6 Pack", id:"SN030"},
+{name:"Permanent Markers 12 Pack", id:"SN031"},
+{name:"Permanent Markers 24 Pack", id:"SN032"},
+{name:"Auto Disappear Marker Blue", id:"SN033"},
+{name:"Auto Disappear Marker Violet", id:"SN034"},
+{name:"Auto Disappear Marker Pink", id:"SN035"},
+{name:"Dressmaker Pencils 12 Pack", id:"SN036"}
+]
+},
+{
+name:"Tape Measures",
+items:[
+{name:"Tape Measure 150cm", id:"SN100"},
+{name:"Tape Measure 300cm", id:"SN101"},
+{name:"Retractable Tape Measure", id:"SN102"}
+]
+},
+{
+name:"Hotfix",
+items:[
+{name:"Hotfix Crystals", id:"SN200", sizes:["Sapphire","Black","Topaz","Red Rainbow","Coral","Amethyst","Diamond","Aquamarine","Emerald","Opal"]},
+{name:"Hotfix Chains SS16", id:"SN201", sizes:["1 line","2 line","3 line"]}
+]
+},
+{
+name:"Cutting Mats & Blades",
+items:[
+{name:"Cutting Mat A1 Green", id:"SN300"},
+{name:"Cutting Mat A3 Pink", id:"SN301"},
+{name:"Cutting Mat A4 Black", id:"SN302"},
+{name:"Rotary Cutter 45mm", id:"SN303"},
+{name:"Rotary Cutter 28mm", id:"SN304"},
+{name:"Rotary Cutter 60mm", id:"SN305"}
+]
+}
+];
+
+function render(){
+const app=document.getElementById("app");
+app.innerHTML="";
+
+data.forEach(cat=>{
+const div=document.createElement("div");
+div.className="category";
+
+let html=`<h2>${cat.name}</h2><div class="grid">`;
+
+cat.items.forEach(item=>{
+html+=`
+<div class="card" onclick='openModal("${item.name}","ID: ${item.id}")'>
+<img src="images/placeholder.jpg">
+<h4>${item.name}</h4>
+<p>${item.id}</p>
+</div>`;
+});
+
+html+="</div>";
+div.innerHTML=html;
+app.appendChild(div);
+});
+}
+
+function openModal(title,info){
+document.getElementById("modalTitle").innerText=title;
+document.getElementById("modalInfo").innerText=info;
+document.getElementById("modal").style.display="block";
+}
+
+function closeModal(){
+document.getElementById("modal").style.display="none";
+}
+
+render();
+</script>
+
+</body>
+</html>

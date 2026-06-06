@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tassels | Fawz Haberdashery</title>
+<link rel="stylesheet" href="global-images.css">
+
+<!-- Firebase & Core Scripts -->
+<script src="firebase-config.js" type="module"></script>
+<script src="fawz-product-id-map.js"></script>
+<script src="fawz-firebase-pricing.js" type="module"></script>
+<script src="fawz-security.js" defer></script>
+
+<style>
+:root {
+    --fawz-red: #e31e24;
+    --fawz-dark: #1a1a1a;
+    --fawz-grey: #f8f8f8;
+    --border: #eeeeee;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background: #fff;
+    color: var(--fawz-dark);
+    overflow-x: hidden;
+}
+header {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    padding: 15px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid var(--fawz-red);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    z-index: 1000;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.logo {
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1.2rem;
+}
+.logo span { color: var(--fawz-red); }
+nav { display: flex; gap: 16px; flex-wrap: wrap; }
+nav a {
+    color: var(--fawz-dark);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+.hero {
+    padding: 46px 5% 24px;
+    max-width: 1300px;
+    margin: auto;
+}
+.hero h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+.toolbar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+}
+.toolbar input {
+    padding: 13px 14px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    min-width: 260px;
+    font-size: 1rem;
+    background: #fff;
+}
+main {
+    padding: 15px 5% 70px;
+    max-width: 1300px;
+    margin: auto;
+}
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+}
+.product-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.04);
+    transition: 0.25s;
+}
+.product-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--fawz-red);
+    box-shadow: 0 15px 32px rgba(0,0,0,0.10);
+}
+.product-img-wrap {
+    height: 240px;
+    background: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border);
+}
+.product-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.product-info {
+    padding: 20px;
+    text-align: center;
+}
+.product-info h4 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin: 0 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.product-info p {
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0;
+}
+.hidden { display: none !important; }
+
+/* MODAL STRUCTURE */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(3px);
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+}
+.modal-content {
+    background: #fff;
+    margin: auto;
+    width: 90%;
+    max-width: 1100px;
+    height: 85%;
+    max-height: 85vh;
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.4);
+    position: relative;
+}
+.close-x {
+    position: absolute;
+    right: 20px;
+    top: 12px;
+    font-size: 34px;
+    cursor: pointer;
+    color: #aaa;
+    z-index: 10;
+    background: rgba(255,255,255,0.9);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+.close-x:hover { color: var(--fawz-red); background: #fff; }
+.modal-left {
+    background: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--border);
+    overflow: hidden;
+}
+.modal-left img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.modal-right {
+    padding: 28px 32px;
+    overflow-y: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.modal-right h2 {
+    margin: 0 0 20px;
+    text-transform: uppercase;
+    color: var(--fawz-red);
+    font-size: 1.6rem;
+    font-weight: 900;
+}
+.variant-group {
+    margin: 10px 0 16px;
+}
+.variant-group label {
+    display: block;
+    margin: 0 0 8px;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: #555;
+    letter-spacing: 1px;
+}
+.variant-select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    background: #fff;
+    cursor: pointer;
+}
+
+/* VISUAL COLOR TABLE MATRIX LAYOUT */
+.color-table-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+    margin-top: 8px;
+}
+.color-block-cell {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    background: #fff;
+    transition: all 0.2s ease;
+}
+.color-block-cell:hover {
+    border-color: #999;
+    background: #fcfcfcf;
+}
+.color-block-cell.active {
+    border-color: var(--fawz-red);
+    background: #fff5f5;
+    box-shadow: 0 0 0 1px var(--fawz-red);
+}
+.color-swatch-preview {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.15);
+    flex-shrink: 0;
+}
+.color-title-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--fawz-dark);
+}
+
+.qty-input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: #f8f8f8;
+    margin: 6px 0 12px;
+}
+#price {
+    font-size: 2rem;
+    font-weight: 900;
+    margin: 15px 0 20px;
+    color: var(--fawz-red);
+}
+.btn-add {
+    width: 100%;
+    background: var(--fawz-red);
+    border: none;
+    color: #fff;
+    font-weight: 900;
+    text-transform: uppercase;
+    padding: 16px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    transition: background 0.2s;
+    margin-top: auto;
+}
+.btn-add:hover { background: #c41a1f; }
+
+@media (max-width: 700px) {
+    .modal-content { grid-template-columns: 1fr; height: 90%; max-height: 90vh; }
+    .modal-left { min-height: 160px; max-height: 200px; border-right: 0; border-bottom: 1px solid var(--border); }
+    .modal-right { padding: 20px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Fawz <span>Haberdashery</span></div>
+    <nav>
+        <a href="home.html">Home</a>
+        <a href="category-index.html">Categories</a>
+        <a href="all-products.html">All Products</a>
+        <a href="demo_cart.html">View Cart</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>Tassels</h1>
+    <div class="toolbar">
+        <input id="searchBox" placeholder="Search graduation tassels...">
+    </div>
+</section>
+
+<!-- IMAGE BANK SOURCE -->
+<div id="imageBank" style="display:none;">
+    <img data-img-key="grad-tassels" src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&q=80&w=800" alt="Graduation Tassels Block">
+</div>
+
+<main>
+    <!-- Render Destination Target Grid Components directly inside structural layout frame -->
+    <div id="categorySectionsContainer" class="product-grid"></div>
+</main>
+
+<!-- Unified Interactive Setup Panel Drawer Window -->
+<div id="productModal" class="modal">
+    <div class="modal-content">
+        <span class="close-x" onclick="closeModal()">&times;</span>
+        <div class="modal-left" id="modalLeft">
+            <img id="modalImg" src="" alt="">
+        </div>
+        <div class="modal-right">
+            <h2 id="modalTitle">Product Title</h2>
+            
+            <div class="variant-group">
+                <label>Select Length / Size</label>
+                <select id="sizeSelect" class="variant-select"></select>
+            </div>
+
+            <!-- Table Block Matrix Array Color Selection Config Node Module -->
+            <div class="variant-group">
+                <label>Select Colour</label>
+                <div id="colorTableGrid" class="color-table-grid"></div>
+            </div>
+
+            <label style="font-weight: 800; text-transform: uppercase; font-size: 0.75rem; color: #555; margin-top:10px; display:block;">Quantity</label>
+            <input type="number" id="qty" class="qty-input" value="1" min="1" oninput="updatePrice()">
+            
+            <div id="price">R 0.00</div>
+            <button class="btn-add" onclick="addToCart()">Add to Cart</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function getImageSrc(imgKey) {
+    const bankImg = document.querySelector(`#imageBank img[data-img-key="${imgKey}"]`);
+    return bankImg ? bankImg.getAttribute('src') : '';
+}
+
+// Complete Dynamic Product Data Arrays
+const productGroups = {
+  "graduation-tassels": {
+    "title": "Graduation Tassels",
+    "imgKey": "grad-tassels",
+    "sizes": ["7.5 cm", "12 cm", "15 cm", "30 cm"],
+    // Colors mapped to hex values for rendering individual swatches
+    "colors": [
+      { "name": "White", "hex": "#ffffff" },
+      { "name": "Red", "hex": "#d32f2f" },
+      { "name": "Old Gold", "hex": "#cfb997" },
+      { "name": "Black", "hex": "#111111" },
+      { "name": "Royal", "hex": "#0d47a1" }
+    ],
+    "pricing": {
+      "7.5 cm": 25.00,
+      "12 cm": 35.00,
+      "15 cm": 45.00,
+      "30 cm": 65.00
+    }
+  }
+};
+
+let activeItem = null;
+let selectedSize = "";
+let selectedColorName = "";
+
+function buildPageGrid() {
+    const container = document.getElementById('categorySectionsContainer');
+    if (!container) return;
+    container.innerHTML = '';
+
+    for (const key in productGroups) {
+        const prod = productGroups[key];
+        const card = document.createElement('article');
+        card.className = 'product-card';
+        
+        const srcImg = getImageSrc(prod.imgKey);
+        const imageTemplate = srcImg ? `<img src="${srcImg}" alt="${prod.title}" loading="lazy">` : `<div style="font-size:3rem; padding: 50px 0;">🎓</div>`;
+
+        card.innerHTML = `
+            <div class="product-img-wrap">${imageTemplate}</div>
+            <div class="product-info">
+                <h4>${prod.title}</h4>
+                <p>${prod.sizes.length} Sizes Available • Multi-Colour Choice</p>
+            </div>
+        `;
+
+        card.onclick = () => openProductModal(prod);
+        container.appendChild(card);
+    }
+}
+
+function openProductModal(prod) {
+    activeItem = prod;
+    document.getElementById('modalTitle').innerText = prod.title;
+    document.getElementById('modalImg').src = getImageSrc(prod.imgKey);
+
+    const sizeSelect = document.getElementById('sizeSelect');
+    const colorTableGrid = document.getElementById('colorTableGrid');
+    
+    sizeSelect.innerHTML = '';
+    colorTableGrid.innerHTML = '';
+
+    // Render Size Option Selectors
+    prod.sizes.forEach(size => {
+        const el = document.createElement('option');
+        el.value = size;
+        el.innerText = size;
+        sizeSelect.appendChild(el);
+    });
+
+    selectedSize = prod.sizes[0];
+    sizeSelect.value = selectedSize;
+    sizeSelect.onchange = (e) => { selectedSize = e.target.value; updatePrice(); };
+
+    // Render Table-Look Color Block Swatches
+    prod.colors.forEach((color, index) => {
+        const block = document.createElement('div');
+        block.className = `color-block-cell ${index === 0 ? 'active' : ''}`;
+        block.setAttribute('data-color-name', color.name);
+        
+        block.innerHTML = `
+            <div class="color-swatch-preview" style="background-color: ${color.hex};"></div>
+            <div class="color-title-label">${color.name}</div>
+        `;
+        
+        block.onclick = () => {
+            document.querySelectorAll('.color-block-cell').forEach(c => c.classList.remove('active'));
+            block.classList.add('active');
+            selectedColorName = color.name;
+            updatePrice();
+        };
+
+        colorTableGrid.appendChild(block);
+    });
+
+    selectedColorName = prod.colors[0].name;
+    document.getElementById('qty').value = 1;
+    
+    updatePrice();
+    document.getElementById('productModal').style.display = 'flex';
+}
+
+function updatePrice() {
+    if (!activeItem) return;
+    
+    const basePrice = activeItem.pricing[selectedSize] || 0;
+    const qty = Math.max(1, parseInt(document.getElementById('qty').value) || 1);
+
+    // Sync loops with integrated customer pricing matrix functions if applicable
+    const computedPid = `tassel-${selectedSize.replace(' ', '')}-${selectedColorName}`.toLowerCase();
+    const baseUnit = (window.getFirebasePrice) ? window.getFirebasePrice(computedPid, basePrice) : basePrice;
+    const totalAmount = baseUnit * qty;
+
+    const priceBox = document.getElementById('price');
+    if (priceBox) {
+        priceBox.innerText = `R ${totalAmount.toFixed(2)}`;
+    }
+}
+
+function addToCart() {
+    if (!activeItem) return;
+
+    const qty = Math.max(1, parseInt(document.getElementById('qty').value) || 1);
+    const basePrice = activeItem.pricing[selectedSize] || 0;
+    const computedPid = `tassel-${selectedSize.replace(' ', '')}-${selectedColorName}`.toLowerCase();
+
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    cart.push({
+        product: `${activeItem.title} (${selectedSize} - ${selectedColorName})`,
+        category: "Tassels",
+        size: selectedSize,
+        color: selectedColorName,
+        qty: qty,
+        price: basePrice * qty,
+        unitPrice: basePrice,
+        total: basePrice * qty,
+        productId: computedPid,
+        tier: window.userTier || 'tier_1'
+    });
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert(`Added: ${activeItem.title} (${selectedSize} - ${selectedColorName}) x${qty} to cart.`);
+    closeModal();
+}
+
+function closeModal() {
+    document.getElementById('productModal').style.display = 'none';
+}
+
+function handleSearch() {
+    const filter = document.getElementById('searchBox').value.toLowerCase();
+    const productCards = document.querySelectorAll('.product-card');
+    
+    productCards.forEach(card => {
+        const textValue = card.innerText.toLowerCase();
+        card.classList.toggle('hidden', !textValue.includes(filter));
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    buildPageGrid();
+    document.getElementById('searchBox')?.addEventListener('input', handleSearch);
+});
+</script>
+</body>
+</html>

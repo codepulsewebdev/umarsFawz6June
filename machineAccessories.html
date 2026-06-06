@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Accessories Combined | Fawz Haberdashery</title>
+<link rel="stylesheet" href="global-images.css">
+<style>
+:root{--fawz-red:#e31e24;--fawz-dark:#1a1a1a;--fawz-grey:#f8f8f8;--border:#eeeeee;}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',Roboto,Arial,sans-serif;background:#fff;color:var(--fawz-dark)}
+header{position:sticky;top:0;background:#fff;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--fawz-red);box-shadow:0 2px 10px rgba(0,0,0,.05);z-index:1000;gap:20px}
+.logo{font-weight:900;text-transform:uppercase;letter-spacing:1px;font-size:1.2rem}.logo span{color:var(--fawz-red)}
+nav a{color:var(--fawz-dark);margin-left:18px;text-decoration:none;font-weight:700;font-size:.9rem}
+.hero{padding:46px 5% 24px;max-width:1300px;margin:auto}.hero h1{font-size:clamp(2rem,4vw,3.5rem);margin:0;text-transform:uppercase}.hero p{color:#666;max-width:900px;line-height:1.6}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}.toolbar input,.toolbar select{padding:13px 14px;border:1px solid #ddd;border-radius:10px;min-width:240px;font-size:1rem;background:#fff}
+main{padding:15px 5% 70px;max-width:1300px;margin:auto}.product-section{margin:32px 0 54px}.section-heading{display:flex;align-items:center;justify-content:space-between;border-left:6px solid var(--fawz-red);padding-left:14px;margin-bottom:18px}.section-heading h3{font-size:1.6rem;margin:0;text-transform:uppercase}.section-heading span{background:#fff3f3;color:var(--fawz-red);font-weight:800;border-radius:999px;padding:6px 11px}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}.product-card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.04);transition:.25s}.product-card:hover{transform:translateY(-4px);border-color:var(--fawz-red);box-shadow:0 15px 32px rgba(0,0,0,.10)}
+.product-img-wrap{height:190px;background:#fafafa;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border)}.product-img-wrap img{width:100%;height:100%;object-fit:contain;padding:14px}.product-info{padding:15px}.category-pill{display:inline-block;font-size:.72rem;font-weight:900;text-transform:uppercase;background:#f2f2f2;border-radius:999px;padding:5px 8px;color:#555}.product-info h4{font-size:1rem;margin:12px 0 8px;line-height:1.3}.product-id{font-size:.76rem;color:#777;word-break:break-all;margin:0 0 8px}.firebase-price{font-weight:900;color:var(--fawz-red);margin:0}
+.modal{display:none;position:fixed;z-index:2000;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(4px);padding:30px 12px}.modal-content{background:#fff;margin:auto;max-width:980px;min-height:520px;display:grid;grid-template-columns:1fr 1.05fr;border-radius:18px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,.24);position:relative}.close-x{position:absolute;right:22px;top:16px;font-size:32px;cursor:pointer;color:#999;z-index:5}.modal-left{background:#fafafa;display:flex;align-items:center;justify-content:center;padding:28px;border-right:1px solid var(--border)}.modal-left img{max-width:100%;max-height:430px;object-fit:contain}.modal-right{padding:42px 36px}.modal-right h2{margin:0 0 12px;text-transform:uppercase;color:var(--fawz-red)}.modal-meta{color:#666;font-size:.92rem;word-break:break-all}
+label{display:block;margin:22px 0 8px;font-weight:900;text-transform:uppercase;font-size:.75rem;color:#555}input,.option-select{width:100%;padding:14px;border:1px solid #ddd;border-radius:10px;font-size:1rem;background:var(--fawz-grey)}#price{font-size:2rem;font-weight:950;margin:25px 0;color:#111}.btn-add{width:100%;background:var(--fawz-red);border:none;color:#fff;font-weight:900;text-transform:uppercase;padding:17px;border-radius:12px;cursor:pointer;letter-spacing:1px}.btn-add:hover{background:#b3161a}.after-add{display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}.after-add p{margin:0 0 10px;font-weight:900;font-size:.85rem;text-transform:uppercase;color:#555}.after-add-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.action-btn{border:1px solid #ddd;background:#fff;border-radius:10px;padding:12px;font-weight:900;cursor:pointer}.action-btn:hover{border-color:var(--fawz-red);color:var(--fawz-red)}.hidden{display:none!important}#imageBank{display:none}
+@media(max-width:760px){header{align-items:flex-start;flex-direction:column}nav a{margin:0 14px 0 0}.modal-content{grid-template-columns:1fr;max-height:92vh;overflow:auto}.modal-left{min-height:260px;border-right:0;border-bottom:1px solid var(--border)}.after-add-grid{grid-template-columns:1fr}}
+</style>
+<script src="firebase-config.js" type="module"></script>
+<script src="fawz-product-id-map.js"></script>
+<script src="fawz-firebase-pricing.js" type="module"></script>
+<script src="fawz-security.js" defer></script>
+</head>
+<body>
+<header><div class="logo">Fawz <span>Haberdashery</span></div><nav><a href="home.html">Home</a><a href="all-products.html">All Products</a><a href="demo_cart.html">View Cart</a></nav><a href="login.html" style="margin-left:12px;font-weight:900;color:#e31e24;text-decoration:none">Login</a></header>
+<section class="hero"><h1>Machine Accessories</h1><p>Combined page ordered as Bobbins, Machine Parts, Multifunction Kits, and Remaining Accessories. Duplicate selectable options have been removed while keeping Firebase-ready product IDs.</p><div class="toolbar"><input id="searchBox" placeholder="Search products or product IDs..."><select id="categoryFilter"><option value="">All sections</option><option value="Bobbins">Bobbins</option><option value="Machine Parts">Machine Parts</option><option value="Multifunction Kits">Multifunction Kits</option><option value="Remaining Accessories">Remaining Accessories</option></select></div></section>
+<div id="imageBank">
+<img data-img-key="bobbin-buddies" src="images/bobins/bobbinsHome/buddies.jpg" alt="Bobbin Buddies">
+<img data-img-key="bobbin-case-bcdbz-each" src="images/bobins/bobinsCases/domestic.webp" alt="Bobbin Case BCDBZ each">
+<img data-img-key="bobbin-case-wide-slot" src="images/bobins/bobinsCases/domesticWide.jpg" alt="Bobbin Case Wide Slot">
+<img data-img-key="bobbin-cases-domestic" src="images/bobins/bobinsCases/domesticCarded.jpg" alt="Bobbin Cases Domestic">
+<img data-img-key="bobbin-cases-industrial" src="images/bobins/bobinsCases/industrial.jpg" alt="Bobbin Cases Industrial">
+<img data-img-key="bobbin-clamps-silicone-10s" src="images/bobins/clamp/IMG_3245.jpg" alt="Bobbin Clamps Silicone 10s">
+<img data-img-key="bobbin-storage-box" src="images/bobins/sewingBoxes/bobbinStorage.jpg" alt="Bobbin Storage Box">
+<img data-img-key="bobbins-brother-clear-6cards" src="images/bobins/machine/brother.jpg" alt="Bobbins Brother Clear 6cards">
+<img data-img-key="bobbins-embroidery-6-cards" src="images/bobins/machine/embroidery.webp" alt="Bobbins Embroidery 6 cards">
+<img data-img-key="bobbins-husqvarna-6cards" src="images/bobins/machine/huqsvana1.jpg" alt="Bobbins Husqvarna 6cards">
+<img data-img-key="bobbins-industrial-100" src="images/bobins/machine/industrial.webp" alt="Bobbins Industrial 100">
+<img data-img-key="bobbins-pfaff-blue-6cards" src="images/bobins/machine/pfaff1.jpg" alt="Bobbins Pfaff Blue 6cards">
+<img data-img-key="card-bobbin-case-domestic" src="images/bobins/bobinsCases/domesticCarded.jpg" alt="Card Bobbin Case Domestic">
+<img data-img-key="card-bobbin-case-industrial" src="images/bobins/bobinsCases/industrial.jpg" alt="Card Bobbin Case Industrial">
+<img data-img-key="card-bobbin-case-wide-slot" src="images/bobins/bobinsCases/domesticWide.jpg" alt="Card Bobbin Case Wide Slot">
+<img data-img-key="carded-10h-bobbins-x-4" src="images/bobins/machine/10Hole.webp" alt="Carded 10H Bobbins x 4">
+<img data-img-key="carded-4h-bobbins-x-4" src="images/bobins/machine/4Hole.webp" alt="Carded 4H Bobbins x 4">
+<img data-img-key="carded-ind-bobbins-x-4" src="images/bobins/machine/industrial.webp" alt="Carded Industrial Bobbins x 4">
+<img data-img-key="carded-plastic-bobbins-x-4" src="images/bobins/machine/plastic.webp" alt="Carded Plastic Bobbins x 4">
+<img data-img-key="group-bobbin-buddies" src="images/bobins/bobbinsHome/buddies.jpg" alt="Bobbin Buddies">
+<img data-img-key="group-bobbin-cases" src="images/bobins/bobinsCases/domestic.webp" alt="Bobbin Cases">
+<img data-img-key="group-bobbin-clamps" src="images/bobins/clamp/IMG_3245.jpg" alt="Bobbin Clamps">
+<img data-img-key="group-bobbin-storage" src="images/bobins/sewingBoxes/bobbinStorage.jpg" alt="Bobbin Storage">
+<img data-img-key="group-bobbins" src="images/bobins/machine/4Hole.webp" alt="Bobbins">
+<img data-img-key="machine-accessories-globes-clip-on" src="images/machineParts/globe1.jpg" alt="machine-accessories-globes-clip-on">
+<img data-img-key="machine-accessories-globes-screw" src="images/machineParts/screwGlobe.jpg" alt="machine-accessories-globes-screw">
+<img data-img-key="machine-accessories-globes-screw-on" src="images/machineParts/screwGlobe.jpg" alt="machine-accessories-globes-screw-on">
+<img data-img-key="machine-accessories-hair-clipper-oil" src="images/machineaccessories/" alt="machine-accessories-hair-clipper-oil">
+<img data-img-key="machine-accessories-industrial-machine-belts" src="images/machineaccessories/" alt="machine-accessories-industrial-machine-belts">
+<img data-img-key="machine-accessories-machine-belts" src="images/machineParts/belt2.jpg" alt="machine-accessories-machine-belts">
+<img data-img-key="machine-accessories-machine-motors-b" src="images/machineParts/motor.jpg" alt="machine-accessories-machine-motors-b">
+<img data-img-key="machine-accessories-machine-motors-fawz" src="images/machineParts/motor.jpg" alt="machine-accessories-machine-motors-fawz">
+<img data-img-key="machine-accessories-machine-oil-lt" src="images/machineaccessories/" alt="machine-accessories-machine-oil-lt">
+<img data-img-key="machine-accessories-machine-oil-ml" src="images/machineParts/oil.jpg" alt="machine-accessories-machine-oil-ml">
+<img data-img-key="machine-parts-allen-key-siruba" src="images/machineparts/sirubaAllenKey.jpg" alt="machine-parts-allen-key-siruba">
+<img data-img-key="machine-parts-cleaning-brush" src="images/machineparts/brush.webp" alt="machine-parts-cleaning-brush">
+<img data-img-key="machine-parts-hemmer-foot" src="images/machineparts/hemmer.jpg" alt="machine-parts-hemmer-foot">
+<img data-img-key="machine-parts-magnetic-seam-guide" src="images/machineParts/seamGuide.png" alt="machine-parts-magnetic-seam-guide">
+<img data-img-key="machine-parts-multifunction-kits" src="images/machineparts/multi16.png" alt="machine-parts-multifunction-kits">
+<img data-img-key="machine-parts-multi-function-kit" src="images/machineparts/multi8.png" alt="machine-parts-multi-function-kit">
+<img data-img-key="machine-parts-multifunction-kit" src="images/machineparts/multi16.png" alt="machine-parts-multifunction-kit">
+<img data-img-key="machine-parts-need-plate" src="images/machineparts/needlePlate.jpg" alt="machine-parts-need-plate">
+<img data-img-key="machine-parts-needle-plate" src="images/machineparts/needlePlate.jpg" alt="machine-parts-needle-plate">
+<img data-img-key="machine-parts-piping-foot-left" src="images/machineparts/pipingFoot.jpg" alt="machine-parts-piping-foot-left">
+<img data-img-key="machine-parts-piping-foot-right" src="images/machineparts/pipingFoot.jpg" alt="machine-parts-piping-foot-right">
+<img data-img-key="machine-parts-presser-foot" src="images/machineparts/36069l.jpg" alt="machine-parts-presser-foot">
+<img data-img-key="machine-parts-presser-foot-hinged-d" src="images/machineparts/36069l.jpg" alt="machine-parts-presser-foot-hinged-d">
+<img data-img-key="machine-parts-shirring-foot-adjust" src="images/machineparts/shirring.jpg" alt="machine-parts-shirring-foot-adjust">
+<img data-img-key="machine-parts-teflon-presser-foot" src="images/machineparts/teflon18.jpg" alt="machine-parts-teflon-presser-foot">
+<img data-img-key="machine-parts-top-stitch-foot-cl" src="images/machineparts/36069l.jpg" alt="machine-parts-top-stitch-foot-cl">
+<img data-img-key="machine-parts-zip-foot-left-ln" src="images/machineparts/p36ln.jpg" alt="machine-parts-zip-foot-left-ln">
+<img data-img-key="machine-parts-zip-foot-right" src="images/machineparts/p36n.jpg" alt="machine-parts-zip-foot-right">
+<img data-img-key="metal-bobbins-10h-200" src="images/bobins/machine/metal.webp" alt="Metal Bobbins 10H 200">
+<img data-img-key="metal-bobbins-4h-100" src="images/bobins/machine/metal.webp" alt="Metal Bobbins 4H 100">
+<img data-img-key="plastic-bobbins-200" src="images/bobins/machine/plastic.webp" alt="Plastic Bobbins 200">
+<img data-img-key="sewing-notions-button-hole-belt-punch" src="images/machineaccessories/" alt="sewing-notions-button-hole-belt-punch">
+<img data-img-key="singer-machine-oil-ml" src="images/machineaccessories/" alt="singer-machine-oil-ml">
+</div>
+<main>
+<section class="product-section" data-category-section="Bobbins">
+<div class="section-heading"><h3>Bobbins</h3><span>5 blocks</span></div>
+<div class="product-grid">
+<article class="product-card" data-group-id="bobbins" data-category="Bobbins" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="group-bobbins" src="" alt="All Bobbins" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Bobbins</span><h4>All Bobbins</h4><p class="product-id">12 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="bobbin-cases" data-category="Bobbins" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="group-bobbin-cases" src="" alt="All Bobbin Cases" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Bobbins</span><h4>All Bobbin Cases</h4><p class="product-id">7 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="bobbin-clamps" data-category="Bobbins" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="group-bobbin-clamps" src="" alt="Bobbin Clamps" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Bobbins</span><h4>Bobbin Clamps</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="bobbin-buddies" data-category="Bobbins" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="group-bobbin-buddies" src="" alt="Bobbin Buddies" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Bobbins</span><h4>Bobbin Buddies</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="bobbin-storage" data-category="Bobbins" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="group-bobbin-storage" src="" alt="Bobbin Storage" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Bobbins</span><h4>Bobbin Storage</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+</div>
+</section>
+<section class="product-section" data-category-section="Machine Parts">
+<div class="section-heading"><h3>Machine Parts</h3><span>15 blocks</span></div>
+<div class="product-grid">
+<article class="product-card" data-group-id="machine-parts-allen-key-siruba" data-category="Machine Parts" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-parts-allen-key-siruba" src="" alt="Allen Key Siruba" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Parts</span><h4>Allen Key Siruba</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-parts-cleaning-brush" data-category="Machine Parts" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-parts-cleaning-brush" src="" alt="Cleaning Brush" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Parts</span><h4>Cleaning Brush</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-parts-hemmer-foot" data-category="Machine Parts" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-parts-hemmer-foot" src="" alt="Hemmer Foot" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Parts</span><h4>Hemmer Foot</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-parts-magnetic-seam-guide" data-category="Machine Parts" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-parts-magnetic-seam-guide" src="" alt="Magnetic Seam Guide" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Parts</span><h4>Magnetic Seam Guide</h4><p class="product-id">2 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-parts-need-plate" data-category="Machine Parts" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-parts-need-plate" src="" alt="Need Plate" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Parts</span><h4>Need Plate</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-parts-needle-plate" data-category="Machine Parts" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-parts-needle-plate" src="" alt="Needle Plate" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Parts</span><h4>Needle Plate</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-parts-piping-foot-left" data-category="Machine Parts" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-parts-piping-foot-left" src="" alt="Piping Foot Left" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Parts</span><h4>Piping Foot Left</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-parts-piping-foot-right" data-category="Machine Parts" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-parts-piping-foot-right" src="" alt="Piping Foot Right" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Parts</span><h4>Piping Foot Right</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-parts-presser-foot-hinged-d" data-category="Machine Parts" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-parts-presser-foot-hinged-d" src="" alt="Presser Foot Hinged D" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Parts</span><h4>Presser Foot Hinged D</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-parts-presser-foot" data-category="Machine Parts" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-parts-presser-foot" src="" alt="Presser Foot" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Parts</span><h4>Presser Foot</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-parts-shirring-foot-adjust" data-category="Machine Parts" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-parts-shirring-foot-adjust" src="" alt="Shirring Foot Adjust" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Parts</span><h4>Shirring Foot Adjust</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-parts-teflon-presser-foot" data-category="Machine Parts" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-parts-teflon-presser-foot" src="" alt="Teflon Presser Foot" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Parts</span><h4>Teflon Presser Foot</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-parts-top-stitch-foot-cl" data-category="Machine Parts" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-parts-top-stitch-foot-cl" src="" alt="Top Stitch Foot Cl" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Parts</span><h4>Top Stitch Foot Cl</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-parts-zip-foot-left-ln" data-category="Machine Parts" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-parts-zip-foot-left-ln" src="" alt="Zip Foot Left Ln" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Parts</span><h4>Zip Foot Left Ln</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-parts-zip-foot-right" data-category="Machine Parts" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-parts-zip-foot-right" src="" alt="Zip Foot Right" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Machine Parts</span><h4>Zip Foot Right</h4><p class="product-id">1 selectable option</p><p class="firebase-price">Login to view price</p></div>
+</article>
+</div>
+</section>
+<section class="product-section" data-category-section="Multifunction Kits">
+<div class="section-heading"><h3>Multifunction Kits</h3><span>1 block</span></div>
+<div class="product-grid">
+<article class="product-card" data-group-id="machine-parts-multifunction-kits" data-category="Multifunction Kits" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-parts-multifunction-kits" src="" alt="Multifunction Kits" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Multifunction Kits</span><h4>Multifunction Kits</h4><p class="product-id">3 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+</div>
+</section>
+<section class="product-section" data-category-section="Remaining Accessories">
+<div class="section-heading"><h3>Remaining Accessories</h3><span>3 blocks</span></div>
+<div class="product-grid">
+<article class="product-card" data-group-id="machine-accessories-globes" data-category="Remaining Accessories" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-accessories-globes-clip-on" src="" alt="Globes" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Remaining Accessories</span><h4>Globes</h4><p class="product-id">4 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-accessories-belts-motors" data-category="Remaining Accessories" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-accessories-machine-belts" src="" alt="Belts &amp; Motors" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Remaining Accessories</span><h4>Belts &amp; Motors</h4><p class="product-id">6 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="machine-accessories-oils" data-category="Remaining Accessories" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="machine-accessories-machine-oil-ml" src="" alt="Machine Oils" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Remaining Accessories</span><h4>Machine Oils</h4><p class="product-id">7 selectable options</p><p class="firebase-price">Login to view price</p></div>
+</article>
+</div>
+</section>
+
+</main>
+<div id="productModal" class="modal"><div class="modal-content"><span class="close-x" onclick="closeModal()">&times;</span><div class="modal-left"><img id="modalImg" src="" alt=""></div><div class="modal-right"><h2 id="modalTitle">Product</h2><p class="modal-meta" id="modalCategory"></p><p class="modal-meta">Product ID: <strong id="modalProductId"></strong></p><label id="variantLabel" for="variantSelect">Option</label><select id="variantSelect" class="option-select" onchange="selectVariant()"></select><label>Quantity</label><input type="number" id="qty" value="1" min="1" oninput="updateModalPrice()"><p id="price">Select product</p><button class="btn-add" onclick="addToCart()">Add to Cart</button><div id="afterAdd" class="after-add"><p>Item added</p><div class="after-add-grid"><button class="action-btn" onclick="closeModal()">Continue Shopping</button><button class="action-btn" onclick="location.href='demo_cart.html'">View Cart</button></div></div></div></div></div>
+<script>
+const productGroups = {
+  "bobbins": {
+    "title": "All Bobbins",
+    "category": "Bobbins",
+    "label": "Choose Bobbin Type",
+    "imgKey": "group-bobbins",
+    "options": [
+      {
+        "name": "Bobbins - Industrial - 100",
+        "productId": "machine-accessories-bobbins-industrial-100",
+        "basePrice": 83.88,
+        "imgKey": "bobbins-industrial-100",
+        "category": "Bobbins"
+      },
+      {
+        "name": "Bobbins Brother Clear 6cards",
+        "productId": "machine-accessories-bobbins-brother-clear-6cards",
+        "basePrice": 76.71,
+        "imgKey": "bobbins-brother-clear-6cards",
+        "category": "Bobbins"
+      },
+      {
+        "name": "Bobbins Embroidery 6 cards",
+        "productId": "machine-accessories-bobbins-embroidery-6-cards",
+        "basePrice": 62.97,
+        "imgKey": "bobbins-embroidery-6-cards",
+        "category": "Bobbins"
+      },
+      {
+        "name": "Bobbins Husqvarna 6cards",
+        "productId": "machine-accessories-bobbins-husqvarna-6cards",
+        "basePrice": 125.94,
+        "imgKey": "bobbins-husqvarna-6cards",
+        "category": "Bobbins"
+      },
+      {
+        "name": "Bobbins Pfaff Blue 6cards",
+        "productId": "machine-accessories-bobbins-pfaff-blue-6cards",
+        "basePrice": 76.71,
+        "imgKey": "bobbins-pfaff-blue-6cards",
+        "category": "Bobbins"
+      },
+      {
+        "name": "Carded 10H Bobbins x 4",
+        "productId": "machine-accessories-carded-10h-bobbins-x-4",
+        "basePrice": 37.28,
+        "imgKey": "carded-10h-bobbins-x-4",
+        "category": "Bobbins"
+      },
+      {
+        "name": "Carded 4H Bobbins x 4",
+        "productId": "machine-accessories-carded-4h-bobbins-x-4",
+        "basePrice": 45,
+        "imgKey": "carded-4h-bobbins-x-4",
+        "category": "Bobbins"
+      },
+      {
+        "name": "Carded Ind. Bobbins x 4",
+        "productId": "machine-accessories-carded-ind-bobbins-x-4",
+        "basePrice": 52.35,
+        "imgKey": "carded-ind-bobbins-x-4",
+        "category": "Bobbins"
+      },
+      {
+        "name": "Carded Plastic Bobbins x 4",
+        "productId": "machine-accessories-carded-plastic-bobbins-x-4",
+        "basePrice": 32.7,
+        "imgKey": "carded-plastic-bobbins-x-4",
+        "category": "Bobbins"
+      },
+      {
+        "name": "Plastic Bobbins - 200",
+        "productId": "machine-accessories-plastic-bobbins-200",
+        "basePrice": 81.42,
+        "imgKey": "plastic-bobbins-200",
+        "category": "Bobbins"
+      },
+      {
+        "name": "Metal Bobbins 10H - 200",
+        "productId": "machine-accessories-metal-bobbins-10h-200",
+        "basePrice": 103.52,
+        "imgKey": "metal-bobbins-10h-200",
+        "category": "Bobbins"
+      },
+      {
+        "name": "Metal Bobbins 4H - 100",
+        "productId": "machine-accessories-metal-bobbins-4h-100",
+        "basePrice": 76,
+        "imgKey": "metal-bobbins-4h-100",
+        "category": "Bobbins"
+      }
+    ]
+  },
+  "bobbin-cases": {
+    "title": "All Bobbin Cases",
+    "category": "Bobbin Cases",
+    "label": "Choose Bobbin Case Type",
+    "imgKey": "group-bobbin-cases",
+    "options": [
+      {
+        "name": "Bobbin Case BCDBZ each",
+        "productId": "machine-accessories-bobbin-case-bcdbz-each",
+        "basePrice": 13.17,
+        "imgKey": "bobbin-case-bcdbz-each",
+        "category": "Bobbin Cases"
+      },
+      {
+        "name": "Bobbin Case Wide Slot",
+        "productId": "machine-accessories-bobbin-case-wide-slot",
+        "basePrice": 440,
+        "imgKey": "bobbin-case-wide-slot",
+        "category": "Bobbin Cases"
+      },
+      {
+        "name": "Card Bobbin Case Wide Slot",
+        "productId": "machine-accessories-card-bobbin-case-wide-slot",
+        "basePrice": 90,
+        "imgKey": "card-bobbin-case-wide-slot",
+        "category": "Bobbin Cases"
+      },
+      {
+        "name": "Bobbin Cases - Industrial",
+        "productId": "machine-accessories-bobbin-cases-industrial",
+        "basePrice": 533,
+        "imgKey": "bobbin-cases-industrial",
+        "category": "Bobbin Cases"
+      },
+      {
+        "name": "Bobbin Cases - Domestic",
+        "productId": "machine-accessories-bobbin-cases-domestic",
+        "basePrice": 503,
+        "imgKey": "bobbin-cases-domestic",
+        "category": "Bobbin Cases"
+      },
+      {
+        "name": "Card Bobbin Case Domestic",
+        "productId": "machine-accessories-card-bobbin-case-domestic",
+        "basePrice": 110,
+        "imgKey": "card-bobbin-case-domestic",
+        "category": "Bobbin Cases"
+      },
+      {
+        "name": "Card Bobbin Case Industrial",
+        "productId": "machine-accessories-card-bobbin-case-industrial",
+        "basePrice": 116,
+        "imgKey": "card-bobbin-case-industrial",
+        "category": "Bobbin Cases"
+      }
+    ]
+  },
+  "bobbin-clamps": {
+    "title": "Bobbin Clamps",
+    "category": "Bobbin Clamps",
+    "label": "Choose Clamp Type",
+    "imgKey": "group-bobbin-clamps",
+    "options": [
+      {
+        "name": "Bobbin Clamps Silicone 10s",
+        "productId": "machine-accessories-bobbin-clamps-silicone-10s",
+        "basePrice": 40.07,
+        "imgKey": "bobbin-clamps-silicone-10s",
+        "category": "Bobbin Clamps"
+      }
+    ]
+  },
+  "bobbin-buddies": {
+    "title": "Bobbin Buddies",
+    "category": "Bobbin Buddies",
+    "label": "Choose Option",
+    "imgKey": "group-bobbin-buddies",
+    "options": [
+      {
+        "name": "Bobbin Buddies",
+        "productId": "machine-accessories-bobbin-buddies",
+        "basePrice": 39.5,
+        "imgKey": "bobbin-buddies",
+        "category": "Bobbin Buddies"
+      }
+    ]
+  },
+  "bobbin-storage": {
+    "title": "Bobbin Storage",
+    "category": "Bobbin Storage",
+    "label": "Choose Storage Type",
+    "imgKey": "group-bobbin-storage",
+    "options": [
+      {
+        "name": "Bobbin Storage Box",
+        "productId": "sewing-boxes-bobbin-storage-box",
+        "basePrice": 11.38,
+        "imgKey": "bobbin-storage-box",
+        "category": "Bobbin Storage"
+      }
+    ]
+  },
+  "machine-parts-allen-key-siruba": {
+    "title": "Allen Key Siruba",
+    "category": "Machine Parts",
+    "label": "Option",
+    "imgKey": "machine-parts-allen-key-siruba",
+    "options": [
+      {
+        "name": "Allen Key Siruba 747F",
+        "productId": "machine-parts-allen-key-siruba-747f",
+        "basePrice": 5.53,
+        "imgKey": "machine-parts-allen-key-siruba",
+        "category": "Machine Parts"
+      }
+    ]
+  },
+  "machine-parts-cleaning-brush": {
+    "title": "Cleaning Brush",
+    "category": "Machine Parts",
+    "label": "Option",
+    "imgKey": "machine-parts-cleaning-brush",
+    "options": [
+      {
+        "name": "Cleaning Brush",
+        "productId": "machine-parts-cleaning-brush",
+        "basePrice": 7.15,
+        "imgKey": "machine-parts-cleaning-brush",
+        "category": "Machine Parts"
+      }
+    ]
+  },
+  "machine-parts-hemmer-foot": {
+    "title": "Hemmer Foot",
+    "category": "Machine Parts",
+    "label": "Option",
+    "imgKey": "machine-parts-hemmer-foot",
+    "options": [
+      {
+        "name": "Hemmer Foot P5-5.6mm",
+        "productId": "machine-parts-hemmer-foot-p5-5-6mm",
+        "basePrice": 26.77,
+        "imgKey": "machine-parts-hemmer-foot",
+        "category": "Machine Parts"
+      }
+    ]
+  },
+  "machine-parts-magnetic-seam-guide": {
+    "title": "Magnetic Seam Guide",
+    "category": "Machine Parts",
+    "label": "Option",
+    "imgKey": "machine-parts-magnetic-seam-guide",
+    "options": [
+      {
+        "name": "Magnetic Seam Guide Large",
+        "productId": "machine-parts-magnetic-seam-guide-large",
+        "basePrice": 10.3,
+        "imgKey": "machine-parts-magnetic-seam-guide",
+        "category": "Machine Parts"
+      },
+      {
+        "name": "Magnetic Seam Guide Small",
+        "productId": "machine-parts-magnetic-seam-guide-small",
+        "basePrice": 9.0,
+        "imgKey": "machine-parts-magnetic-seam-guide",
+        "category": "Machine Parts"
+      }
+    ]
+  },
+  "machine-parts-need-plate": {
+    "title": "Need Plate",
+    "category": "Machine Parts",
+    "label": "Option",
+    "imgKey": "machine-parts-need-plate",
+    "options": [
+      {
+        "name": "Need Plate 109Z/307",
+        "productId": "machine-parts-need-plate-109z-307",
+        "basePrice": 6.59,
+        "imgKey": "machine-parts-need-plate",
+        "category": "Machine Parts"
+      }
+    ]
+  },
+  "machine-parts-needle-plate": {
+    "title": "Needle Plate",
+    "category": "Machine Parts",
+    "label": "Option",
+    "imgKey": "machine-parts-needle-plate",
+    "options": [
+      {
+        "name": "Needle Plate 206",
+        "productId": "machine-parts-needle-plate-206",
+        "basePrice": 6.18,
+        "imgKey": "machine-parts-needle-plate",
+        "category": "Machine Parts"
+      }
+    ]
+  },
+  "machine-parts-piping-foot-left": {
+    "title": "Piping Foot Left",
+    "category": "Machine Parts",
+    "label": "Option",
+    "imgKey": "machine-parts-piping-foot-left",
+    "options": [
+      {
+        "name": "Piping Foot Left 360069L",
+        "productId": "machine-parts-piping-foot-left-360069l",
+        "basePrice": 25.0,
+        "imgKey": "machine-parts-piping-foot-left",
+        "category": "Machine Parts"
+      }
+    ]
+  },
+  "machine-parts-piping-foot-right": {
+    "title": "Piping Foot Right",
+    "category": "Machine Parts",
+    "label": "Option",
+    "imgKey": "machine-parts-piping-foot-right",
+    "options": [
+      {
+        "name": "Piping Foot Right 360069R",
+        "productId": "machine-parts-piping-foot-right-360069r",
+        "basePrice": 25.0,
+        "imgKey": "machine-parts-piping-foot-right",
+        "category": "Machine Parts"
+      }
+    ]
+  },
+  "machine-parts-presser-foot-hinged-d": {
+    "title": "Presser Foot Hinged D",
+    "category": "Machine Parts",
+    "label": "Option",
+    "imgKey": "machine-parts-presser-foot-hinged-d",
+    "options": [
+      {
+        "name": "Presser Foot Hinged D177",
+        "productId": "machine-parts-presser-foot-hinged-d177",
+        "basePrice": 3.71,
+        "imgKey": "machine-parts-presser-foot-hinged-d",
+        "category": "Machine Parts"
+      }
+    ]
+  },
+  "machine-parts-presser-foot": {
+    "title": "Presser Foot",
+    "category": "Machine Parts",
+    "label": "Option",
+    "imgKey": "machine-parts-presser-foot",
+    "options": [
+      {
+        "name": "Presser Foot P351",
+        "productId": "machine-parts-presser-foot-p351",
+        "basePrice": 5.71,
+        "imgKey": "machine-parts-presser-foot",
+        "category": "Machine Parts"
+      }
+    ]
+  },
+  "machine-parts-shirring-foot-adjust": {
+    "title": "Shirring Foot Adjust",
+    "category": "Machine Parts",
+    "label": "Option",
+    "imgKey": "machine-parts-shirring-foot-adjust",
+    "options": [
+      {
+        "name": "Shirring Foot (Adjust) S950",
+        "productId": "machine-parts-shirring-foot-adjust-s950",
+        "basePrice": 16.48,
+        "imgKey": "machine-parts-shirring-foot-adjust",
+        "category": "Machine Parts"
+      }
+    ]
+  },
+  "machine-parts-teflon-presser-foot": {
+    "title": "Teflon Presser Foot",
+    "category": "Machine Parts",
+    "label": "Option",
+    "imgKey": "machine-parts-teflon-presser-foot",
+    "options": [
+      {
+        "name": "Teflon Presser Foot MT18",
+        "productId": "machine-parts-teflon-presser-foot-mt18",
+        "basePrice": 5.0,
+        "imgKey": "machine-parts-teflon-presser-foot",
+        "category": "Machine Parts"
+      }
+    ]
+  },
+  "machine-parts-top-stitch-foot-cl": {
+    "title": "Top Stitch Foot Cl",
+    "category": "Machine Parts",
+    "label": "Option",
+    "imgKey": "machine-parts-top-stitch-foot-cl",
+    "options": [
+      {
+        "name": "Top Stitch Foot CL 1/4",
+        "productId": "machine-parts-top-stitch-foot-cl-1-4",
+        "basePrice": 15.3,
+        "imgKey": "machine-parts-top-stitch-foot-cl",
+        "category": "Machine Parts"
+      }
+    ]
+  },
+  "machine-parts-zip-foot-left-ln": {
+    "title": "Zip Foot Left Ln",
+    "category": "Machine Parts",
+    "label": "Option",
+    "imgKey": "machine-parts-zip-foot-left-ln",
+    "options": [
+      {
+        "name": "Zip Foot Left P36LN",
+        "productId": "machine-parts-zip-foot-left-p36ln",
+        "basePrice": 9.36,
+        "imgKey": "machine-parts-zip-foot-left-ln",
+        "category": "Machine Parts"
+      }
+    ]
+  },
+  "machine-parts-zip-foot-right": {
+    "title": "Zip Foot Right",
+    "category": "Machine Parts",
+    "label": "Option",
+    "imgKey": "machine-parts-zip-foot-right",
+    "options": [
+      {
+        "name": "Zip Foot Right P36N",
+        "productId": "machine-parts-zip-foot-right-p36n",
+        "basePrice": 9.36,
+        "imgKey": "machine-parts-zip-foot-right",
+        "category": "Machine Parts"
+      }
+    ]
+  },
+  "machine-parts-multifunction-kits": {
+    "title": "Multifunction Kits",
+    "category": "Multifunction Kits",
+    "label": "Choose Kit",
+    "imgKey": "machine-parts-multifunction-kits",
+    "options": [
+      {
+        "name": "Multi Function Kit 16pcs",
+        "productId": "machine-parts-multi-function-kit-16pcs",
+        "basePrice": 121.0,
+        "imgKey": "machine-parts-multi-function-kit",
+        "category": "Multifunction Kits"
+      },
+      {
+        "name": "Multi Function Kit 32pcs",
+        "productId": "machine-parts-multi-function-kit-32pcs",
+        "basePrice": 211.86,
+        "imgKey": "machine-parts-multi-function-kit",
+        "category": "Multifunction Kits"
+      },
+      {
+        "name": "Multifunction Kit 48pcs",
+        "productId": "machine-parts-multifunction-kit-48pcs",
+        "basePrice": 352.0,
+        "imgKey": "machine-parts-multifunction-kit",
+        "category": "Multifunction Kits"
+      }
+    ]
+  },
+  "machine-accessories-globes": {
+    "title": "Globes",
+    "category": "Remaining Accessories",
+    "label": "Choose Globe Type",
+    "imgKey": "machine-accessories-globes-clip-on",
+    "options": [
+      {
+        "name": "Carded Globes - Clip-on",
+        "productId": "machine-accessories-carded-globes-clip-on",
+        "basePrice": 88.54,
+        "imgKey": "machine-accessories-globes-clip-on",
+        "category": "Machine Accessories"
+      },
+      {
+        "name": "Globes - Clip-on - Loose",
+        "productId": "machine-accessories-globes-clip-on-loose",
+        "basePrice": 387.34,
+        "imgKey": "machine-accessories-globes-clip-on",
+        "category": "Machine Accessories"
+      },
+      {
+        "name": "Carded Globes - Screw",
+        "productId": "machine-accessories-carded-globes-screw",
+        "basePrice": 88.54,
+        "imgKey": "machine-accessories-globes-screw",
+        "category": "Machine Accessories"
+      },
+      {
+        "name": "Globes - Screw on Loose",
+        "productId": "machine-accessories-globes-screw-on-loose",
+        "basePrice": 387.34,
+        "imgKey": "machine-accessories-globes-screw-on",
+        "category": "Machine Accessories"
+      }
+    ]
+  },
+  "machine-accessories-belts-motors": {
+    "title": "Belts & Motors",
+    "category": "Remaining Accessories",
+    "label": "Choose Belt or Motor",
+    "imgKey": "machine-accessories-machine-belts",
+    "options": [
+      {
+        "name": "Carded Machine Belts",
+        "productId": "machine-accessories-carded-machine-belts",
+        "basePrice": 52.8,
+        "imgKey": "machine-accessories-machine-belts",
+        "category": "Machine Accessories"
+      },
+      {
+        "name": "Machine Belts - Loose",
+        "productId": "machine-accessories-machine-belts-loose",
+        "basePrice": 4.2,
+        "imgKey": "machine-accessories-machine-belts",
+        "category": "Machine Accessories"
+      },
+      {
+        "name": "Industrial Machine Belts",
+        "productId": "machine-accessories-industrial-machine-belts",
+        "basePrice": 13.46,
+        "imgKey": "machine-accessories-industrial-machine-belts",
+        "category": "Machine Accessories"
+      },
+      {
+        "name": "Machine Motors (B)",
+        "productId": "machine-accessories-machine-motors-b",
+        "basePrice": 125.0,
+        "imgKey": "machine-accessories-machine-motors-b",
+        "category": "Machine Accessories"
+      },
+      {
+        "name": "Machine Motors (Fawz)",
+        "productId": "machine-accessories-machine-motors-fawz",
+        "basePrice": 162.64,
+        "imgKey": "machine-accessories-machine-motors-fawz",
+        "category": "Machine Accessories"
+      },
+      {
+        "name": "Button Hole/Belt Punch Kit",
+        "productId": "sewing-notions-button-hole-belt-punch-kit",
+        "basePrice": 117.0,
+        "imgKey": "sewing-notions-button-hole-belt-punch",
+        "category": "Sewing Notions"
+      }
+    ]
+  },
+  "machine-accessories-oils": {
+    "title": "Machine Oils",
+    "category": "Remaining Accessories",
+    "label": "Choose Oil",
+    "imgKey": "machine-accessories-machine-oil-ml",
+    "options": [
+      {
+        "name": "Carded Machine Oil - 20ml",
+        "productId": "machine-accessories-carded-machine-oil-20ml",
+        "basePrice": 41.34,
+        "imgKey": "machine-accessories-machine-oil-ml",
+        "category": "Machine Accessories"
+      },
+      {
+        "name": "Machine Oil 100ml Each",
+        "productId": "machine-accessories-machine-oil-100ml-each",
+        "basePrice": 8.5,
+        "imgKey": "machine-accessories-machine-oil-ml",
+        "category": "Machine Accessories"
+      },
+      {
+        "name": "Machine Oil 500ml",
+        "productId": "machine-accessories-machine-oil-500ml",
+        "basePrice": 30.0,
+        "imgKey": "machine-accessories-machine-oil-ml",
+        "category": "Machine Accessories"
+      },
+      {
+        "name": "Hair Clipper Oil",
+        "productId": "machine-accessories-hair-clipper-oil",
+        "basePrice": 14.55,
+        "imgKey": "machine-accessories-hair-clipper-oil",
+        "category": "Machine Accessories"
+      },
+      {
+        "name": "Machine Oil 1lt",
+        "productId": "machine-accessories-machine-oil-1lt",
+        "basePrice": 50.0,
+        "imgKey": "machine-accessories-machine-oil-lt",
+        "category": "Machine Accessories"
+      },
+      {
+        "name": "Machine Oil 5lt",
+        "productId": "machine-accessories-machine-oil-5lt",
+        "basePrice": 240.0,
+        "imgKey": "machine-accessories-machine-oil-lt",
+        "category": "Machine Accessories"
+      },
+      {
+        "name": "Machine Oil 100ml",
+        "productId": "singer-machine-oil-100ml",
+        "basePrice": 16.6,
+        "imgKey": "singer-machine-oil-ml",
+        "category": "SINGER"
+      }
+    ]
+  }
+};
+let selectedGroup = null;
+let selectedProduct = null;
+function getBankImage(key){const img=document.querySelector(`#imageBank img[data-img-key="${CSS.escape(key)}"]`);return img?img.getAttribute('src'):'';}
+function applyCardImages(){document.querySelectorAll('[data-image-key]').forEach(img=>{const src=getBankImage(img.dataset.imageKey);if(src) img.src=src;});}
+function uniqueOptions(options){const seen=new Set();return (options||[]).filter(option=>{const key=option.productId||option.name;if(seen.has(key)) return false;seen.add(key);return true;});}
+function openProduct(card){const groupId=card.dataset.groupId;selectedGroup=productGroups[groupId];if(!selectedGroup)return;selectedGroup.options=uniqueOptions(selectedGroup.options);const variantSelect=document.getElementById('variantSelect');variantSelect.innerHTML=selectedGroup.options.map((option,index)=>`<option value="${index}">${option.name}</option>`).join('');document.getElementById('variantLabel').textContent=selectedGroup.label||'Choose product';document.getElementById('modalTitle').textContent=selectedGroup.title;document.getElementById('modalCategory').textContent=selectedGroup.category;document.getElementById('qty').value=1;document.getElementById('afterAdd').style.display='none';document.getElementById('productModal').style.display='block';selectVariant();}
+function selectVariant(){if(!selectedGroup)return;const index=Number(document.getElementById('variantSelect').value||0);const option=selectedGroup.options[index]||selectedGroup.options[0];selectedProduct={productId:option.productId,name:option.name,category:option.category||selectedGroup.category,basePrice:Number(option.basePrice||0),imgKey:option.imgKey||selectedGroup.imgKey};window.fawzCurrentProductId=selectedProduct.productId;window.fawzCurrentProductName=selectedProduct.name;document.getElementById('modalProductId').textContent=selectedProduct.productId;document.getElementById('modalImg').src=getBankImage(selectedProduct.imgKey)||getBankImage(selectedGroup.imgKey);document.getElementById('modalImg').alt=selectedProduct.name;document.getElementById('afterAdd').style.display='none';updateModalPrice();}
+function closeModal(){document.getElementById('productModal').style.display='none';selectedGroup=null;selectedProduct=null;}
+async function updateModalPrice(){const qty=Math.max(parseInt(document.getElementById('qty').value||'1',10)||1,1);const priceEl=document.getElementById('price');if(!selectedProduct){priceEl.textContent='Select product';return;}priceEl.textContent='Loading...';let unit=selectedProduct.basePrice;try{if(window.fawzFetchTierPrice) unit=await window.fawzFetchTierPrice(selectedProduct.productId);}catch(e){console.warn('Using workbook fallback price until Firebase is configured:',e);}window.fawzCurrentUnitPrice=unit;priceEl.textContent='R '+(unit*qty).toFixed(2);}
+function addToCart(){if(!selectedProduct)return;const qty=Math.max(parseInt(document.getElementById('qty').value||'1',10)||1,1);const unit=Number(window.fawzCurrentUnitPrice||selectedProduct.basePrice||0);const optionText=document.getElementById('variantSelect').selectedOptions[0]?.textContent||selectedProduct.name;const cart=JSON.parse(localStorage.getItem('cart')||'[]');cart.push({product:optionText,productId:selectedProduct.productId,category:selectedProduct.category,size:optionText,qty,price:unit,unitPrice:unit,total:unit*qty,image:getBankImage(selectedProduct.imgKey)});localStorage.setItem('cart',JSON.stringify(cart));document.getElementById('afterAdd').style.display='block';}
+function filterProducts(){const q=document.getElementById('searchBox').value.toLowerCase().trim();const c=document.getElementById('categoryFilter').value;document.querySelectorAll('.product-card').forEach(card=>{const group=productGroups[card.dataset.groupId];const haystack=JSON.stringify(group||{}).toLowerCase();const matchesSearch=!q||haystack.includes(q)||card.textContent.toLowerCase().includes(q);const matchesCategory=!c||card.dataset.category===c;card.classList.toggle('hidden',!(matchesSearch&&matchesCategory));});document.querySelectorAll('.product-section').forEach(section=>{section.classList.toggle('hidden',section.querySelectorAll('.product-card:not(.hidden)').length===0);});}
+document.getElementById('searchBox').addEventListener('input',filterProducts);document.getElementById('categoryFilter').addEventListener('change',filterProducts);window.addEventListener('click',e=>{if(e.target===document.getElementById('productModal')) closeModal();});document.addEventListener('DOMContentLoaded',applyCardImages);
+</script>
+</body>
+</html>

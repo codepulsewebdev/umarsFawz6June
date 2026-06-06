@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elastics | Fawz Haberdashery</title>
+<link rel="stylesheet" href="global-images.css">
+<style>
+:root{--fawz-red:#e31e24;--fawz-dark:#1a1a1a;--fawz-grey:#f8f8f8;--border:#eeeeee;}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',Roboto,Arial,sans-serif;background:#fff;color:var(--fawz-dark)}
+header{position:sticky;top:0;background:#fff;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--fawz-red);box-shadow:0 2px 10px rgba(0,0,0,.05);z-index:1000;gap:20px}
+.logo{font-weight:900;text-transform:uppercase;letter-spacing:1px;font-size:1.2rem}
+.logo span{color:var(--fawz-red)}
+nav a{color:var(--fawz-dark);margin-left:18px;text-decoration:none;font-weight:700;font-size:.9rem}
+.hero{padding:46px 5% 24px;max-width:1300px;margin:auto}
+.hero h1{font-size:clamp(2rem,4vw,3.5rem);margin:0;text-transform:uppercase}
+.hero p{color:#666;max-width:900px;line-height:1.6}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.toolbar input,.toolbar select{padding:13px 14px;border:1px solid #ddd;border-radius:10px;min-width:240px;font-size:1rem;background:#fff}
+main{padding:15px 5% 70px;max-width:1300px;margin:auto}
+.product-section{margin:32px 0 54px}
+.section-heading{display:flex;align-items:center;justify-content:space-between;border-left:6px solid var(--fawz-red);padding-left:14px;margin-bottom:18px}
+.section-heading h3{font-size:1.6rem;margin:0;text-transform:uppercase}
+.section-heading span{background:#fff3f3;color:var(--fawz-red);font-weight:800;border-radius:999px;padding:6px 11px}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+.product-card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.04);transition:.25s}
+.product-card:hover{transform:translateY(-4px);border-color:var(--fawz-red);box-shadow:0 15px 32px rgba(0,0,0,.10)}
+.product-img-wrap{height:190px;background:#fafafa;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border)}
+.product-img-wrap img{width:100%;height:100%;object-fit:contain;padding:14px}
+.product-info{padding:15px}
+.category-pill{display:inline-block;font-size:.72rem;font-weight:900;text-transform:uppercase;background:#f2f2f2;border-radius:999px;padding:5px 8px;color:#555}
+.product-info h4{font-size:1rem;margin:12px 0 8px;line-height:1.3}
+.product-id{font-size:.76rem;color:#777;word-break:break-all;margin:0 0 8px}
+.firebase-price{font-weight:900;color:var(--fawz-red);margin:0}
+.modal{display:none;position:fixed;z-index:2000;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(4px);padding:30px 12px}
+.modal-content{background:#fff;margin:auto;max-width:980px;min-height:520px;display:grid;grid-template-columns:1fr 1.05fr;border-radius:18px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,.24);position:relative}
+.close-x{position:absolute;right:22px;top:16px;font-size:32px;cursor:pointer;color:#999;z-index:5}
+.modal-left{background:#fafafa;display:flex;align-items:center;justify-content:center;padding:28px;border-right:1px solid var(--border)}
+.modal-left img{max-width:100%;max-height:430px;object-fit:contain}
+.modal-right{padding:42px 36px}
+.modal-right h2{margin:0 0 12px;text-transform:uppercase;color:var(--fawz-red)}
+.modal-meta{color:#666;font-size:.92rem;word-break:break-all}
+label{display:block;margin:22px 0 8px;font-weight:900;text-transform:uppercase;font-size:.75rem;color:#555}
+input,.option-select{width:100%;padding:14px;border:1px solid #ddd;border-radius:10px;font-size:1rem;background:var(--fawz-grey)}
+#price{font-size:2rem;font-weight:950;margin:25px 0;color:#111}
+.btn-add{width:100%;background:var(--fawz-red);border:none;color:#fff;font-weight:900;text-transform:uppercase;padding:17px;border-radius:12px;cursor:pointer;letter-spacing:1px}
+.btn-add:hover{background:#b3161a}
+.hidden{display:none!important}
+#imageBank{display:none}
+@media(max-width:760px){header{align-items:flex-start;flex-direction:column} nav a{margin:0 14px 0 0}.modal-content{grid-template-columns:1fr;max-height:92vh;overflow:auto}.modal-left{min-height:260px;border-right:0;border-bottom:1px solid var(--border)}}
+</style>
+<script src="firebase-config.js" type="module"></script>
+<script src="fawz-product-id-map.js"></script>
+<script src="fawz-firebase-pricing.js" type="module"></script>
+<script src="fawz-security.js" defer></script>
+</head>
+<body>
+<header><div class="logo">Fawz <span>Haberdashery</span></div><nav><a href="home.html">Home</a><a href="all-products.html">All Products</a><a href="demo_cart.html">View Cart</a></nav><a href="login.html" style="margin-left:12px;font-weight:900;color:#e31e24;text-decoration:none">Login</a></header>
+<section class="hero">
+<h1>Elastics</h1>
+<p>Grouped elastics page. Customers choose the elastic type first, then select size and available color in the modal. Each dropdown is automatically de-duplicated.</p>
+<div class="toolbar"><input id="searchBox" placeholder="Search products, sizes, colors, or product IDs..."><select id="categoryFilter"><option value="">All categories</option><option value="Elastics">Elastics</option></select></div>
+</section>
+<!-- HTML IMAGE BANK: edit image paths here only. JavaScript uses data-img-key and does not store image paths. -->
+<div id="imageBank">
+<img data-img-key="normal-elastics" src="images/elastic/whtnormal.webp" alt="normal-elastics">
+<img data-img-key="elastics-cord" src="images/elastic/6Cord.jpg" alt="elastics-cord">
+<img data-img-key="elastics-button-hole-elastic" src="images/elastic/buttonHole.jpg" alt="elastics-button-hole-elastic">
+<img data-img-key="elastics-draw-cord-elastic" src="images/elastic/drawCord.jpg" alt="elastics-draw-cord-elastic">
+<img data-img-key="elastics-hat" src="images/elastic/hat.webp" alt="elastics-hat">
+<img data-img-key="elastics-non-curl" src="images/elastic/nonCurl.jpg" alt="elastics-non-curl">
+<img data-img-key="elastics-printed" src="images/elastic/leopard.webp" alt="elastics-printed">
+<img data-img-key="elastics-shirring" src="images/elastic/shirring.jpg" alt="elastics-shirring">
+</div>
+<main>
+<section class="product-section" data-category-section="Elastics">
+<div class="section-heading"><h3>Elastics</h3><span>10 blocks</span></div>
+<div class="product-grid">
+<article class="product-card" data-group-id="normal-elastics" data-category="Elastics" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="normal-elastics" src="images/elastics/" alt="Normal Elastics" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Elastics</span><h4>Normal Elastics</h4><p class="product-id">36 selectable variants</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="cord-elastics" data-category="Elastics" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="elastics-cord" src="images/elastics/" alt="Cord Elastics" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Elastics</span><h4>Cord Elastics</h4><p class="product-id">4 selectable variants</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="buttonhole-elastics" data-category="Elastics" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="elastics-button-hole-elastic" src="images/elastics/" alt="Buttonhole Elastics" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Elastics</span><h4>Buttonhole Elastics</h4><p class="product-id">2 selectable variants</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="drawcord-elastics" data-category="Elastics" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="elastics-draw-cord-elastic" src="images/elastics/" alt="Drawcord Elastics" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Elastics</span><h4>Drawcord Elastics</h4><p class="product-id">1 selectable variants</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="hat-elastics" data-category="Elastics" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="elastics-hat" src="images/elastics/" alt="Hat Elastics" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Elastics</span><h4>Hat Elastics</h4><p class="product-id">8 selectable variants</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="non-curl-elastics" data-category="Elastics" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="elastics-non-curl" src="images/elastics/" alt="Non-Curl Elastics" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Elastics</span><h4>Non-Curl Elastics</h4><p class="product-id">8 selectable variants</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="printed-elastics" data-category="Elastics" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="elastics-printed" src="images/elastics/" alt="Printed Elastics" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Elastics</span><h4>Printed Elastics</h4><p class="product-id">3 selectable variants</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-group-id="shirring-elastics" data-category="Elastics" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="elastics-shirring" src="images/elastics/" alt="Shirring Elastics" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Elastics</span><h4>Shirring Elastics</h4><p class="product-id">2 selectable variants</p><p class="firebase-price">Login to view price</p></div>
+</article>
+</div>
+</section>
+</main>
+<div id="productModal" class="modal">
+<div class="modal-content">
+<span class="close-x" onclick="closeModal()">&times;</span>
+<div class="modal-left"><img id="modalImg" src="" alt=""></div>
+<div class="modal-right">
+<h2 id="modalTitle">Product</h2>
+<p class="modal-meta" id="modalCategory"></p>
+<p class="modal-meta">Product ID: <strong id="modalProductId"></strong></p>
+<label id="sizeLabel" for="sizeSelect">Size</label>
+<select id="sizeSelect" class="option-select" onchange="renderColorOptions()"></select>
+<label id="colorLabel" for="colorSelect">Color</label>
+<select id="colorSelect" class="option-select" onchange="selectVariant()"></select>
+<label>Quantity</label>
+<input type="number" id="qty" value="1" min="1" oninput="updateModalPrice()">
+<p id="price">Select product</p>
+<button class="btn-add" onclick="addToCart()">Add to Cart</button>
+</div>
+</div>
+</div>
+<script>
+const productGroups = {
+  "shirring-elastics": {
+    title:"Shirring Elastic",category:"Elastics",imgKey:"elastics-shirring",label:"Type",colorLabel:"Color",
+    options:["White","Black"].flatMap(c=>[
+      {name:`Shirring Elastic Carded ${c}`,productId:`shirring-carded-${c.toLowerCase()}`,size:"Carded - 12 cards per box",color:c},
+      {name:`Shirring Elastic Rolls ${c}`,productId:`shirring-roll-${c.toLowerCase()}`,size:"Roll - 36 rolls per box",color:c}
+    ])
+  },
+  "cord-elastics": {
+    title:"Cord Elastic",category:"Elastics",imgKey:"elastics-cord",label:"Cord Size (2.75m)",colorLabel:"Color",
+    options:["6 Cord","8 Cord","10 Cord","12 Cord"].flatMap(sz=>["White","Black"].map(c=>({name:`${sz} ${c}`,productId:`cord-${sz}-${c}`.toLowerCase().replaceAll(" ","-"),size:`${sz} - 2.75m - 20 cards per box`,color:c})))
+  },
+  "normal-elastics": {
+    title:"Regular Elastic",category:"Elastics",imgKey:"normal-elastics",label:"Size",colorLabel:"Color",
+    options:["20mm","25mm","32mm","38mm","50mm","75mm","100mm","120mm"].flatMap(sz=>["Black","White","Grey","Bottle","Red","Navy"].map(c=>({name:`Regular ${sz} ${c}`,productId:`regular-${sz}-${c}`.toLowerCase(),size:sz,color:c})))
+  },
+  "hat-elastics": {
+    title:"Hat Elastic",category:"Elastics",imgKey:"elastics-hat",label:"Type / Size",colorLabel:"Color",
+    options:["Roll - 200 meters per roll","Carded - 20 cards per box"].flatMap(t=>["1.5mm","1.8mm"].flatMap(sz=>["White","Black"].map(c=>({name:`Hat Elastic ${t} ${sz} ${c}`,productId:`hat-${t}-${sz}-${c}`.toLowerCase().replaceAll(" ","-"),size:`${t} - ${sz}`,color:c}))))
+  },
+  "printed-elastics": {
+    title:"Printed Elastic",category:"Elastics",imgKey:"elastics-printed",label:"Print",colorLabel:"Roll",
+    options:["Leopard","Zebra","Pattern"].map(p=>({name:`${p} Printed Elastic`,productId:`printed-${p}`.toLowerCase(),size:`${p} - 38mm`,color:"25 meters per roll"}))
+  },
+  "shock-cord": {
+    title:"Shock Cord",category:"Elastics",imgKey:"elastics-cord",label:"Size",colorLabel:"Color",
+    options:["3mm","6mm","9mm"].flatMap(sz=>["White","Navy","Black"].map(c=>({name:`Shock Cord ${sz} ${c}`,productId:`shock-${sz}-${c}`.toLowerCase(),size:sz,color:c})))
+  },
+  "elastic-braid": {
+    title:"Elastic Braid",category:"Elastics",imgKey:"normal-elastics",label:"Size",colorLabel:"Color",
+    options:["4mm","5mm","6mm","7.5mm","10mm","12mm","14mm","16mm"].flatMap(sz=>["White","Black"].map(c=>({name:`Elastic Braid ${sz} ${c}`,productId:`braid-${sz}-${c}`.toLowerCase(),size:sz,color:c})))
+  },
+  "non-curl-elastics": {
+    title:"Non-Curl Elastic",category:"Elastics",imgKey:"elastics-non-curl",label:"Size",colorLabel:"Color",
+    options:["20mm","25mm","32mm","38mm"].flatMap(sz=>["White","Black"].map(c=>({name:`Non Curl ${sz} ${c}`,productId:`noncurl-${sz}-${c}`.toLowerCase(),size:sz,color:c})))
+  },
+  "buttonhole-elastics": {
+    title:"Buttonhole Elastic",category:"Elastics",imgKey:"elastics-button-hole-elastic",label:"Size",colorLabel:"Color",
+    options:["White","Black"].map(c=>({name:`Buttonhole Elastic ${c}`,productId:`buttonhole-20mm-${c}`.toLowerCase(),size:"20mm",color:c}))
+  },
+  "drawcord-elastics": {
+    title:"Drawcord Elastic",category:"Elastics",imgKey:"elastics-draw-cord-elastic",label:"Size",colorLabel:"Option",
+    options:[{name:"Drawcord Elastic 32mm",productId:"drawcord-32mm",size:"32mm",color:"Standard"}]
+  }
+}
+let selectedGroup = null;
+let selectedProduct = null;
+function uniqueValues(values){return [...new Set(values.filter(Boolean))];}
+function getBankImage(key){const img=document.querySelector(`#imageBank img[data-img-key="${CSS.escape(key)}"]`);return img?img.getAttribute('src'):'';}
+function applyCardImages(){document.querySelectorAll('[data-image-key]').forEach(img=>{const src=getBankImage(img.dataset.imageKey);if(src) img.src=src;});}
+function money(value){return 'R '+Number(value||0).toFixed(2);}
+function openProduct(card){
+  const groupId=card.dataset.groupId;selectedGroup=productGroups[groupId];if(!selectedGroup)return;
+  document.getElementById('modalTitle').textContent=selectedGroup.title;
+  document.getElementById('modalCategory').textContent=selectedGroup.category;
+  document.getElementById('sizeLabel').textContent=selectedGroup.label||'Size';
+  document.getElementById('colorLabel').textContent=selectedGroup.colorLabel||'Color';
+  document.getElementById('qty').value=1;
+  const sizeSelect=document.getElementById('sizeSelect');
+  const sizes=uniqueValues(selectedGroup.options.map(o=>o.size));
+  sizeSelect.innerHTML=sizes.map(size=>`<option value="${String(size).replace(/"/g,'&quot;')}">${size}</option>`).join('');
+  document.getElementById('productModal').style.display='block';
+  renderColorOptions();
+}
+function renderColorOptions(){
+  if(!selectedGroup)return;
+  const size=document.getElementById('sizeSelect').value;
+  const colorSelect=document.getElementById('colorSelect');
+  const colors=uniqueValues(selectedGroup.options.filter(o=>o.size===size).map(o=>o.color));
+  colorSelect.innerHTML=colors.map(color=>`<option value="${String(color).replace(/"/g,'&quot;')}">${color}</option>`).join('');
+  selectVariant();
+}
+function selectVariant(){
+  if(!selectedGroup)return;
+  const size=document.getElementById('sizeSelect').value;
+  const color=document.getElementById('colorSelect').value;
+  selectedProduct=selectedGroup.options.find(o=>o.size===size && o.color===color) || selectedGroup.options.find(o=>o.size===size) || selectedGroup.options[0];
+  if(!selectedProduct)return;
+  document.getElementById('modalProductId').textContent=selectedProduct.productId;
+  const modalImg=document.getElementById('modalImg');
+  modalImg.src=getBankImage(selectedProduct.imgKey)||getBankImage(selectedGroup.imgKey)||'';
+  modalImg.alt=selectedProduct.name;
+  updateModalPrice();
+}
+async function updateModalPrice(){
+  const qty=Math.max(parseInt(document.getElementById('qty').value||'1',10)||1,1);
+  const priceEl=document.getElementById('price');
+  if(!selectedProduct){priceEl.textContent='Select product';return;}
+  priceEl.textContent='Loading...';
+  let unit=selectedProduct.basePrice;
+  try{if(window.fawzFetchTierPrice) unit=await window.fawzFetchTierPrice(selectedProduct.productId);}catch(e){console.warn('Using workbook fallback price until Firebase is configured:',e);}
+  window.fawzCurrentUnitPrice=unit;
+  priceEl.textContent=money(unit*qty);
+}
+function addToCart(){
+  if(!selectedProduct)return;
+  const qty=Math.max(parseInt(document.getElementById('qty').value||'1',10)||1,1);
+  const unit=Number(window.fawzCurrentUnitPrice||selectedProduct.basePrice||0);
+  const cart=JSON.parse(localStorage.getItem('cart')||'[]');
+  cart.push({product:selectedProduct.name,productId:selectedProduct.productId,category:selectedProduct.category,size:selectedProduct.size,color:selectedProduct.color,qty,price:unit,unitPrice:unit,total:unit*qty,image:getBankImage(selectedProduct.imgKey)||getBankImage(selectedGroup.imgKey)});
+  localStorage.setItem('cart',JSON.stringify(cart));
+  alert('Added to cart: '+selectedProduct.name);
+}
+function closeModal(){document.getElementById('productModal').style.display='none';selectedGroup=null;selectedProduct=null;}
+function filterProducts(){
+  const q=document.getElementById('searchBox').value.toLowerCase().trim();
+  const c=document.getElementById('categoryFilter').value;
+  document.querySelectorAll('.product-card').forEach(card=>{
+    const group=productGroups[card.dataset.groupId];
+    const haystack=JSON.stringify(group||{}).toLowerCase();
+    const matchesSearch=!q||haystack.includes(q)||card.textContent.toLowerCase().includes(q);
+    const matchesCategory=!c||card.dataset.category===c;
+    card.classList.toggle('hidden',!(matchesSearch&&matchesCategory));
+  });
+  document.querySelectorAll('.product-section').forEach(section=>{section.classList.toggle('hidden',section.querySelectorAll('.product-card:not(.hidden)').length===0);});
+}
+document.getElementById('searchBox').addEventListener('input',filterProducts);
+document.getElementById('categoryFilter').addEventListener('change',filterProducts);
+window.addEventListener('click',e=>{if(e.target===document.getElementById('productModal')) closeModal();});
+document.addEventListener('DOMContentLoaded',applyCardImages);
+</script>
+</body>
+</html>

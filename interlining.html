@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interlining | Fawz Haberdashery</title>
+<link rel="stylesheet" href="global-images.css">
+<style>
+:root{--fawz-red:#e31e24;--fawz-dark:#1a1a1a;--fawz-grey:#f8f8f8;--border:#eeeeee;}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',Roboto,Arial,sans-serif;background:#fff;color:var(--fawz-dark);-webkit-user-select:none;user-select:none}
+header{position:sticky;top:0;background:#fff;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--fawz-red);box-shadow:0 2px 10px rgba(0,0,0,.05);z-index:1000;gap:20px;flex-wrap:wrap}
+.logo{font-weight:900;text-transform:uppercase;letter-spacing:1px;font-size:1.2rem}
+.logo span{color:var(--fawz-red)}
+nav{display:flex;gap:16px;flex-wrap:wrap}
+nav a{color:var(--fawz-dark);text-decoration:none;font-weight:700;font-size:.9rem}
+.hero{padding:46px 5% 24px;max-width:1300px;margin:auto}
+.hero h1{font-size:clamp(2rem,4vw,3.5rem);margin:0;text-transform:uppercase}
+.hero p{color:#666;max-width:900px;line-height:1.6;margin-top:10px}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.toolbar input,.toolbar select{padding:13px 14px;border:1px solid #ddd;border-radius:10px;min-width:240px;font-size:1rem;background:#fff}
+main{padding:15px 5% 70px;max-width:1300px;margin:auto}
+.product-section{margin:32px 0 54px}
+.section-heading{display:flex;align-items:center;justify-content:space-between;border-left:6px solid var(--fawz-red);padding-left:14px;margin-bottom:18px}
+.section-heading h3{font-size:1.6rem;margin:0;text-transform:uppercase}
+.section-heading span{background:#fff3f3;color:var(--fawz-red);font-weight:800;border-radius:999px;padding:6px 11px}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+.product-card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.04);transition:.25s}
+.product-card:hover{transform:translateY(-4px);border-color:var(--fawz-red);box-shadow:0 15px 32px rgba(0,0,0,.10)}
+.product-img-wrap{height:190px;background:#fafafa;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);position:relative}
+.product-img-wrap img{width:100%;height:100%;object-fit:contain;padding:14px;pointer-events:none}
+.product-info{padding:15px}
+.category-pill{display:inline-block;font-size:.72rem;font-weight:900;text-transform:uppercase;background:#f2f2f2;border-radius:999px;padding:5px 8px;color:#555}
+.product-info h4{font-size:1rem;margin:12px 0 8px;line-height:1.3;text-transform:uppercase}
+.product-id{font-size:.76rem;color:#777;word-break:break-all;margin:0 0 8px;line-height:1.5}
+.firebase-price{font-weight:900;color:var(--fawz-red);margin:0}
+.modal{display:none;position:fixed;z-index:2000;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(4px);padding:30px 12px}
+.modal-content{background:#fff;margin:auto;max-width:980px;min-height:520px;display:grid;grid-template-columns:1fr 1.05fr;border-radius:18px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,.24);position:relative}
+.close-x{position:absolute;right:22px;top:16px;font-size:32px;cursor:pointer;color:#999;z-index:5}
+.modal-left{background:#fafafa;display:flex;align-items:center;justify-content:center;padding:28px;border-right:1px solid var(--border)}
+.modal-left img{max-width:100%;max-height:430px;object-fit:contain;pointer-events:none}
+.modal-right{padding:42px 36px;overflow-y:auto;max-height:88vh}
+.modal-right h2{margin:0 0 12px;text-transform:uppercase;color:var(--fawz-red)}
+.modal-meta{color:#666;font-size:.92rem;word-break:break-all;line-height:1.6}
+label{display:block;margin:18px 0 8px;font-weight:900;text-transform:uppercase;font-size:.75rem;color:#555}
+input,.option-select{width:100%;padding:14px;border:1px solid #ddd;border-radius:10px;font-size:1rem;background:var(--fawz-grey)}
+#price{font-size:2rem;font-weight:950;margin:25px 0;color:#111}
+.btn-add{width:100%;background:var(--fawz-red);border:none;color:#fff;font-weight:900;text-transform:uppercase;padding:17px;border-radius:12px;cursor:pointer;letter-spacing:1px}
+.btn-add:hover{background:#b3161a}
+.hidden{display:none!important}
+#imageBank{display:none}
+.security-overlay{display:none;position:fixed;inset:0;z-index:999999;background:#111;color:#fff;align-items:center;justify-content:center;text-align:center;padding:30px;font-weight:900;font-size:1.3rem}
+@media(max-width:760px){header{align-items:flex-start;flex-direction:column}nav a{margin:0 14px 0 0}.modal-content{grid-template-columns:1fr;max-height:92vh;overflow:auto}.modal-left{min-height:260px;border-right:0;border-bottom:1px solid var(--border)}}
+@media print{body{display:none!important}}
+</style>
+<script src="firebase-config.js" type="module"></script>
+<script src="fawz-product-id-map.js"></script>
+<script src="fawz-firebase-pricing.js" type="module"></script>
+<script src="fawz-security.js" defer></script>
+</head>
+<body oncontextmenu="return false">
+<header>
+<div class="logo">Fawz <span>Haberdashery</span></div>
+<nav><a href="home.html">Home</a><a href="all-products.html">All Products</a><a href="demo_cart.html">View Cart</a></nav>
+<a href="login.html" style="margin-left:12px;font-weight:900;color:#e31e24;text-decoration:none">Login</a>
+</header>
+
+<section class="hero">
+<h1>Interlining</h1>
+<p>Interlining products rebuilt into clean grouped blocks. Click a product, choose only the available specifications, enter quantity, and add it to cart.</p>
+<div class="toolbar">
+<input id="searchBox" placeholder="Search interlining products or options...">
+<select id="categoryFilter"><option value="">All products</option><option value="non-woven-interlining">Non-Woven Interlining</option><option value="tracing-material">Tracing Material</option><option value="water-soluble-interlining">Water-Soluble Interlining</option><option value="pp-embroidery">PP Embroidery</option><option value="spider-interlining">Spider Interlining</option><option value="sdf-interlining">SDF Interlining (Sugar-Coated)</option><option value="microdot">Microdot</option><option value="dimension-interlining">Dimension Interlining</option><option value="quala-fusing">Quala Fusing</option><option value="red-line-interlining">Red Line Interlining</option></select>
+</div>
+</section>
+
+<div id="imageBank">
+<img data-img-key="interlining-non-woven" src="images/interlining/nonWoven.jpg" alt="interlining-non-woven">
+<img data-img-key="interlining-tracing-material" src="images/interlining/tracingMaterial.jpg" alt="interlining-tracing-material">
+<img data-img-key="interlining-water-soluble" src="images/interlining/waterSoluble.jpg" alt="interlining-water-soluble">
+<img data-img-key="interlining-pp-embroidery" src="images/interlining/PPEmbroidery.jpg" alt="interlining-pp-embroidery">
+<img data-img-key="interlining-spider" src="images/interlining/spider.jpg" alt="interlining-spider">
+<img data-img-key="interlining-sdf" src="images/interlining/STFInterlining.jpg" alt="interlining-sdf">
+<img data-img-key="interlining-microdot" src="images/interlining/microdot.webp" alt="interlining-microdot">
+<img data-img-key="interlining-dimension" src="images/interlining/dimension.jpg" alt="interlining-dimension">
+<img data-img-key="interlining-quala-fusing" src="images/interlining/collar.jpg" alt="interlining-quala-fusing">
+<img data-img-key="interlining-red-line" src="images/interlining/redLine.jpg" alt="interlining-red-line">
+</div>
+
+<main>
+<section class="product-section" data-category-section="Interlining">
+<div class="section-heading"><h3>Interlining</h3><span>10 blocks</span></div>
+<div class="product-grid" id="productGrid">
+<article class="product-card" data-product-id="non-woven-interlining" data-category="Interlining" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="interlining-non-woven" src="" alt="Non-Woven Interlining" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Interlining</span><h4>Non-Woven Interlining</h4><p class="product-id">Choose roll length, item number, and colour where available</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-product-id="tracing-material" data-category="Interlining" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="interlining-tracing-material" src="" alt="Tracing Material" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Interlining</span><h4>Tracing Material</h4><p class="product-id">Pink, Blue or Green · 25 yards per roll</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-product-id="water-soluble-interlining" data-category="Interlining" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="interlining-water-soluble" src="" alt="Water-Soluble Interlining" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Interlining</span><h4>Water-Soluble Interlining</h4><p class="product-id">30cm width · 100 yards</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-product-id="pp-embroidery" data-category="Interlining" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="interlining-pp-embroidery" src="" alt="PP Embroidery" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Interlining</span><h4>PP Embroidery</h4><p class="product-id">40 inches width · 50 yards · White</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-product-id="spider-interlining" data-category="Interlining" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="interlining-spider" src="" alt="Spider Interlining" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Interlining</span><h4>Spider Interlining</h4><p class="product-id">44 inches width · 50 yards · White</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-product-id="sdf-interlining" data-category="Interlining" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="interlining-sdf" src="" alt="SDF Interlining (Sugar-Coated)" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Interlining</span><h4>SDF Interlining (Sugar-Coated)</h4><p class="product-id">44 or 60 inches · 25 metres · White or Black</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-product-id="microdot" data-category="Interlining" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="interlining-microdot" src="" alt="Microdot" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Interlining</span><h4>Microdot</h4><p class="product-id">35 GSM or 70 GSM · 100cm width · 100 metres · Black or White</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-product-id="dimension-interlining" data-category="Interlining" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="interlining-dimension" src="" alt="Dimension Interlining" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Interlining</span><h4>Dimension Interlining</h4><p class="product-id">60 inches width · 25 metres · White or Black</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-product-id="quala-fusing" data-category="Interlining" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="interlining-quala-fusing" src="" alt="Quala Fusing" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Interlining</span><h4>Collar Fusing</h4><p class="product-id">112cm width · Standard (MVSA) or Premium (JPSA)</p><p class="firebase-price">Login to view price</p></div>
+</article>
+<article class="product-card" data-product-id="red-line-interlining" data-category="Interlining" onclick="openProduct(this)">
+<div class="product-img-wrap"><img data-image-key="interlining-red-line" src="" alt="Red Line Interlining" loading="lazy"></div>
+<div class="product-info"><span class="category-pill">Interlining</span><h4>Red Line Interlining</h4><p class="product-id">44 inches wide · 50 metres per roll</p><p class="firebase-price">Login to view price</p></div>
+</article>
+</div>
+</section>
+</main>
+
+<div id="productModal" class="modal">
+<div class="modal-content">
+<span class="close-x" onclick="closeModal()">&times;</span>
+<div class="modal-left"><img id="modalImg" src="" alt=""></div>
+<div class="modal-right">
+<h2 id="modalTitle">Product</h2>
+<p class="modal-meta" id="modalCategory"></p>
+<p class="modal-meta" id="modalDetails"></p>
+<p class="modal-meta">Product ID: <strong id="modalProductId"></strong></p>
+
+<div id="rollWrap" class="hidden"><label for="rollSelect">Roll Size</label><select id="rollSelect" class="option-select" onchange="handleNonWovenChange()"></select></div>
+<div id="itemWrap" class="hidden"><label for="itemSelect">Item Number</label><select id="itemSelect" class="option-select" onchange="handleNonWovenChange()"></select></div>
+<div id="colourWrap" class="hidden"><label for="colourSelect">Colour</label><select id="colourSelect" class="option-select" onchange="selectConfiguredProduct()"></select></div>
+<div id="widthWrap" class="hidden"><label for="widthSelect">Width</label><select id="widthSelect" class="option-select" onchange="selectConfiguredProduct()"></select></div>
+<div id="gsmWrap" class="hidden"><label for="gsmSelect">GSM</label><select id="gsmSelect" class="option-select" onchange="selectConfiguredProduct()"></select></div>
+<div id="typeWrap" class="hidden"><label for="typeSelect">Type</label><select id="typeSelect" class="option-select" onchange="selectConfiguredProduct()"></select></div>
+
+<label>Quantity</label>
+<input type="number" id="qty" value="1" min="1" oninput="updateModalPrice()">
+<p id="price">Select product</p>
+<button class="btn-add" onclick="addToCart()">Add to Cart</button>
+</div>
+</div>
+</div>
+
+<div class="security-overlay" id="securityOverlay">Screen capture / restricted shortcut detected.</div>
+
+<script>
+const productData = [
+  {
+    "id": "non-woven-interlining",
+    "title": "Non-Woven Interlining",
+    "subtitle": "Choose roll length, item number, and colour where available",
+    "category": "Interlining",
+    "imgKey": "interlining-non-woven",
+    "type": "nonwoven",
+    "itemNumbersWhite": [
+      "4444",
+      "2016 HF",
+      "1025 HF",
+      "1030 HF",
+      "1035 HF",
+      "1040 HF",
+      "1070 HF",
+      "90 HF",
+      "1115 HF"
+    ],
+    "itemNumbersBlack": [
+      "2016 HF",
+      "1025 HF",
+      "1030 HF",
+      "1035 HF",
+      "1050 HF",
+      "1070 HF",
+      "90 HF"
+    ],
+    "rollLengths": [
+      "100 yards per roll",
+      "25 yards per roll"
+    ]
+  },
+  {
+    "id": "tracing-material",
+    "title": "Tracing Material",
+    "subtitle": "Pink, Blue or Green · 25 yards per roll",
+    "category": "Interlining",
+    "imgKey": "interlining-tracing-material",
+    "options": {
+      "Colour": [
+        "Pink",
+        "Blue",
+        "Green"
+      ]
+    },
+    "fixed": {
+      "Length": "25 yards per roll"
+    }
+  },
+  {
+    "id": "water-soluble-interlining",
+    "title": "Water-Soluble Interlining",
+    "subtitle": "30cm width · 100 yards",
+    "category": "Interlining",
+    "imgKey": "interlining-water-soluble",
+    "fixed": {
+      "Width": "30cm",
+      "Length": "100 yards"
+    }
+  },
+  {
+    "id": "pp-embroidery",
+    "title": "PP Embroidery",
+    "subtitle": "40 inches width · 50 yards · White",
+    "category": "Interlining",
+    "imgKey": "interlining-pp-embroidery",
+    "fixed": {
+      "Width": "40 inches",
+      "Length": "50 yards",
+      "Colour": "White"
+    }
+  },
+  {
+    "id": "spider-interlining",
+    "title": "Spider Interlining",
+    "subtitle": "44 inches width · 50 yards · White",
+    "category": "Interlining",
+    "imgKey": "interlining-spider",
+    "fixed": {
+      "Width": "44 inches",
+      "Length": "50 yards",
+      "Colour": "White"
+    }
+  },
+  {
+    "id": "sdf-interlining",
+    "title": "SDF Interlining (Sugar-Coated)",
+    "subtitle": "44 or 60 inches · 25 metres · White or Black",
+    "category": "Interlining",
+    "imgKey": "interlining-sdf",
+    "options": {
+      "Width": [
+        "44 inches",
+        "60 inches"
+      ],
+      "Colour": [
+        "White",
+        "Black"
+      ]
+    },
+    "fixed": {
+      "Length": "25 metres"
+    }
+  },
+  {
+    "id": "microdot",
+    "title": "Microdot",
+    "subtitle": "35 GSM or 70 GSM · 100cm width · 100 metres · Black or White",
+    "category": "Interlining",
+    "imgKey": "interlining-microdot",
+    "options": {
+      "GSM": [
+        "35 GSM",
+        "70 GSM"
+      ],
+      "Colour": [
+        "White",
+        "Black"
+      ]
+    },
+    "fixed": {
+      "Width": "100cm",
+      "Length": "100 metres"
+    }
+  },
+  {
+    "id": "dimension-interlining",
+    "title": "Dimension Interlining",
+    "subtitle": "60 inches width · 25 metres · White or Black",
+    "category": "Interlining",
+    "imgKey": "interlining-dimension",
+    "options": {
+      "Colour": [
+        "White",
+        "Black"
+      ]
+    },
+    "fixed": {
+      "Width": "60 inches",
+      "Length": "25 metres"
+    }
+  },
+  {
+    "id": "quala-fusing",
+    "title": "Quala Fusing",
+    "subtitle": "112cm width · Standard (MVSA) or Premium (JPSA)",
+    "category": "Interlining",
+    "imgKey": "interlining-quala-fusing",
+    "options": {
+      "Type": [
+        "Standard (MVSA) - 25 metres per roll",
+        "Premium (JPSA) - 10 metres per roll"
+      ]
+    },
+    "fixed": {
+      "Width": "112cm"
+    }
+  },
+  {
+    "id": "red-line-interlining",
+    "title": "Red Line Interlining",
+    "subtitle": "44 inches wide · 50 metres per roll",
+    "category": "Interlining",
+    "imgKey": "interlining-red-line",
+    "fixed": {
+      "Width": "44 inches",
+      "Length": "50 metres per roll"
+    }
+  }
+];
+let selectedGroup = null;
+let selectedProduct = null;
+
+function slugify(value){
+  return String(value).toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+}
+
+function getBankImage(key){
+  const img = document.querySelector(`#imageBank img[data-img-key="${CSS.escape(key)}"]`);
+  return img ? img.getAttribute('src') : '';
+}
+
+function applyCardImages(){
+  document.querySelectorAll('[data-image-key]').forEach(img => {
+    img.src = getBankImage(img.dataset.imageKey);
+  });
+}
+
+function fillSelect(id, options){
+  const el = document.getElementById(id);
+  el.innerHTML = options.map(v => `<option value="${v}">${v}</option>`).join('');
+}
+
+function resetSelectors(){
+  ['rollWrap','itemWrap','colourWrap','widthWrap','gsmWrap','typeWrap'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  ['rollSelect','itemSelect','colourSelect','widthSelect','gsmSelect','typeSelect'].forEach(id => document.getElementById(id).innerHTML = '');
+}
+
+function openProduct(card){
+  selectedGroup = productData.find(p => p.id === card.dataset.productId);
+  if(!selectedGroup) return;
+
+  resetSelectors();
+  document.getElementById('qty').value = 1;
+  document.getElementById('modalTitle').textContent = selectedGroup.title;
+  document.getElementById('modalCategory').textContent = selectedGroup.category;
+  document.getElementById('modalImg').src = getBankImage(selectedGroup.imgKey);
+  document.getElementById('modalImg').alt = selectedGroup.title;
+
+  if(selectedGroup.type === 'nonwoven'){
+    document.getElementById('rollWrap').classList.remove('hidden');
+    document.getElementById('itemWrap').classList.remove('hidden');
+    fillSelect('rollSelect', selectedGroup.rollLengths);
+    fillSelect('itemSelect', selectedGroup.itemNumbersWhite);
+    handleNonWovenChange();
+  } else {
+    if(selectedGroup.options){
+      Object.entries(selectedGroup.options).forEach(([key, values]) => {
+        const lower = key.toLowerCase();
+        const wrapId = lower === 'colour' ? 'colourWrap' : lower === 'width' ? 'widthWrap' : lower === 'gsm' ? 'gsmWrap' : lower === 'type' ? 'typeWrap' : null;
+        const selectId = lower === 'colour' ? 'colourSelect' : lower === 'width' ? 'widthSelect' : lower === 'gsm' ? 'gsmSelect' : lower === 'type' ? 'typeSelect' : null;
+        if(wrapId && selectId){
+          document.getElementById(wrapId).classList.remove('hidden');
+          fillSelect(selectId, values);
+        }
+      });
+    }
+    selectConfiguredProduct();
+  }
+
+  document.getElementById('productModal').style.display = 'block';
+}
+
+function handleNonWovenChange(){
+  const item = document.getElementById('itemSelect').value;
+  const colourWrap = document.getElementById('colourWrap');
+  const colourSelect = document.getElementById('colourSelect');
+
+  const hasBlack = selectedGroup.itemNumbersBlack.includes(item);
+  if(hasBlack){
+    colourWrap.classList.remove('hidden');
+    fillSelect('colourSelect', ['White','Black']);
+  } else {
+    colourWrap.classList.add('hidden');
+    colourSelect.innerHTML = '<option value="White">White</option>';
+  }
+
+  selectConfiguredProduct();
+}
+
+function selectConfiguredProduct(){
+  if(!selectedGroup) return;
+
+  let details = {};
+  let name = selectedGroup.title;
+
+  if(selectedGroup.type === 'nonwoven'){
+    details.rollSize = document.getElementById('rollSelect').value;
+    details.itemNumber = document.getElementById('itemSelect').value;
+    details.colour = document.getElementById('colourSelect').value || 'White';
+    name += ` - ${details.itemNumber} · ${details.rollSize} · ${details.colour}`;
+  } else {
+    if(selectedGroup.fixed) details = {...details, ...selectedGroup.fixed};
+    if(!document.getElementById('colourWrap').classList.contains('hidden')) details.Colour = document.getElementById('colourSelect').value;
+    if(!document.getElementById('widthWrap').classList.contains('hidden')) details.Width = document.getElementById('widthSelect').value;
+    if(!document.getElementById('gsmWrap').classList.contains('hidden')) details.GSM = document.getElementById('gsmSelect').value;
+    if(!document.getElementById('typeWrap').classList.contains('hidden')) details.Type = document.getElementById('typeSelect').value;
+    const selectedParts = Object.entries(details).map(([k,v]) => `${k}: ${v}`);
+    if(selectedParts.length) name += ' - ' + Object.values(details).join(' · ');
+  }
+
+  const productId = buildProductId(selectedGroup, details);
+
+  selectedProduct = {
+    name,
+    productId,
+    category: selectedGroup.category,
+    details,
+    basePrice: 0,
+    imgKey: selectedGroup.imgKey
+  };
+
+  window.fawzCurrentProductId = selectedProduct.productId;
+  window.fawzCurrentProductName = selectedProduct.name;
+
+  document.getElementById('modalProductId').textContent = selectedProduct.productId;
+  document.getElementById('modalDetails').textContent = Object.entries(details).map(([k,v]) => `${k}: ${v}`).join(' · ');
+
+  updateModalPrice();
+}
+
+function buildProductId(group, details){
+  let parts = [group.id];
+
+  if(group.type === 'nonwoven'){
+    parts.push(slugify(details.itemNumber));
+    parts.push(slugify(details.rollSize));
+    parts.push(slugify(details.colour));
+  } else {
+    Object.values(details).forEach(value => parts.push(slugify(value)));
+  }
+
+  return parts.join('-');
+}
+
+function closeModal(){
+  document.getElementById('productModal').style.display = 'none';
+}
+
+async function updateModalPrice(){
+  const qty = Math.max(parseInt(document.getElementById('qty').value || '1', 10) || 1, 1);
+  const priceEl = document.getElementById('price');
+
+  if(!selectedProduct){
+    priceEl.textContent = 'Select product';
+    return;
+  }
+
+  priceEl.textContent = 'Loading...';
+  let unit = Number(selectedProduct.basePrice || 0);
+
+  try{
+    if(window.fawzFetchTierPrice){
+      unit = await window.fawzFetchTierPrice(selectedProduct.productId);
+    }
+  }catch(e){
+    console.warn('Using workbook fallback price until Firebase is configured:', e);
+  }
+
+  window.fawzCurrentUnitPrice = unit;
+  priceEl.textContent = unit > 0 ? 'R ' + (unit * qty).toFixed(2) : 'Login to view price';
+}
+
+function addToCart(){
+  if(!selectedProduct) return;
+
+  const qty = Math.max(parseInt(document.getElementById('qty').value || '1', 10) || 1, 1);
+  const unit = Number(window.fawzCurrentUnitPrice || selectedProduct.basePrice || 0);
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+  cart.push({
+    product: selectedProduct.name,
+    productId: selectedProduct.productId,
+    category: selectedProduct.category,
+    details: selectedProduct.details,
+    size: Object.values(selectedProduct.details).join(' · '),
+    qty,
+    price: unit,
+    unitPrice: unit,
+    total: unit * qty,
+    image: getBankImage(selectedProduct.imgKey)
+  });
+
+  localStorage.setItem('cart', JSON.stringify(cart));
+  alert('Added to cart: ' + selectedProduct.name);
+}
+
+function filterProducts(){
+  const q = document.getElementById('searchBox').value.toLowerCase().trim();
+  const selected = document.getElementById('categoryFilter').value;
+
+  document.querySelectorAll('.product-card').forEach(card => {
+    const product = productData.find(p => p.id === card.dataset.productId);
+    const haystack = JSON.stringify(product || {}).toLowerCase();
+    const matchesSearch = !q || haystack.includes(q) || card.textContent.toLowerCase().includes(q);
+    const matchesProduct = !selected || card.dataset.productId === selected;
+    card.classList.toggle('hidden', !(matchesSearch && matchesProduct));
+  });
+}
+
+document.getElementById('searchBox').addEventListener('input', filterProducts);
+document.getElementById('categoryFilter').addEventListener('change', filterProducts);
+window.addEventListener('click', e => { if(e.target === document.getElementById('productModal')) closeModal(); });
+document.addEventListener('DOMContentLoaded', applyCardImages);
+
+(function(){
+  const overlay=document.getElementById('securityOverlay');
+  function flash(){overlay.style.display='flex';setTimeout(()=>overlay.style.display='none',1200);}
+  document.addEventListener('contextmenu',e=>e.preventDefault());
+  document.addEventListener('dragstart',e=>e.preventDefault());
+  document.addEventListener('selectstart',e=>e.preventDefault());
+  document.addEventListener('keydown',e=>{
+    const k=e.key.toLowerCase();
+    if(e.key==='PrintScreen'||(e.ctrlKey&&['s','u','p','c','x','a'].includes(k))||(e.ctrlKey&&e.shiftKey&&['i','j','c'].includes(k))||e.key==='F12'){e.preventDefault();flash();return false;}
+  });
+})();
+</script>
+<script type="module" src="./fawz-auth-guard.js"></script>
+<script type="module" src="./fawz-firebase-pricing.js"></script>
+</body>
+</html>
